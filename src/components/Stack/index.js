@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import StackFrame from '../StackFrame/StackFrame.js';
+import Object from '../Object';
 
 class Stack extends Component {
 	render() {
 		return (
 			<div className="stack">
-				<StackFrame/>
-				<StackFrame/>
+				<h1>STACK</h1>
+				<div className="objects">
+					<button>Create a new object</button>
+					<Object/>
+				</div>
 			</div>
 		)
 	}

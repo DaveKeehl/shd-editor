@@ -1,0 +1,51 @@
+{
+	"diagram" : {
+		"stack" : {
+			"objects": [
+				{
+					"class" : "myClass",
+					"variables" : [
+						{
+							"nature" : "primitive",
+							"name" : "myVar",
+							"type" : "Int",
+							"value" : 5
+						},
+						{
+							"nature" : "reference",
+							"name" : "myVar",
+							"type" : "Int",
+							"value" : 10
+						}
+					]
+				}
+			],
+			"position" : {
+				"x" : 10,
+				"y" : 20
+			}
+		},
+		"heap" : [
+			{
+				"nature" : "primitive",
+				"name" : "myVar",
+				"type" : "Int",
+				"value" : 5,
+				"position" : {
+					"x" : 10,
+					"y" : 20
+				}
+			},
+			{
+				"nature" : "reference",
+				"name" : "myVar",
+				"type" : "Int",
+				"value" : 10,
+				"position" : {
+					"x" : 10,
+					"y" : 20
+				}
+			}
+		]
+	}
+}

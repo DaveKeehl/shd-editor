@@ -1,14 +1,18 @@
-import React from 'react';
-import Stack from './components/Stack/Stack.js';
-import Object from './components/Object/Object.js';
+import React, {Component} from 'react';
+import Stack from './components/Stack';
+import Heap from './components/Heap';
 
-function App() {
-	return (
-		<div className="App">
-			<Stack/>
-			<Object/>
-		</div>
-	);
+class App extends Component {
+
+	render() {
+		return (
+			<div className="App">
+				<Stack/>
+				<div className="separator"></div>
+				<Heap/>
+			</div>
+		)
+	};
 }
 
 export default App;
