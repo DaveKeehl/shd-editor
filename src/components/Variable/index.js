@@ -23,6 +23,7 @@ class Variable extends Component {
 						<input 
 							type="text" 
 							name="name"
+							autoComplete="off"
 						/>
 					</label>
 
@@ -31,6 +32,7 @@ class Variable extends Component {
 						<input 
 							type="text" 
 							name="type"
+							autoComplete="off"
 						/>
 					</label>
 
@@ -39,6 +41,7 @@ class Variable extends Component {
 						<input 
 							type="text" 
 							name="value"
+							autoComplete="off"
 						/>
 					</label>
 				</form>

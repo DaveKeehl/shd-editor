@@ -4,6 +4,8 @@ import Variable from '../Variable'
 function Variables() {
 	return (
 		<div className="object__variables">
+			<Variable />
+			<Variable />
 		</div>
 	)
 }

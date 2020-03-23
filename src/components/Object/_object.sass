@@ -16,15 +16,31 @@
 		padding-bottom: 10px
 		border-bottom: 1px solid transparentize(white, .5)
 
-		div
+		label
 			display: flex
+			margin-right: 5px
 
 			img
 				transform: translateY(-1px)
+				&:hover
+					cursor: pointer
 
-			h2
+			input
+				background: none
+				border: 0
 				font-size: 20px
-				margin-left: 10px
+				font-weight: bold
+				margin-left: 5px
+				padding: 2px 5px
+				border-radius: 3px
+				background: none
+				transition: background .3s
+				&:focus
+					background: transparentize(white, .8)
+					outline: 0
+				&::placeholder
+					color: white
+					opacity: .5
 
 	&__variables
 		margin-bottom: 10px

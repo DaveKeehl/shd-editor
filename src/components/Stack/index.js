@@ -9,6 +9,7 @@ class Stack extends Component {
 				<Header region="STACK" />
 				<div className="stack__objects">
 					<Object/>
+					<Object/>
 				</div>
 			</div>
 		)
