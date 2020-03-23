@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import Object from '../Object';
+import React, { Component } from 'react'
+import Header from '../Header'
+import Object from '../Object'
 
 class Stack extends Component {
 	render() {
 		return (
 			<div className="stack">
-				<h1>STACK</h1>
-				<div className="objects">
-					<button>Create a new object</button>
+				<Header region="STACK" />
+				<div className="stack__objects">
 					<Object/>
 				</div>
 			</div>
@@ -15,4 +15,4 @@ class Stack extends Component {
 	}
 }
 
-export default Stack;
+export default Stack

@@ -1,0 +1,21 @@
+*
+	margin: 0
+	padding: 0
+	box-sizing: border-box
+	font-family: 'Roboto', sans-serif
+	
+.App
+	-webkit-font-smoothing: antialiased
+	-moz-osx-font-smoothing: grayscale
+	text-rendering: optimizeLegibility
+	position: absolute
+	width: 100%
+	height: 100%
+	display: grid
+	grid-template-columns: minmax(max-content,340px) min-content auto
+
+.separator
+	background: #F3F3F3
+	width: 10px
+	&:hover
+		cursor: col-resize

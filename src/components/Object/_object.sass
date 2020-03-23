@@ -1,0 +1,97 @@
+.object
+	*
+		color: white
+	padding: 20px
+	background: linear-gradient(180deg, #ED6060 0%, #DB3737 100%)
+	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 12px
+
+	&:not(:last-child)
+		margin-bottom: 10px
+
+	&__header
+		display: flex
+		justify-content: space-between
+		margin-bottom: 20px
+		padding-bottom: 10px
+		border-bottom: 1px solid transparentize(white, .5)
+
+		div
+			display: flex
+
+			img
+				transform: translateY(-1px)
+
+			h2
+				font-size: 20px
+				margin-left: 10px
+
+	&__variables
+		margin-bottom: 10px
+
+		&__variable
+			$variable-horizontal-gap: 10px
+			display: flex
+
+			&:not(:last-child)
+				margin-bottom: 20px
+
+			&:last-child
+				border-bottom: 1px solid transparentize(white, .5)
+				padding-bottom: 20px
+
+			&--remove
+				display: flex
+				background: none
+				border: none
+				img
+					transform: translateY(2px)
+
+			&--remove, &__container
+				margin-right: $variable-horizontal-gap
+
+			form
+				display: flex
+				flex-direction: column
+				align-items: flex-start
+				width: 100%
+
+			label
+				display: flex
+				align-items: center
+				width: 100%
+				&:not(:last-child)
+					margin-bottom: 10px
+
+			input
+				border: none
+				margin-left: 10px
+				border-radius: 3px
+				padding: 6px 3px
+				color: black
+				font-size: 14px
+				box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
+				width: 100%
+			
+	&__form
+		display: flex
+		flex-direction: column
+		align-items: center
+
+		div
+			display: flex
+			justify-content: center
+			align-items: center
+
+		input[type="radio"]
+			margin-right: 5px
+
+		label:not(:last-child)
+			margin-right: 20px
+
+		button
+			width: 100%
+			font-size: 14px
+			text-decoration: underline
+			margin-top: 10px
+			width: fit-content
