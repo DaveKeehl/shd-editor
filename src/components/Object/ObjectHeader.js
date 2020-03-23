@@ -8,7 +8,12 @@ class ObjectHeader extends Component {
 		this.state = {
 			className: ""
 		}
+		this.removeBlock = this.removeBlock.bind(this)
 		this.handleChange = this.handleChange.bind(this)
+	}
+
+	removeBlock() {
+		this.props.removeBlock(this.props.id)
 	}
 
 	handleChange(event) {
@@ -45,7 +50,7 @@ class ObjectHeader extends Component {
 					className="object__header--remove"
 					src={removeBlock} 
 					alt="Remove block" 
-					onClick={this.props.removeBlock}
+					onClick={this.removeBlock}
 				/>
 			</div>
 		)
