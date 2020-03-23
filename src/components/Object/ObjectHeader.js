@@ -6,7 +6,7 @@ class ObjectHeader extends Component {
 	constructor() {
 		super()
 		this.state = {
-			className: "Class"
+			className: ""
 		}
 		this.handleChange = this.handleChange.bind(this)
 	}
