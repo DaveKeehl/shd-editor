@@ -19,7 +19,6 @@ class ObjectHeader extends Component {
 	}
 
 	handleKeyPress(event) {
-		console.log(event.keyCode)
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}
@@ -37,12 +36,17 @@ class ObjectHeader extends Component {
 						type="text"
 						name="className"
 						value={this.state.className}
-						placeholder="Class"
+						placeholder="Class name"
 						onChange={this.handleChange}
 						onKeyUp={this.handleKeyPress}
 					/>
 				</label>
-				<img src={removeBlock} alt="Remove block" />
+				<img 
+					className="object__header--remove"
+					src={removeBlock} 
+					alt="Remove block" 
+					onClick={this.props.removeBlock}
+				/>
 			</div>
 		)
 	}

@@ -42,6 +42,9 @@
 					color: white
 					opacity: .5
 
+		&--remove:hover
+			cursor: pointer
+
 	&__variables
 		margin-bottom: 10px
 
@@ -83,11 +86,17 @@
 				border: none
 				margin-left: 10px
 				border-radius: 3px
-				padding: 6px 3px
+				padding: 6px
 				color: black
 				font-size: 14px
 				box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
 				width: 100%
+				transition: box-shadow .1s
+				&:focus
+					outline: 0
+					box-shadow: 0 0 0 2px transparentize(white, .3)
+				&::placeholder
+					opacity: .5
 			
 	&__form
 		display: flex

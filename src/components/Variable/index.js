@@ -24,6 +24,7 @@ class Variable extends Component {
 							type="text" 
 							name="name"
 							autoComplete="off"
+							placeholder="var-name"
 						/>
 					</label>
 
@@ -33,6 +34,7 @@ class Variable extends Component {
 							type="text" 
 							name="type"
 							autoComplete="off"
+							placeholder="var-type"
 						/>
 					</label>
 
@@ -42,6 +44,7 @@ class Variable extends Component {
 							type="text" 
 							name="value"
 							autoComplete="off"
+							placeholder="var-value"
 						/>
 					</label>
 				</form>
