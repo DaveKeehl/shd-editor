@@ -41,7 +41,6 @@ class Stack extends Component {
 	}
 
 	render() {
-		console.log(this.state.objects)
 		return (
 			<div className="stack">
 				<Header region="STACK" addBlock={this.addBlock} />
