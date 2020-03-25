@@ -12,16 +12,16 @@ class Stack extends Component {
 		this.removeBlock = this.removeBlock.bind(this)
 	}
 
-	addBlock(event) {
-		const newBlock = 
+	addBlock() {
+		const newBlock = [
 			<Object 
-				key={this.state.objects.length}  
-				id={this.state.objects.length}  
-				removeBlock={this.removeBlock} 
+				key={this.state.objects.length}
+				id={this.state.objects.length}
 			/>
+		]
 		this.setState(prevState => {
 				return {
-					objects: prevState.objects.concat(newBlock)
+					objects: newBlock.concat(prevState.objects)
 				}
 			}
 		)
@@ -41,11 +41,12 @@ class Stack extends Component {
 	}
 
 	render() {
+		const objects = this.state.objects
 		return (
 			<div className="stack">
 				<Header region="STACK" addBlock={this.addBlock} />
 				<div className="stack__objects">
-					{this.state.objects}
+					{objects}
 				</div>
 			</div>
 		)

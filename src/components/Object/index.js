@@ -7,7 +7,7 @@ class Object extends Component {
 	render() {
 		return (
 			<div className="object">
-				<ObjectHeader id={this.props.id} removeBlock={this.props.removeBlock}/>
+				<ObjectHeader id={this.props.id} />
 				<Variables />
 				<NewVariableForm />
 			</div>
