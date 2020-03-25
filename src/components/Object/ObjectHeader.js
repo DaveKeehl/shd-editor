@@ -21,6 +21,7 @@ class ObjectHeader extends Component {
 		this.setState({
 			[name]: value
 		})
+		this.props.updateName(value)
 	}
 
 	handleKeyPress(event) {
@@ -44,6 +45,7 @@ class ObjectHeader extends Component {
 						placeholder="Class name"
 						onChange={this.handleChange}
 						onKeyUp={this.handleKeyPress}
+						autoComplete="off"
 					/>
 				</label>
 				<button 

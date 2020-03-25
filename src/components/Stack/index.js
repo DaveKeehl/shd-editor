@@ -19,6 +19,7 @@ class Stack extends Component {
 			<Object 
 				key={newObjectsCount}  
 				id={newObjectsCount}  
+				region="stack"
 				removeBlock={this.removeBlock} 
 			/>
 		]
@@ -41,7 +42,11 @@ class Stack extends Component {
 		// console.log(this.state)
 		return (
 			<div className="stack">
-				<Header region="STACK" numberOfObjects={this.state.objects.length} addBlock={this.addBlock} />
+				<Header 
+					region="stack" 
+					numberOfObjects={this.state.objects.length} 
+					addBlock={this.addBlock} 
+				/>
 				<div className="stack__objects">
 					{this.state.objects}
 				</div>

@@ -4,7 +4,7 @@ class NewVariableForm extends Component {
 	constructor() {
 		super()
 		this.state = {
-			newVariableType: "primitive"
+			newVariableNature: "primitive"
 		}
 		this.handleSubmit = this.handleSubmit.bind(this)
 		this.handleChange = this.handleChange.bind(this)
@@ -25,7 +25,7 @@ class NewVariableForm extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault()
-		this.props.addVariable(this.state.newVariableType)
+		this.props.addVariable(this.state.newVariableNature)
 	}
 
 	render() {
@@ -35,9 +35,9 @@ class NewVariableForm extends Component {
 					<label>
 						<input 
 							type="radio" 
-							name="newVariableType"
+							name="newVariableNature"
 							value="primitive"
-							checked={this.state.newVariableType === "primitive"}
+							checked={this.state.newVariableNature === "primitive"}
 							onChange={this.handleChange}
 						/>
 						Primitive
@@ -46,9 +46,9 @@ class NewVariableForm extends Component {
 					<label>
 						<input 
 							type="radio" 
-							name="newVariableType"
+							name="newVariableNature"
 							value="reference"
-							checked={this.state.newVariableType === "reference"}
+							checked={this.state.newVariableNature === "reference"}
 							onChange={this.handleChange}
 						/>
 						Reference
