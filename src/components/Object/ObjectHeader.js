@@ -50,7 +50,7 @@ class ObjectHeader extends Component {
 					className="object__header--remove"
 					src={removeBlock} 
 					alt="Remove block" 
-					
+					onClick={this.removeBlock}
 				/>
 			</div>
 		)
