@@ -8,11 +8,11 @@ class ObjectHeader extends Component {
 		this.state = {
 			className: ""
 		}
-		this.removeBlock = this.removeBlock.bind(this)
+		this.handleClick = this.handleClick.bind(this)
 		this.handleChange = this.handleChange.bind(this)
 	}
 
-	removeBlock() {
+	handleClick() {
 		this.props.removeBlock(this.props.id)
 	}
 
@@ -46,12 +46,13 @@ class ObjectHeader extends Component {
 						onKeyUp={this.handleKeyPress}
 					/>
 				</label>
-				<img 
-					className="object__header--remove"
-					src={removeBlock} 
-					alt="Remove block" 
-					onClick={this.removeBlock}
-				/>
+				<button 
+					className="object__header--remove" 
+					onClick={this.handleClick}
+				>
+					<img src={removeBlock} alt="Remove block"/>
+				</button>
+
 			</div>
 		)
 	}

@@ -3,13 +3,13 @@
 @import 'components/Heap/heap'
 @import 'components/Header/header'
 @import 'components/Object/object'
-@import 'components/Variable/variable'
 
 .variable
 	&:not(:last-child)
 		margin-bottom: 20px
 
 button
+	display: flex
 	background: none
 	border: none
 	&:hover
@@ -18,3 +18,9 @@ button
 		opacity: .8
 	&:focus
 		outline: none
+
+@keyframes fadeIn
+	0%
+		opacity: 0
+	100%
+		opacity: 1

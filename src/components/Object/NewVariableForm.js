@@ -25,7 +25,7 @@ class NewVariableForm extends Component {
 
 	handleSubmit(event) {
 		event.preventDefault()
-		console.log(this.state.newVariableType)
+		this.props.addVariable(this.state.newVariableType)
 	}
 
 	render() {

@@ -6,7 +6,7 @@ class Stack extends Component {
 	constructor() {
 		super()
 		this.state = {
-			totalObjectsCount: 0,
+			totalObjectsCreated: 0,
 			objects: []
 		}
 		this.addBlock = this.addBlock.bind(this)
@@ -14,12 +14,7 @@ class Stack extends Component {
 	}
 
 	addBlock() {
-		const newObjectsCount = this.state.totalObjectsCount+1
-		this.setState(prevState => {
-			return {
-				totalObjectsCount: newObjectsCount
-			}
-		})
+		const newObjectsCount = this.state.totalObjectsCreated+1
 		const newBlock = [
 			<Object 
 				key={newObjectsCount}  
@@ -28,26 +23,25 @@ class Stack extends Component {
 			/>
 		]
 		const newObjects = newBlock.concat(this.state.objects)
-		this.setState({objects: newObjects})
+		this.setState({
+			totalObjectsCreated: newObjectsCount,
+			objects: newObjects
+		})
 	}
 
 	removeBlock(id) {
-		const newObjectsList = []
-		for (let i = 0; i < this.state.objects.length; i++) {
-			if (id !== this.state.objects[i].props.id) {
-				newObjectsList.push(this.state.objects[i])
+		this.setState(prevState => {
+			return {
+				objects: prevState.objects.filter(object => id !== object.props.id)
 			}
-		}
-		this.setState({
-			objects: newObjectsList
 		})
 	}
 
 	render() {
-		console.log(this.state)
+		// console.log(this.state)
 		return (
 			<div className="stack">
-				<Header region="STACK" addBlock={this.addBlock} />
+				<Header region="STACK" numberOfObjects={this.state.objects.length} addBlock={this.addBlock} />
 				<div className="stack__objects">
 					{this.state.objects}
 				</div>

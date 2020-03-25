@@ -1,6 +1,7 @@
 .object
 	*
 		color: white
+
 	padding: 20px
 	background: linear-gradient(180deg, #ED6060 0%, #DB3737 100%)
 	box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -59,14 +60,16 @@
 				border-bottom: 1px solid transparentize(white, .5)
 				padding-bottom: 20px
 
-			&--remove
+			&__actions
 				display: flex
-				background: none
-				border: none
-				img
+				flex-direction: column
+				justify-content: center
+				margin-right: $variable-horizontal-gap
+
+				&--remove img
 					transform: translateY(2px)
 
-			&--remove, &__container
+			&__container
 				margin-right: $variable-horizontal-gap
 
 			form
@@ -74,6 +77,17 @@
 				flex-direction: column
 				align-items: flex-start
 				width: 100%
+
+				div
+					background: white
+					margin-left: 10px
+					padding: 5px 18px
+					border-radius: 3px
+					box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
+
+				
+				img:hover
+					cursor: pointer
 
 			label
 				display: flex
@@ -96,7 +110,7 @@
 					outline: 0
 					box-shadow: 0 0 0 2px transparentize(white, .3)
 				&::placeholder
-					opacity: .5
+					opacity: .3
 			
 	&__form
 		display: flex
