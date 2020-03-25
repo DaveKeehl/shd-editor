@@ -46,7 +46,7 @@ class Stack extends Component {
 			<div className="stack">
 				<Header region="STACK" addBlock={this.addBlock} />
 				<div className="stack__objects">
-					{objects}
+					
 				</div>
 			</div>
 		)
