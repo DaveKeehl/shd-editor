@@ -21,7 +21,7 @@ class Variable extends Component {
 	}
 
 	componentDidMount() {
-		console.log(this.props)
+		// console.log(this.props)
 		this.setState({nature: this.props.nature})
 	}
 

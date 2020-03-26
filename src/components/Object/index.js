@@ -43,7 +43,7 @@ class Object extends Component {
 	}
 
 	removeVariable(id) {
-		console.log(id)
+		// console.log(id)
 		this.setState(prevState => {
 			return {
 				variables: prevState.variables.filter(variable => id !== variable.props.id)
@@ -52,9 +52,20 @@ class Object extends Component {
 	}
 
 	moveVariableUp(id) {
-		console.log(id)
-		const toMove = this.state.variables.filter(variable => variable.props.id === id)
-		console.log(toMove)
+		let idx
+		for (let i = 0; i < this.state.variables.length; i++) {
+			if (this.state.variables[i].props.id === id) {
+				idx = i
+			}
+		}
+		if (this.state.variables.length > 1 && idx > 0) {
+			console.log("can move up")
+			let reorderedVariables = this.state.variables
+			const temp = reorderedVariables[idx-1]
+			reorderedVariables[idx-1] = reorderedVariables[idx]
+			reorderedVariables[idx] = temp
+			this.setState({ variables: reorderedVariables })
+		}
 	}
 	
 	moveVariableDown(id) {
@@ -65,7 +76,7 @@ class Object extends Component {
 		const background = {
 			background: "linear-gradient(180deg, #4A59A7 0%, #16298A 100%)"
 		}
-		// console.log(this.state)
+		
 		return (
 			<div 
 				className="object" 
