@@ -14,8 +14,7 @@ class Object extends Component {
 		this.updateName = this.updateName.bind(this)
 		this.addVariable = this.addVariable.bind(this)
 		this.removeVariable = this.removeVariable.bind(this)
-		this.moveVariableUp = this.moveVariableUp.bind(this)
-		this.moveVariableDown = this.moveVariableDown.bind(this)
+		this.reorderVariable = this.reorderVariable.bind(this)
 	}
 
 	updateName(name) {
@@ -31,8 +30,7 @@ class Object extends Component {
 				id={newVariablesCount} 
 				nature={nature}
 				removeVariable={this.removeVariable}
-				moveVariableUp={this.moveVariableUp}
-				moveVariableDown={this.moveVariableDown}
+				reorderVariable={this.reorderVariable}
 			/>
 		]
 		const newVariables = this.state.variables.concat(newVariable)
@@ -51,25 +49,30 @@ class Object extends Component {
 		})
 	}
 
-	moveVariableUp(id) {
+	reorderVariable(direction, id) {
 		let idx
+		let reorderedVariables = this.state.variables
 		for (let i = 0; i < this.state.variables.length; i++) {
 			if (this.state.variables[i].props.id === id) {
 				idx = i
 			}
 		}
-		if (this.state.variables.length > 1 && idx > 0) {
-			console.log("can move up")
-			let reorderedVariables = this.state.variables
-			const temp = reorderedVariables[idx-1]
-			reorderedVariables[idx-1] = reorderedVariables[idx]
-			reorderedVariables[idx] = temp
-			this.setState({ variables: reorderedVariables })
+		if (direction === "up") {
+			if (reorderedVariables.length > 1 && idx > 0) {
+				// console.log("can move up")
+				const temp = reorderedVariables[idx-1]
+				reorderedVariables[idx-1] = reorderedVariables[idx]
+				reorderedVariables[idx] = temp
+			}
+		} else {
+			if (reorderedVariables.length > 1 && idx >= 0 && idx < reorderedVariables.length-1) {
+				// console.log("can move down")
+				const temp = reorderedVariables[idx+1]
+				reorderedVariables[idx+1] = reorderedVariables[idx]
+				reorderedVariables[idx] = temp
+			}
 		}
-	}
-	
-	moveVariableDown(id) {
-		console.log(id)
+		this.setState({ variables: reorderedVariables })
 	}
 
 	render() {

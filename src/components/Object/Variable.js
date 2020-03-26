@@ -21,7 +21,6 @@ class Variable extends Component {
 	}
 
 	componentDidMount() {
-		// console.log(this.props)
 		this.setState({nature: this.props.nature})
 	}
 
@@ -30,11 +29,11 @@ class Variable extends Component {
 	}
 
 	moveVariableUp() {
-		this.props.moveVariableUp(this.props.id)
+		this.props.reorderVariable("up", this.props.id)
 	}
 
 	moveVariableDown() {
-		this.props.moveVariableUp(this.props.id)
+		this.props.reorderVariable("down", this.props.id)
 	}
 
 	handleChange(event) {
