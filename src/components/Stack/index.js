@@ -1,57 +1,38 @@
-import React, { Component } from 'react'
-import Header from '../Header'
-// import Object from '../Object'
+import React, { useState } from "react"
+import Header from "../Header"
+import Object from "../Object"
 
-class Stack extends Component {
-	constructor() {
-		super()
-		this.state = {
-			totalObjectsCreated: 0,
-			objects: []
-		}
-		this.addBlock = this.addBlock.bind(this)
-		this.removeBlock = this.removeBlock.bind(this)
+function Stack() {
+	const {totalObjectsCreated, setTotalObjectsCreated} = useState(0)
+	const {objects, setObjects} = useState([])
+
+	addBlock = () => {
+		const newBlock = <Object 
+							key={newObjectsCount}  
+							id={newObjectsCount}  
+							region="stack"
+							removeBlock={this.removeBlock} 
+						/>
+		setTotalObjectsCreated(oldCount => oldCount+1)
+		setObjects(existingBlocks => [newBlock, ...existingBlocks])
 	}
 
-	addBlock() {
-		const newObjectsCount = this.state.totalObjectsCreated+1
-		const newBlock = [
-			<Object 
-				key={newObjectsCount}  
-				id={newObjectsCount}  
-				region="stack"
-				removeBlock={this.removeBlock} 
+	removeBlock = (id) => {
+		setObjects(objects => objects.filter(object => id !== object.props.id))
+	}
+
+	return (
+		<div className="stack">
+			<Header 
+				region="stack" 
+				numberOfObjects={this.state.objects.length} 
+				addBlock={this.addBlock} 
 			/>
-		]
-		const newObjects = newBlock.concat(this.state.objects)
-		this.setState({
-			totalObjectsCreated: newObjectsCount,
-			objects: newObjects
-		})
-	}
-
-	removeBlock(id) {
-		this.setState(prevState => {
-			return {
-				objects: prevState.objects.filter(object => id !== object.props.id)
-			}
-		})
-	}
-
-	render() {
-		return (
-			<div className="stack">
-				<Header 
-					region="stack" 
-					numberOfObjects={this.state.objects.length} 
-					addBlock={this.addBlock} 
-				/>
-				<div className="stack__objects">
-					{this.state.objects}
-				</div>
-			</div>
-		)
-	}
+			{/* <div className="stack__objects">
+				{this.state.objects}
+			</div> */}
+		</div>
+	)
 }
 
 export default Stack
