@@ -6,7 +6,7 @@ function Stack() {
 	const [totalObjectsCreated, setTotalObjectsCreated] = useState(0)
 	const [objects, setObjects] = useState([])
 
-	addBlock = () => {
+	const addBlock = () => {
 		const newBlock = <Object 
 							key={totalObjectsCreated}  
 							id={totalObjectsCreated}  
@@ -17,7 +17,7 @@ function Stack() {
 		setObjects(existingBlocks => [newBlock, ...existingBlocks])
 	}
 
-	removeBlock = (id) => {
+	const removeBlock = (id) => {
 		setObjects(objects => objects.filter(object => id !== object.props.id))
 	}
 

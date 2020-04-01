@@ -8,11 +8,11 @@ function Object(props) {
 	const [totalVariablesCreated, setTotalVariablesCreated] = useState(0)
 	const [variables, setVariables] = useState([])
 
-	updateName = (name) => {
+	const updateName = (name) => {
 		setName(name)
 	}
 
-	addVariable = (nature) => {
+	const addVariable = (nature) => {
 		const newVariable = <Variable 
 								key={totalVariablesCreated} 
 								id={totalVariablesCreated} 
@@ -23,7 +23,7 @@ function Object(props) {
 		setVariables(existingVariables => [...existingVariables, newVariable])
 	}
 
-	removeVariable = (id) => {
+	const removeVariable = (id) => {
 		setVariables(variables => variables.filter(variable => id !== variable.props.id))
 	}
 
