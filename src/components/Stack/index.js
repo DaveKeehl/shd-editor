@@ -23,10 +23,8 @@ function Stack() {
 
 	return (
 		<div className="stack">
-			test
 			<Header 
 				region="stack" 
-				numberOfObjects={objects.length} 
 				 
 			/>
 			{/* <div className="stack__objects">
