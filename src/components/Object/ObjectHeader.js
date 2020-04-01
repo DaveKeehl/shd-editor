@@ -26,7 +26,7 @@ function ObjectHeader(props) {
 				type="text"
 				name="className"
 				value={className}
-				placeholder="Class.method()"
+				placeholder={props.region === "stack" ? "Class.method()" : "Class"}
 				onChange={handleChange}
 				onKeyUp={handleKeyPress}
 				autoComplete="off"

@@ -6,9 +6,10 @@ function ObjectComponent(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
+	const [position, setPosition] = useState({top: "", left: ""})
 
-	function updateName(name) {
-		setName(name)
+	function updateName(newName) {
+		setName(newName)
 	}
 
 	function addVariable(nature) {
@@ -26,10 +27,16 @@ function ObjectComponent(props) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
 	}
 
+	function DragHandle() {
+		return <div className="object__drag-handle"></div>
+	}
+
 	return (
-		<div className="object">
+		<div className="object" draggable={props.region === "heap" ? true : false}>
+			{props.region === "heap" ? <DragHandle /> : null}
 			<ObjectHeader 
 				id={props.id} 
+				region={props.region}
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>

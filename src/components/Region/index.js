@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import Header from "../Header"
 import Object from "../Object"
 
 function Region(props) {
-	const [name, setName] = useState("")
+	const [name, setName] = useState(props.name)
 	const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
-
-	useEffect(() => setName(props.name), [])
+	const [draggableArea, setDraggableArea] = useState({top: "", right: "", bottom: "", left: ""})
 
 	function addBlock() {
 		const newBlock = <Object 
@@ -24,7 +23,7 @@ function Region(props) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
-	const message = <p>Click on the "+" button to create a {name === "stack" ? <em>Stack Frame</em> : "Object"}.</p>
+	const message = <p>Click on the "+" button to create {name === "stack" ? "a Stack Frame" : "an Object"}.</p>
 
 	return (
 		<div className={name}>
@@ -33,7 +32,7 @@ function Region(props) {
 				objectsCount={objects.length} 
 				addBlock={addBlock}
 			/>
-			<div className={`${name}__objects`}>
+			<div className={`${name}__objects objects`}>
 				{objects.length === 0 ? message : objects}
 			</div>
 		</div>
