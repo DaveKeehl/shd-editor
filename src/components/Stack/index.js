@@ -21,12 +21,13 @@ function Stack() {
 		// setObjects(objects => objects.filter(object => id !== object.props.id))
 	// }
 
+	console.log(objects)
 
 	return (
 		<div className="stack">
 			<Header 
 				region="stack" 
-				objectsCount={objects.length} 
+				objectsCount={0} 
 			/>
 			<div className="stack__objects">
 				{objects}
