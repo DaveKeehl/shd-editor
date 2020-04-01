@@ -13,7 +13,7 @@ function Stack() {
 							region="stack"
 							removeBlock={removeBlock} 
 						/>
-		setTotalObjectsCreated(prevCount => prevCount+1)
+		setCount(prevCount => prevCount+1)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 	}
 

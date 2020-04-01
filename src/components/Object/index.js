@@ -19,7 +19,7 @@ function Object(props) {
 								nature={nature}
 								removeVariable={removeVariable}
 							/>
-		setTotalVariablesCreated(prevCount => prevCount+1)
+		setCount(prevCount => prevCount+1)
 		setVariables(prevVariables => [...prevVariables, newVariable])
 	}
 
