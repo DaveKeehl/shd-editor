@@ -1,10 +1,10 @@
 import React, { useState } from "react"
-import Header from "../Header"
+// import Header from "../Header"
 // import Object from "../Object"
 
 function Stack() {
-	const {totalObjectsCreated, setTotalObjectsCreated} = useState(0)
-	const {objects, setObjects} = useState([])
+	// const {totalObjectsCreated, setTotalObjectsCreated} = useState(0)
+	// const {objects, setObjects} = useState([])
 
 	addBlock = () => {
 		// const newBlock = <Object 
@@ -23,11 +23,11 @@ function Stack() {
 
 	return (
 		<div className="stack">
-			<Header 
+			{/* <Header 
 				region="stack" 
 				numberOfObjects={objects.length} 
 				addBlock={addBlock} 
-			/>
+			/> */}
 			{/* <div className="stack__objects">
 				{this.state.objects}
 			</div> */}
