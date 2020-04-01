@@ -22,7 +22,7 @@ function Variable(props) {
 	const valueField = <input 
 							nature="text" 
 							name="value"
-							value={state.value}
+							value={value}
 							autoComplete="off"
 							placeholder="var-value"
 							onChange={handleChange}
@@ -38,7 +38,7 @@ function Variable(props) {
 					<input 
 						nature="text" 
 						name="name"
-						value={state.name}
+						value={name}
 						autoComplete="off"
 						placeholder="var-name"
 						onChange={handleChange}
@@ -50,7 +50,7 @@ function Variable(props) {
 					<input 
 						nature="text" 
 						name="type"
-						value={state.type}
+						value={type}
 						autoComplete="off"
 						placeholder="var-type"
 						onChange={handleChange}
