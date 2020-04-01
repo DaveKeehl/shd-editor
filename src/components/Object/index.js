@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import ObjectHeader from './ObjectHeader'
-// import Variable from './Variable'
-// import NewVariableForm from './NewVariableForm'
+import React, { useState } from "react"
+import ObjectHeader from "./ObjectHeader"
+import Variable from "./Variable"
+// import NewVariableForm from "./NewVariableForm"
 
 function Object(props) {
 	const [name, setName] = useState("")
