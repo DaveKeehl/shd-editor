@@ -5,7 +5,7 @@ function Header(props) {
 	return (
 		<header>
 			<h1>{props.region.toUpperCase()} ({props.objectsCount})</h1>
-			<button>
+			<button onClick={props.addBlock}>
 				<img src={addBlockButton} alt="Add a block" />
 			</button>
 		</header>

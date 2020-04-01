@@ -26,6 +26,7 @@ function Stack() {
 			<Header 
 				region="stack" 
 				objectsCount={objects.length} 
+				addBlock={addBlock}
 			/>
 			<div className="stack__objects">
 				{objects}
