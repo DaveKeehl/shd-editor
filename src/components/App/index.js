@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import Separator from "./../Separator"
+import Heap from "./../Heap"
 
 class App extends Component {
 
@@ -7,6 +8,7 @@ class App extends Component {
 		return (
 			<div className="App">
 				<Separator />
+				<Heap />
 				Hello World
 			</div>
 		)
