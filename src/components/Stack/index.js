@@ -3,22 +3,22 @@ import Header from "../Header"
 import Object from "../Object"
 
 function Stack() {
-	const [totalObjectsCreated, setTotalObjectsCreated] = useState(0)
+	const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
 
 	const addBlock = () => {
 		const newBlock = <Object 
-							key={totalObjectsCreated}  
-							id={totalObjectsCreated}  
+							key={count} 
+							id={count} 
 							region="stack"
 							removeBlock={removeBlock} 
 						/>
-		setTotalObjectsCreated(oldCount => oldCount+1)
-		setObjects(existingBlocks => [newBlock, ...existingBlocks])
+		setTotalObjectsCreated(prevCount => prevCount+1)
+		setObjects(prevObjects => [newBlock, ...prevObjects])
 	}
 
 	const removeBlock = (id) => {
-		setObjects(objects => objects.filter(object => id !== object.props.id))
+		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
 	return (

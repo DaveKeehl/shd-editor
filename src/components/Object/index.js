@@ -5,7 +5,7 @@ import NewVariableForm from "./NewVariableForm"
 
 function Object(props) {
 	const [name, setName] = useState("")
-	const [totalVariablesCreated, setTotalVariablesCreated] = useState(0)
+	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
 
 	const updateName = (name) => {
@@ -14,17 +14,17 @@ function Object(props) {
 
 	const addVariable = (nature) => {
 		const newVariable = <Variable 
-								key={totalVariablesCreated} 
-								id={totalVariablesCreated} 
+								key={count} 
+								id={count} 
 								nature={nature}
 								removeVariable={removeVariable}
 							/>
-		setTotalVariablesCreated(oldCount => oldCount+1)
-		setVariables(existingVariables => [...existingVariables, newVariable])
+		setTotalVariablesCreated(prevCount => prevCount+1)
+		setVariables(prevVariables => [...prevVariables, newVariable])
 	}
 
 	const removeVariable = (id) => {
-		setVariables(variables => variables.filter(variable => id !== variable.props.id))
+		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
 	}
 
 	const background = {

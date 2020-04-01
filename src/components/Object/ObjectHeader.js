@@ -1,64 +1,45 @@
-import React, {Component} from "react"
-import renameClass from "../../images/rename-class.svg"
+import React, { useState } from "react"
 import removeBlock from "../../images/remove-block.svg"
 
-class ObjectHeader extends Component {
-	constructor() {
-		super()
-		this.state = {
-			className: ""
-		}
-		this.handleClick = this.handleClick.bind(this)
-		this.handleChange = this.handleChange.bind(this)
+function ObjectHeader(props) {
+	const [className, setClassName] = useState("")
+
+	const handleClick = () => {
+		props.removeBlock(props.id)
 	}
 
-	handleClick() {
-		this.props.removeBlock(this.props.id)
+	const handleChange = (event) => {
+		const {value} = event.target
+		setClassName(value)
+		props.updateName(value)
 	}
 
-	handleChange(event) {
-		const {name,value} = event.target
-		this.setState({
-			[name]: value
-		})
-		this.props.updateName(value)
-	}
-
-	handleKeyPress(event) {
+	const handleKeyPress = (event) => {
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}
 	}
 
-	render() {
-		return (
-			<div className="object__header">
-				<label>
-					<img 
-						src={renameClass}
-						alt="Rename the class"
-					/>
-					<input 
-						type="text"
-						name="className"
-						value={this.state.className}
-						placeholder="Class name"
-						onChange={this.handleChange}
-						onKeyUp={this.handleKeyPress}
-						autoComplete="off"
-					/>
-				</label>
-				<button 
-					className="object__header--remove" 
-					onClick={this.handleClick}
-				>
-					<img src={removeBlock} alt="Remove block"/>
-				</button>
+	return (
+		<div className="object__header">
+			<input 
+				type="text"
+				name="className"
+				value={className}
+				placeholder="Class.method()"
+				onChange={handleChange}
+				onKeyUp={handleKeyPress}
+				autoComplete="off"
+			/>
+			<button 
+				className="object__header--remove" 
+				onClick={handleClick}
+			>
+				<img src={removeBlock} alt="Remove block"/>
+			</button>
 
-			</div>
-		)
-	}
-
+		</div>
+	)
 }
 
 export default ObjectHeader

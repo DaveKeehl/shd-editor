@@ -4,8 +4,7 @@ function NewVariableForm(props) {
 	const [nature, setNature] = useState("primitive")
 
 	const handleChange = (event) => {
-		const {value} = event.target
-		setNature(value)
+		setNature(event.target.value)
 	}
 
 	const handleSubmit = (event) => {
