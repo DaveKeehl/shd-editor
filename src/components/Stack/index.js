@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 // import Header from "../Header"
 // import Object from "../Object"
 
@@ -6,23 +6,24 @@ function Stack() {
 	// const {totalObjectsCreated, setTotalObjectsCreated} = useState(0)
 	// const {objects, setObjects} = useState([])
 
-	addBlock = () => {
-		// const newBlock = <Object 
-		// 					key={newObjectsCount}  
-		// 					id={newObjectsCount}  
-		// 					region="stack"
-		// 					removeBlock={this.removeBlock} 
-		// 				/>
-		// setTotalObjectsCreated(oldCount => oldCount+1)
-		// setObjects(existingBlocks => [newBlock, ...existingBlocks])
-	}
+	// addBlock = () => {
+	// 	const newBlock = <Object 
+	// 						key={newObjectsCount}  
+	// 						id={newObjectsCount}  
+	// 						region="stack"
+	// 						removeBlock={this.removeBlock} 
+	// 					/>
+	// 	setTotalObjectsCreated(oldCount => oldCount+1)
+	// 	setObjects(existingBlocks => [newBlock, ...existingBlocks])
+	// }
 
-	removeBlock = (id) => {
+	// removeBlock = (id) => {
 		// setObjects(objects => objects.filter(object => id !== object.props.id))
-	}
+	// }
 
 	return (
 		<div className="stack">
+			test
 			{/* <Header 
 				region="stack" 
 				numberOfObjects={objects.length} 
