@@ -26,15 +26,8 @@ function ObjectComponent(props) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
 	}
 
-	const background = {
-		background: "linear-gradient(180deg, #4A59A7 0%, #16298A 100%)"
-	}
-
 	return (
-		<div 
-			className="object" 
-			style={props.region === "heap" ? background : null}
-		>
+		<div className="object">
 			<ObjectHeader 
 				id={props.id} 
 				updateName={updateName}

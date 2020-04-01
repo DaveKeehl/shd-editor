@@ -1,15 +1,13 @@
 import React, {Component} from "react"
-import Stack from "./../Stack"
-import Separator from "./../Separator"
-import Heap from "./../Heap"
+import Region from "../Region"
 
 class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Stack />
-				<Separator />
-				<Heap />
+				<Region name="stack" />
+				<div className="separator"></div>
+				<Region name="heap" />
 			</div>
 		)
 	}
