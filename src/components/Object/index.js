@@ -3,16 +3,16 @@ import ObjectHeader from "./ObjectHeader"
 import Variable from "./Variable"
 import NewVariableForm from "./NewVariableForm"
 
-function Object(props) {
+function ObjectComponent(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
 
-	const updateName = (name) => {
+	function updateName(name) {
 		setName(name)
 	}
 
-	const addVariable = (nature) => {
+	function addVariable(nature) {
 		const newVariable = <Variable 
 								key={count} 
 								id={count} 
@@ -23,7 +23,7 @@ function Object(props) {
 		setVariables(prevVariables => [...prevVariables, newVariable])
 	}
 
-	const removeVariable = (id) => {
+	function removeVariable(id) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
 	}
 
@@ -47,4 +47,4 @@ function Object(props) {
 	)
 }
 
-export default Object
+export default ObjectComponent

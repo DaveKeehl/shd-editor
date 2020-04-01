@@ -4,17 +4,17 @@ import removeBlock from "../../images/remove-block.svg"
 function ObjectHeader(props) {
 	const [className, setClassName] = useState("")
 
-	const handleClick = () => {
+	function handleClick() {
 		props.removeBlock(props.id)
 	}
 
-	const handleChange = (event) => {
+	function handleChange(event) {
 		const {value} = event.target
 		setClassName(value)
 		props.updateName(value)
 	}
 
-	const handleKeyPress = (event) => {
+	function handleKeyPress(event) {
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}

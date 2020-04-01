@@ -6,7 +6,7 @@ function Stack() {
 	const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
 
-	const addBlock = () => {
+	function addBlock() {
 		const newBlock = <Object 
 							key={count} 
 							id={count} 
@@ -17,7 +17,7 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 	}
 
-	const removeBlock = (id) => {
+	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
@@ -29,8 +29,7 @@ function Stack() {
 				addBlock={addBlock}
 			/>
 			<div className="stack__objects">
-				{/* {objects} */}
-				<Object />
+				{objects}
 			</div>
 		</div>
 	)

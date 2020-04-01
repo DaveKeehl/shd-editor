@@ -8,11 +8,11 @@ function Variable(props) {
 	const [type, setType] = useState("")
 	const [value, setValue] = useState("")
 
-	const removeVariable = () => {
+	function removeVariable() {
 		props.removeVariable(props.id)
 	}
 
-	const handleChange = (event) => {
+	function handleChange(event) {
 		const {name, value} = event.target
 		// this.setState({
 		// 	[name]: value

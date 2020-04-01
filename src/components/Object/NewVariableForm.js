@@ -3,11 +3,11 @@ import React, { useState } from "react"
 function NewVariableForm(props) {
 	const [nature, setNature] = useState("primitive")
 
-	const handleChange = (event) => {
+	function handleChange(event) {
 		setNature(event.target.value)
 	}
 
-	const handleSubmit = (event) => {
+	function handleSubmit(event) {
 		event.preventDefault()
 		props.addVariable(nature)
 	}
