@@ -41,8 +41,8 @@ function Object(props) {
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>
-			{/* <div className="object__variables">{variables}</div>
-			<NewVariableForm addVariable={addVariable} /> */}
+			{/* <div className="object__variables">{variables}</div> */}
+			<NewVariableForm addVariable={addVariable} />
 		</div>
 	)
 }

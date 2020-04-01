@@ -1,64 +1,47 @@
-import React, {Component} from "react"
+import React, { useState } from "react"
 
-class NewVariableForm extends Component {
-	constructor() {
-		super()
-		this.state = {
-			newVariableNature: "primitive"
-		}
-		this.handleSubmit = this.handleSubmit.bind(this)
-		this.handleChange = this.handleChange.bind(this)
+function NewVariableForm(props) {
+	const [nature, setNature] = useState("primitive")
+
+	const handleChange = (event) => {
+		const {value} = event.target
+		setNature(value)
 	}
 
-	handleChange(event) {
-		const {name, value, type, checked} = event.target
-		if (type === "checkbox") {
-			this.setState({
-				[name]: checked
-			})
-		}  else {
-			this.setState({
-				[name]: value
-			}) 
-		}
-	}
-
-	handleSubmit(event) {
+	const handleSubmit = (event) => {
 		event.preventDefault()
-		this.props.addVariable(this.state.newVariableNature)
+		props.addVariable(nature)
 	}
 
-	render() {
-		return (
-			<form className="object__form" onSubmit={this.handleSubmit}>
-				<div>
-					<label>
-						<input 
-							type="radio" 
-							name="newVariableNature"
-							value="primitive"
-							checked={this.state.newVariableNature === "primitive"}
-							onChange={this.handleChange}
-						/>
-						Primitive
-					</label>
+	return (
+		<form className="object__form" onSubmit={handleSubmit}>
+			<div>
+				<label>
+					<input 
+						type="radio" 
+						name="nature"
+						value="primitive"
+						checked={nature === "primitive"}
+						onChange={handleChange}
+					/>
+					Primitive
+				</label>
 
-					<label>
-						<input 
-							type="radio" 
-							name="newVariableNature"
-							value="reference"
-							checked={this.state.newVariableNature === "reference"}
-							onChange={this.handleChange}
-						/>
-						Reference
-					</label>
+				<label>
+					<input 
+						type="radio" 
+						name="nature"
+						value="reference"
+						checked={nature === "reference"}
+						onChange={handleChange}
+					/>
+					Reference
+				</label>
 
-				</div>
-				<button>Add a variable</button>
-			</form>
-		)
-	}
+			</div>
+			<button>Add a variable</button>
+		</form>
+	)
 }
 
 export default NewVariableForm
