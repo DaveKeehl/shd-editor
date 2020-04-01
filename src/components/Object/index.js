@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import ObjectHeader from "./ObjectHeader"
 import Variable from "./Variable"
-import NewVariableForm from "./NewVariableForm"
 
 function ObjectComponent(props) {
 	const [name, setName] = useState("")
@@ -42,7 +41,14 @@ function ObjectComponent(props) {
 				removeBlock={props.removeBlock}
 			/>
 			<div className="object__variables">{variables}</div>
-			<NewVariableForm addVariable={addVariable} />
+			<div 
+				className="object__separator" 
+				style={variables.length > 0 ? {display: "block"} : {display: "none"}}
+			></div>
+			<div className="object__buttons">
+				<button onClick={() => {addVariable("primitive")}}>Add Prim.</button>
+				<button onClick={() => {addVariable("reference")}}>Add Ref.</button>
+			</div>
 		</div>
 	)
 }
