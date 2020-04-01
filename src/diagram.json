@@ -3,27 +3,25 @@
 		"stack" : {
 			"objects": [
 				{
-					"class" : "myClass",
+					"classMethod" : "Class.method()",
 					"variables" : [
 						{
 							"nature" : "primitive",
 							"name" : "myVar",
 							"type" : "Int",
-							"value" : 5
+							"value" : 5,
+							"id" : 0
 						},
 						{
 							"nature" : "reference",
 							"name" : "myVar",
 							"type" : "Int",
-							"value" : 10
+							"value" : null,
+							"id" : 1
 						}
 					]
 				}
-			],
-			"position" : {
-				"x" : 10,
-				"y" : 20
-			}
+			]
 		},
 		"heap" : [
 			{
@@ -31,9 +29,10 @@
 				"name" : "myVar",
 				"type" : "Int",
 				"value" : 5,
+				"id" : 2,
 				"position" : {
-					"x" : 10,
-					"y" : 20
+					"top" : 10,
+					"left" : 20
 				}
 			},
 			{
@@ -41,9 +40,10 @@
 				"name" : "myVar",
 				"type" : "Int",
 				"value" : 10,
+				"id" : 3,
 				"position" : {
-					"x" : 10,
-					"y" : 20
+					"top" : 10,
+					"left" : 20
 				}
 			}
 		]

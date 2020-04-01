@@ -9,7 +9,9 @@ class Object extends Component {
 		this.state = {
 			name: "",
 			totalVariablesCreated: 0,
-			variables: []
+			variables: [],
+			topVariableKey: "",
+			bottomVariableKey: ""
 		}
 		this.updateName = this.updateName.bind(this)
 		this.addVariable = this.addVariable.bind(this)
@@ -18,7 +20,7 @@ class Object extends Component {
 	}
 
 	updateName(name) {
-		console.log(name)
+		// console.log(name)
 		this.setState({ name: name })
 	}
 
@@ -36,7 +38,8 @@ class Object extends Component {
 		const newVariables = this.state.variables.concat(newVariable)
 		this.setState({
 			totalVariablesCreated: newVariablesCount,
-			variables: newVariables
+			variables: newVariables,
+			topVariableKey: newVariables[0].props.id
 		})
 	}
 

@@ -1,4 +1,5 @@
 import React, {Component} from "react"
+import ReactDOM from "react-dom"
 import removeVariable from "../../images/remove-variable.svg"
 import moveUp from "../../images/move-up.svg"
 import moveDown from "../../images/move-down.svg"
@@ -12,7 +13,9 @@ class Variable extends Component {
 			nature: "",
 			name: "",
 			type: "",
-			value: ""
+			value: "",
+			canMoveUp: "",
+			canMoveDown: ""
 		}
 		this.removeVariable = this.removeVariable.bind(this)
 		this.moveVariableUp = this.moveVariableUp.bind(this)
@@ -21,7 +24,12 @@ class Variable extends Component {
 	}
 
 	componentDidMount() {
-		this.setState({nature: this.props.nature})
+		this.setState({ nature: this.props.nature })
+		const variable = ReactDOM.findDOMNode(this)
+		const variablesList = ReactDOM.findDOMNode(this).parentNode.childNodes
+		const length = variablesList.length
+		console.log(variablesList)
+		// console.log(`idx: ${idx}, length: ${length}`)
 	}
 
 	removeVariable() {
