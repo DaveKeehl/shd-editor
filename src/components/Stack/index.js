@@ -29,7 +29,8 @@ function Stack() {
 				addBlock={addBlock}
 			/>
 			<div className="stack__objects">
-				{objects}
+				{/* {objects} */}
+				<Object />
 			</div>
 		</div>
 	)
