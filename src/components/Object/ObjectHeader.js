@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import removeBlock from "../../images/remove-block.svg"
+import removeBlock from "../../images/delete-icon.svg"
 
 function ObjectHeader(props) {
 	const [className, setClassName] = useState("")

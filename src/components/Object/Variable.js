@@ -1,12 +1,9 @@
 import React, { useState } from "react"
-import removeVariable from "../../images/remove-variable.svg"
+import removeVariableImg from "../../images/delete-icon.svg"
 import circle from "../../images/circle.svg"
 
 function Variable(props) {
-	const [nature, setNature] = useState("")
-	const [name, setName] = useState("")
-	const [type, setType] = useState("")
-	const [value, setValue] = useState("")
+	const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
 
 	function removeVariable() {
 		props.removeVariable(props.id)
@@ -14,54 +11,50 @@ function Variable(props) {
 
 	function handleChange(event) {
 		const {name, value} = event.target
-		// this.setState({
-		// 	[name]: value
-		// })
+		setData({ [name]: value })
 	}
 
 	const valueField = <input 
-							nature="text" 
+							className="object__variable__value"
 							name="value"
 							value={value}
 							autoComplete="off"
-							placeholder="var-value"
+							placeholder="value"
 							onChange={handleChange}
 						/>
-	const referenceField = <div><img src={circle} alt="Reference link" /></div>
+
+	const referenceField = <div className="object__variable__value">
+								<img src={circle} alt="Reference link" />
+							</div>
 
 	return (
-		<div className="object__variables__variable">
-			this is a variable
-			{/* <form>
-				<label>
-					Name: 
-					<input 
-						nature="text" 
-						name="name"
-						value={name}
-						autoComplete="off"
-						placeholder="var-name"
-						onChange={handleChange}
-					/>
-				</label>
+		<div className="object__variable">
 
-				<label>
-					Type: 
-					<input 
-						nature="text" 
-						name="type"
-						value={type}
-						autoComplete="off"
-						placeholder="var-type"
-						onChange={handleChange}
-					/>
-				</label>
+			<button onClick={removeVariable}>
+				<img src={removeVariableImg} alt="Remove variable"/>
+			</button>
 
-				<label>
-					{props.nature === "reference" ? "References: " : "Value: "}
-					{props.nature === "reference" ? referenceField : valueField}
-				</label>
-			</form> */}
+			<form>
+				<input 
+					className="object__variable__name"
+					name="name"
+					value={name}
+					autoComplete="off"
+					placeholder="Name"
+					onChange={handleChange}
+				/>
+
+				<input 
+					className="object__variable__type"
+					name="type"
+					value={type}
+					autoComplete="off"
+					placeholder="Type"
+					onChange={handleChange}
+				/>
+
+				{props.nature === "reference" ? referenceField : valueField}
+			</form>
 
 		</div>
 	)

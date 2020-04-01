@@ -40,7 +40,7 @@ function ObjectComponent(props) {
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>
-			<div className="object__variables">{variables}</div>
+			<div>{variables}</div>
 			<div 
 				className="object__separator" 
 				style={variables.length > 0 ? {display: "block"} : {display: "none"}}

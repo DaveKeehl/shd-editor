@@ -36,57 +36,68 @@
 		&--remove:hover
 			cursor: pointer
 
-	&__variables
+	&__variable
+		position: relative
+		display: flex
+		border-radius: 8px
+		padding: 20px
 		margin-bottom: 15px
+		background: transparentize(black, .85)
 
-		&__variable
-			display: flex
-			border-radius: 8px
-			padding: 10px
-			margin-bottom: 15px
-			background: transparentize(black, .85)
+		button
+			position: absolute
+			top: 5px
+			right: 5px
+			img
+				height: 15px
+				opacity: .5
 
-			form
-				display: flex
-				flex-direction: column
-				align-items: flex-start
-				width: 100%
+		form
+			display: grid
+			justify-content: center
+			grid-template-columns: max-content 1fr
+			grid-template-rows: repeat(2,1fr)
+			gap: 10px
+			width: 100%
 
-				div
-					display: flex
-					justify-content: center
-					background: white
-					margin-left: 10px
-					height: 28px
-					width: 50px
-					border-radius: 3px
-					box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
+		input
+			border: none
+			color: white
+			font-size: 16px
+			font-weight: bold
+			width: 100%
+			text-align: center
+			transition: box-shadow .1s
+			&:focus
+				outline: 0
 
-				img:hover
-					cursor: pointer
+		&__name, &__type
+			background: none
+			&::placeholder
+				color: white
+				opacity: .7
 
-			label
-				display: flex
-				align-items: center
-				width: 100%
-				&:not(:last-child)
-					margin-bottom: 10px
+		&__name
+			grid-column: 1 / 2
+			grid-row: 2 / 3
 
-			input
-				border: none
-				margin-left: 10px
-				border-radius: 3px
-				padding: 6px
+		&__type
+			grid-column: 2 / 3
+			grid-row: 1 / 2
+
+		&__value
+			grid-column: 2 / 3
+			grid-row: 2 / 3
+			background: white
+			box-shadow: 0 2px 4px transparentize(black, .9)
+			border-radius: 3px
+			padding: 6px
+			text-align: center
+			&::placeholder
 				color: black
-				font-size: 14px
-				box-shadow: 0 2px 4px rgba(0, 0, 0, .1)
-				width: 100%
-				transition: box-shadow .1s
-				&:focus
-					outline: 0
-					box-shadow: 0 0 0 2px transparentize(white, .3)
-				&::placeholder
-					opacity: .3
+				opacity: .7
+			&:focus
+				box-shadow: 0 0 0 2px transparentize(white, .3)
 
 	&__separator
 		border-bottom: 1px solid transparentize(white, .5)
