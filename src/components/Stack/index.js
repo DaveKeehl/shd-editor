@@ -21,6 +21,8 @@ function Stack() {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
+	const emptyStackMessage = <p>Click on the "+" button to create a <em>Stack Frame</em>.</p>
+
 	return (
 		<div className="stack">
 			<Header 
@@ -29,7 +31,7 @@ function Stack() {
 				addBlock={addBlock}
 			/>
 			<div className="stack__objects">
-				{objects}
+				{objects.length === 0 ? emptyStackMessage : objects}
 			</div>
 		</div>
 	)

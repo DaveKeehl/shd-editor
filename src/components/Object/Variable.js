@@ -11,7 +11,7 @@ function Variable(props) {
 
 	function handleChange(event) {
 		const {name, value} = event.target
-		setData({ [name]: value })
+		setData(prevData => ({...prevData, [name]: value }))
 	}
 
 	const valueField = <input 

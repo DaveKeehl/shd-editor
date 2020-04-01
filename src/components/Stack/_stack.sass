@@ -1,10 +1,22 @@
 .stack
+	$stack-object-start: #EE4848
+	$stack-object-end: #D93333
+
 	display: flex
 	flex-direction: column
 	overflow: hidden
+
 	&__objects
 		padding: 20px
 		overflow-y: auto
+		text-align: center
+
+		p
+			padding-top: 10px
+			max-width: 75%
+			margin: 0 auto
+			line-height: 24px
+
 		& > button
 			color: black
 			width: 100%
@@ -14,3 +26,6 @@
 			font-weight: bold
 			text-decoration: underline
 			margin: 10px 0 30px 0
+
+		& .object
+			background: linear-gradient(180deg, $stack-object-start 0%, $stack-object-end 100%)
