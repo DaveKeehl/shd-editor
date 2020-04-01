@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Header from '../Header'
-import Object from '../Object'
+// import Object from '../Object'
 
 class Stack extends Component {
 	constructor() {
