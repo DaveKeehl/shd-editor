@@ -4,7 +4,7 @@ import Header from "../Header"
 
 function Stack() {
 	// const {totalObjectsCreated, setTotalObjectsCreated} = useState(0)
-	const {objects, setObjects} = useState([])
+	const [objects, setObjects] = useState([])
 
 	// addBlock = () => {
 	// 	const newBlock = <Object 
@@ -27,7 +27,7 @@ function Stack() {
 		<div className="stack">
 			<Header 
 				region="stack" 
-				objectsCount={0} 
+				objectsCount={objects.length} 
 			/>
 			<div className="stack__objects">
 				{objects}
