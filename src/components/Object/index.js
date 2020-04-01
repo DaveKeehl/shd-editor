@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-// import ObjectHeader from './ObjectHeader'
+import ObjectHeader from './ObjectHeader'
 // import Variable from './Variable'
 // import NewVariableForm from './NewVariableForm'
 
