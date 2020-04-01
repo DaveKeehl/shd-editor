@@ -21,6 +21,7 @@ function Stack() {
 		// setObjects(objects => objects.filter(object => id !== object.props.id))
 	// }
 
+	
 	return (
 		<div className="stack">
 			<Header 
