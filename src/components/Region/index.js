@@ -24,7 +24,7 @@ function Region(props) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
-	const message = <p>Click on the "+" button to create a {name === "stack" ? <em>Stack Frame</em> : "Object"}<em>Stack Frame</em>.</p>
+	const message = <p>Click on the "+" button to create a {name === "stack" ? <em>Stack Frame</em> : "Object"}.</p>
 
 	return (
 		<div className={name}>
