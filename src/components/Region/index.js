@@ -45,7 +45,6 @@ function Region(props) {
 						onClick={(event) => {
 							if (isAddModeActive) {
 								const {clientX, clientY} = event
-								console.log(`${clientX}, ${clientY}`)
 								const newBlock = <Object 
 													key={count} 
 													id={count} 
