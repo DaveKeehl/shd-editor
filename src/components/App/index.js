@@ -37,7 +37,7 @@ function App() {
 			onMouseMove={handleMouseMove} 
 			onMouseUp={handleMouseUp} 
 			draggable={false}
-			style={{gridTemplateColumns: `${stackWidth >= 360 ? stackWidth : 360}px min-content auto`}}
+			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
 			<Region name="stack" stackWidth={stackWidth}/>
 			<div 
