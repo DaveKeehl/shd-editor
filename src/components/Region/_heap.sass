@@ -3,12 +3,22 @@
 	$heap-object-end: $red-end
 	$heap-object-dark: $dark-red
 
+	min-width: 360px
+
+	&__objects
+		position: relative
+		height: 100%
+		
+
 	.object
 		background: linear-gradient(180deg, $heap-object-start 0%, $heap-object-end 100%)
 		box-shadow: 0 4px 4px transparentize($heap-object-end, .75)
 		width: 320px
 		margin-bottom: 10px
 		margin-right: 10px
+		position: absolute
+		// top: 0
+		// left: 0
 
 		&__drag-handle
 			height: 7px

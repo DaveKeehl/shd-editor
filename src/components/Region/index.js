@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import Header from "../Header"
 import Object from "../Object"
+import {HeapAddModeProvider, HeapAddModeConsumer} from "../../contexts/heapAddModeContext"
 
 function Region(props) {
 	const [name, setName] = useState(props.name)
@@ -8,13 +9,14 @@ function Region(props) {
 	const [objects, setObjects] = useState([])
 	const [draggableArea, setDraggableArea] = useState({top: "", right: "", bottom: "", left: ""})
 
-	function addBlock() {
+	function addBlock(event) {
+		console.log(event)
 		const newBlock = <Object 
-							key={count} 
-							id={count} 
-							region={name}
-							removeBlock={removeBlock} 
-						/>
+						 	key={count} 
+						 	id={count} 
+						 	region={name}
+						 	removeBlock={removeBlock}
+						 />
 		setCount(prevCount => prevCount+1)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 	}
@@ -23,19 +25,36 @@ function Region(props) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 	}
 
-	const message = <p>Click on the "+" button to create {name === "stack" ? "a Stack Frame" : "an Object"}.</p>
+	const message = <p>Click on the "+" button {name === "stack" ? "to create a Stack Frame" : "to freely position an Object on the Heap"}.</p>
 
 	return (
-		<div className={name}>
-			<Header 
-				region={name} 
-				objectsCount={objects.length} 
-				addBlock={addBlock}
-			/>
-			<div className={`${name}__objects objects`}>
-				{objects.length === 0 ? message : objects}
+		<HeapAddModeProvider>
+			<div className={name}>
+				<Header 
+					region={name} 
+					objectsCount={objects.length}
+				/>
+				<HeapAddModeConsumer>
+					{({isAddModeActive, toggleAddMode}) => {
+						return (
+							<div 
+								className={`${name}__objects objects`}
+								style={isAddModeActive ? {cursor: "crosshair"} : null}
+								onClick={() => {
+									if (isAddModeActive) {
+										addBlock()
+										toggleAddMode()
+									}
+								}}
+							>
+								{objects.length === 0 ? message : objects}
+							</div>
+						)
+					}}
+				</HeapAddModeConsumer>
+
 			</div>
-		</div>
+		</HeapAddModeProvider>
 	)
 }
 

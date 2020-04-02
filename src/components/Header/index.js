@@ -1,12 +1,12 @@
 import React from "react"
-import addBlockButton from "../../images/add-block.svg"
+import SmartAddIcon from "./SmartAddIcon"
 
 function Header(props) {
 	return (
-		<header draggable={false}>
+		<header>
 			<h1>{props.region.toUpperCase()} ({props.objectsCount})</h1>
-			<button onClick={props.addBlock}>
-				<img src={addBlockButton} alt="Add a block" />
+			<button>
+				<SmartAddIcon />
 			</button>
 		</header>
 	)

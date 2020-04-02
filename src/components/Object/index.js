@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import ObjectHeader from "./ObjectHeader"
 import Variable from "./Variable"
 
@@ -6,7 +6,19 @@ function ObjectComponent(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
+	const [size, setSize] = useState({width: "", height: ""})
 	const [position, setPosition] = useState({top: "", left: ""})
+
+	const obj = useRef(null)
+
+	useEffect(() => {
+		const {top, left, width, height} = obj.current.getBoundingClientRect()
+		setPosition({top: top, left: left})
+		setSize({width: width, height: height})
+	}, [])
+
+	console.log(position)
+	console.log(size)
 
 	function updateName(newName) {
 		setName(newName)
@@ -32,7 +44,12 @@ function ObjectComponent(props) {
 	}
 
 	return (
-		<div className="object" draggable={props.region === "heap" ? true : false}>
+		<div 
+			className="object" 
+			draggable={props.region === "heap" ? true : false} 
+			ref={obj}
+			style={{top: position.top, left: position.left}}
+		>
 			{props.region === "heap" ? <DragHandle /> : null}
 			<ObjectHeader 
 				id={props.id} 
