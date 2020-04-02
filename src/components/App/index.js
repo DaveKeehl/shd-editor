@@ -6,7 +6,6 @@ function App() {
 	const [stackWidth, setStackWidth] = useState(360)
 
 	const separator = useRef(null)
-	console.log(separator.current)
 
 	function handleDoubleClick() {
 		setStackWidth(360)

@@ -12,13 +12,10 @@ function ObjectComponent(props) {
 	const obj = useRef(null)
 
 	useEffect(() => {
-		const {top, left, width, height} = obj.current.getBoundingClientRect()
-		setPosition({top: top, left: left})
+		const {width, height} = obj.current.getBoundingClientRect()
+		setPosition({top: props.top-23, left: props.left-width/2})
 		setSize({width: width, height: height})
-	}, [])
-
-	console.log(position)
-	console.log(size)
+	}, [props.left, props.top])
 
 	function updateName(newName) {
 		setName(newName)
