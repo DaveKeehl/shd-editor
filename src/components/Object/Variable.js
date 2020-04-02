@@ -14,14 +14,16 @@ function Variable(props) {
 		setData(prevData => ({...prevData, [name]: value }))
 	}
 
-	const valueField = <input 
-						className="object__variable__value"
-						name="value"
-						value={value}
-						autoComplete="off"
-						placeholder="value"
-						onChange={handleChange}
-					/>
+	const valueField = (
+		<input 
+			className="object__variable__value"
+			name="value"
+			value={value}
+			autoComplete="off"
+			placeholder="value"
+			onChange={handleChange}
+		/>
+	)
 
 	const referenceField = <div className="object__variable__value"><ArrowStart /></div>
 

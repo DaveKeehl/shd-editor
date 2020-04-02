@@ -22,12 +22,14 @@ function ObjectComponent(props) {
 	}
 
 	function addVariable(nature) {
-		const newVariable = <Variable 
-								key={count} 
-								id={count} 
-								nature={nature}
-								removeVariable={removeVariable}
-							/>
+		const newVariable = (
+			<Variable 
+				key={count} 
+				id={count} 
+				nature={nature}
+				removeVariable={removeVariable}
+			/>
+		)
 		setCount(prevCount => prevCount+1)
 		setVariables(prevVariables => [...prevVariables, newVariable])
 	}

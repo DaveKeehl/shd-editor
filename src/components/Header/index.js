@@ -6,15 +6,14 @@ function Header(props) {
 	return (
 		<header>
 			<h1>{props.region.toUpperCase()} ({props.objectsCount})</h1>
-			{
-				props.region === "stack" ?
-					<button onClick={props.addBlock}>
-						<img src={addBlock} alt="Add a Stack Frame"/>
-					</button>
+			{props.region === "stack" ?
+				<button onClick={props.addBlock}>
+					<img src={addBlock} alt="Add a Stack Frame"/>
+				</button>
 				:
-					<button>
-						<SmartAddIcon />
-					</button>
+				<button>
+					<SmartAddIcon />
+				</button>
 			}
 
 		</header>

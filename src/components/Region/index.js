@@ -11,12 +11,14 @@ function Region(props) {
 
 	function addBlock(event) {
 		// console.log(event)
-		const newBlock = <Object 
-						 	key={count} 
-						 	id={count} 
-						 	region={name}
-						 	removeBlock={removeBlock}
-						 />
+		const newBlock = (
+			<Object 
+				key={count} 
+				id={count} 
+				region={name}
+				removeBlock={removeBlock}
+			/>	
+		)
 		setCount(prevCount => prevCount+1)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 	}
@@ -43,7 +45,7 @@ function Region(props) {
 						onClick={(event) => {
 							if (isAddModeActive) {
 								const {clientX, clientY} = event
-								// console.log(`${clientX}, ${clientY}`)
+								console.log(`${clientX}, ${clientY}`)
 								const newBlock = <Object 
 													key={count} 
 													id={count} 
