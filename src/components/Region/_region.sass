@@ -2,12 +2,23 @@
 @import "./heap"
 
 .stack, .heap
+	display: flex
+	flex-direction: column
+	overflow: hidden
 	text-align: center
 
-.objects
+	.objects
+		padding: 20px
+		overflow-y: auto
 
-	p
-		padding-top: 10px
-		max-width: 75%
-		margin: 0 auto
-		line-height: 24px
+		p
+			padding-top: 10px
+			max-width: 75%
+			margin: 0 auto
+			line-height: 24px
+
+	svg
+		height: 19px
+		width: 19px
+		&:hover
+			cursor: pointer

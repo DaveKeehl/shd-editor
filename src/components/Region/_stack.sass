@@ -1,13 +1,17 @@
 .stack
-
-	display: flex
-	flex-direction: column
-	overflow: hidden
-
-	&__objects
-		padding: 20px
-		overflow-y: auto
+	$stack-object-start: $blue-start
+	$stack-object-end: $blue-end
+	$stack-object-dark: $dark-blue
 
 	.object
-		background: linear-gradient(180deg, $blue-start 0%, $blue-end 100%)
-		box-shadow: 0 4px 4px transparentize($blue-end, .75)
+		background: linear-gradient(180deg, $stack-object-start 0%, $stack-object-end 100%)
+		box-shadow: 0 4px 4px transparentize($stack-object-end, .75)
+
+		&:not(:last-child)
+			margin-bottom: 10px
+
+	svg
+		.outer
+			stroke: $stack-object-dark
+		.inner
+			fill: $stack-object-dark

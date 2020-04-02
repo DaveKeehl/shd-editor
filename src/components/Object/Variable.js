@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import removeVariableImg from "../../images/delete-icon.svg"
-import circle from "../../images/circle.svg"
+import ArrowStart from "./ArrowStart"
 
 function Variable(props) {
 	const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
@@ -15,17 +15,15 @@ function Variable(props) {
 	}
 
 	const valueField = <input 
-							className="object__variable__value"
-							name="value"
-							value={value}
-							autoComplete="off"
-							placeholder="value"
-							onChange={handleChange}
-						/>
+						className="object__variable__value"
+						name="value"
+						value={value}
+						autoComplete="off"
+						placeholder="value"
+						onChange={handleChange}
+					/>
 
-	const referenceField = <div className="object__variable__value">
-								<img src={circle} alt="Reference link" />
-							</div>
+	const referenceField = <div className="object__variable__value"><ArrowStart /></div>
 
 	return (
 		<div className="object__variable">

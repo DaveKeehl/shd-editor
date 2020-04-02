@@ -8,15 +8,10 @@
 
 	&:hover .object__header--remove
 		opacity: 1
-		
-
-	&:not(:last-child)
-		margin-bottom: 10px
 
 	&__header
 		display: flex
 		justify-content: space-between
-		margin-bottom: 15px
 		padding-bottom: 10px
 		border-bottom: 1px solid transparentize(white, .5)
 
@@ -51,6 +46,9 @@
 		padding: 15px
 		margin: 0 10px 15px 10px
 		background: transparentize(black, .85)
+
+		&:first-child
+			margin-top: 15px
 
 		&:hover button
 			opacity: 1
@@ -100,6 +98,8 @@
 			grid-row: 1 / 2
 
 		&__value
+			display: flex
+			justify-content: center
 			grid-column: 2 / 3
 			grid-row: 2 / 3
 			background: white
