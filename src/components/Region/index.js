@@ -51,6 +51,7 @@ function Region(props) {
 													region={name}
 													top={clientY}
 													left={clientX}
+													stackWidth={props.stackWidth}
 													removeBlock={removeBlock}
 												/>
 								setCount(prevCount => prevCount+1)

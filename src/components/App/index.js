@@ -23,8 +23,10 @@ function App() {
 	}
 
 	function handleMouseMove(event) {
+		const minWidth = 360
+		const maxWidth = 500
 		if (isResizable) {
-			if (event.clientX >= 360 && event.clientX < window.innerWidth/2) {
+			if (event.clientX >= minWidth && event.clientX <= maxWidth) {
 				setStackWidth(event.clientX)
 			}
 		}
@@ -48,7 +50,7 @@ function App() {
 				ref={separator}
 			>
 			</div>
-			<Region name="heap" />
+			<Region name="heap" stackWidth={stackWidth} />
 		</div>
 	)
 }
