@@ -13,29 +13,20 @@ function ObjectComponent(props) {
 
 	useEffect(() => {
 		const {width, height} = obj.current.getBoundingClientRect()
-		let top = props.top - 55 - 23
-		let left = props.left - props.stackWidth - 10 - width/2
-		console.log(`Mouse top: ${props.top}, Mouse left: ${props.left}`)
-		// // IF THE OBJECT CROSSES THE TOP BORDER
-		// if (top-23 < 55) {
-		// 	top = 55 + 20
-		// }
-		// // IF THE OBJECT CROSSES THE BOTTOM BORDER
-		// else if (top+height > window.innerHeight) {
-		// 	top = window.innerHeight - height - 20
-		// } 
-		// // IF THE OBJECT CROSSES THE LEFT BORDER
-		// else if (left < 370) {
-		// 	top = top - height/2
-		// 	left = 370 + 20
-		// }
-		// // IF THE OBJECT CROSSES THE RIGHT BORDER
-		// else if (left+width > window.innerWidth) {
-		// 	left = window.innerWidth - width - 20
-		// }
-		// else {
-		// 	top = top - 23
-		// }
+		const leftLimit = props.stackWidth + 10
+		const topLimit = 55
+		let top = props.mouseTop - topLimit - 23
+		let left = props.mouseLeft - leftLimit - width/2
+
+		if (top-23 < topLimit && left < 0) {
+			top = 20
+			left = 20
+		} else if (top-23 < topLimit) {
+			top = 20
+		} else if (left < 0) {
+			left = 20
+		}
+
 		setPosition({top: top, left: left})
 		setSize({width: width, height: height})
 	}, [props.left, props.top])
@@ -68,9 +59,8 @@ function ObjectComponent(props) {
 	return (
 		<div 
 			className="object" 
-			draggable={props.region === "heap" ? true : false} 
 			ref={obj}
-			style={{top: position.top, left: position.left}}
+			style={props.region === "heap" ? {top: position.top, left: position.left} : null}
 		>
 			{props.region === "heap" ? <DragHandle /> : null}
 			<ObjectHeader 

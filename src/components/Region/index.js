@@ -49,8 +49,8 @@ function Region(props) {
 													key={count} 
 													id={count} 
 													region={name}
-													top={clientY}
-													left={clientX}
+													mouseTop={clientY}
+													mouseLeft={clientX}
 													stackWidth={props.stackWidth}
 													removeBlock={removeBlock}
 												/>
