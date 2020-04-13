@@ -25,7 +25,8 @@ $dark-grey: #353535
 
 @import 'components/App/app'
 @import 'components/Header/header'
-@import 'components/Region/region'
+@import 'components/Stack/stack'
+@import 'components/Heap/heap'
 @import 'components/Object/object'
 
 //==================================
@@ -42,6 +43,29 @@ button
 		opacity: .8
 	&:focus
 		outline: none
+
+.stack, .heap
+	display: flex
+	flex-direction: column
+	overflow: hidden
+	text-align: center
+
+	.objects
+		padding: 20px
+		overflow: auto
+
+		p
+			padding-top: 10px
+			max-width: 75%
+			margin: 0 auto
+			line-height: 24px
+
+	svg:hover
+		cursor: pointer
+
+//==================================
+// ANIMATIONS
+//==================================
 
 @keyframes fadeIn
 	0%
