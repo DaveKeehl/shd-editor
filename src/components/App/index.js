@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react"
 import Region from "../Region"
+import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
 
 function App() {
 	const [isResizable, setIsResizable] = useState(false)
@@ -40,7 +41,9 @@ function App() {
 			draggable={false}
 			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
-			<Region name="stack" />
+			<HeapAddModeContextProvider>
+				<Region name="stack" />
+			</HeapAddModeContextProvider>
 			<div 
 				className="separator"
 				onDoubleClick={handleDoubleClick}
@@ -50,7 +53,9 @@ function App() {
 				ref={separator}
 			>
 			</div>
-			<Region name="heap" stackWidth={stackWidth} />
+			<HeapAddModeContextProvider>
+				<Region name="heap" stackWidth={stackWidth} />
+			</HeapAddModeContextProvider>
 		</div>
 	)
 }

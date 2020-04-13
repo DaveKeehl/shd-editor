@@ -6,39 +6,10 @@ function ObjectComponent(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
-	const [size, setSize] = useState({width: "", height: ""})
 	const [position, setPosition] = useState({top: "", left: ""})
+	const [size, setSize] = useState({width: "", height: ""})
 
 	const obj = useRef(null)
-
-	useEffect(() => {
-		const {width, height} = obj.current.getBoundingClientRect()
-		let top = props.top - 55 - 23
-		let left = props.left - props.stackWidth - 10 - width/2
-		console.log(`Mouse top: ${props.top}, Mouse left: ${props.left}`)
-		// // IF THE OBJECT CROSSES THE TOP BORDER
-		// if (top-23 < 55) {
-		// 	top = 55 + 20
-		// }
-		// // IF THE OBJECT CROSSES THE BOTTOM BORDER
-		// else if (top+height > window.innerHeight) {
-		// 	top = window.innerHeight - height - 20
-		// } 
-		// // IF THE OBJECT CROSSES THE LEFT BORDER
-		// else if (left < 370) {
-		// 	top = top - height/2
-		// 	left = 370 + 20
-		// }
-		// // IF THE OBJECT CROSSES THE RIGHT BORDER
-		// else if (left+width > window.innerWidth) {
-		// 	left = window.innerWidth - width - 20
-		// }
-		// else {
-		// 	top = top - 23
-		// }
-		setPosition({top: top, left: left})
-		setSize({width: width, height: height})
-	}, [props.left, props.top])
 
 	function updateName(newName) {
 		setName(newName)

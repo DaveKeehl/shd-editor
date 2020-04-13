@@ -1,23 +1,19 @@
-import React, { Component } from "react"
+import React, {useState} from "react"
 
-const {Provider, Consumer} = React.createContext()
+const HeapAddModeContext = React.createContext()
 
-class HeapAddModeProvider extends Component {
-	state = {
-		isAddModeActive: false
+function HeapAddModeContextProvider(props) {
+	const [isAddModeActive, setIsAddModeActive] = useState(false)
+
+	function toggleAddMode() {
+		setIsAddModeActive(prevState => !prevState)
 	}
 
-	toggleAddMode = () => {
-		this.setState(prevState => ({isAddModeActive: !prevState.isAddModeActive}))
-	}
-
-	render() {
-		return (
-			<Provider value={{isAddModeActive: this.state.isAddModeActive, toggleAddMode: this.toggleAddMode}}>
-				{this.props.children}
-			</Provider>
-		)
-	}
+	return (
+		<HeapAddModeContext.Provider value={{isAddModeActive, toggleAddMode}}>
+			{props.children}
+		</HeapAddModeContext.Provider>
+	)
 }
 
-export {HeapAddModeProvider, Consumer as HeapAddModeConsumer}
+export {HeapAddModeContextProvider, HeapAddModeContext}

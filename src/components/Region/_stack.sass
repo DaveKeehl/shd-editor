@@ -10,8 +10,13 @@
 		&:not(:last-child)
 			margin-bottom: 10px
 
-	svg
-		.outer
-			stroke: $stack-object-dark
-		.inner
-			fill: $stack-object-dark
+		&__variable__value
+			color: $stack-object-dark
+			&::placeholder
+				color: $stack-object-dark
+
+		svg
+			.outer
+				stroke: $stack-object-dark
+			.inner
+				fill: $stack-object-dark
