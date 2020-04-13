@@ -1,21 +1,16 @@
-import React, { useState, useEffect, useRef } from "react"
-import ObjectHeader from "./ObjectHeader"
-import Variable from "./Variable"
+import React, {useState, useEffect, useRef} from "react"
+import ObjectHeader from "../Object/ObjectHeader"
+import Variable from "../Object/Variable"
 
-function ObjectComponent(props) {
-
-	console.log("Rendered object")
-
+function HeapObject(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
-	const [position, setPosition] = useState({top: "", left: ""})
 	const [size, setSize] = useState({width: "", height: ""})
+	const [position, setPosition] = useState({top: "", left: ""})
 
 	const obj = useRef(null)
 
-<<<<<<< HEAD
-=======
 	useEffect(() => {
 		const {width, height} = obj.current.getBoundingClientRect()
 		const leftLimit = props.stackWidth + 10
@@ -36,7 +31,6 @@ function ObjectComponent(props) {
 		setSize({width: width, height: height})
 	}, [props.left, props.top])
 
->>>>>>> 5eeaac09990507aad9db1c498ed1fd8c13fdd162
 	function updateName(newName) {
 		setName(newName)
 	}
@@ -69,10 +63,10 @@ function ObjectComponent(props) {
 			draggable={true}
 			style={props.region === "heap" ? {top: position.top, left: position.left} : null}
 		>
-			{props.region === "heap" ? <DragHandle /> : null}
+			<DragHandle />
 			<ObjectHeader 
 				id={props.id} 
-				region={props.region}
+				region="heap"
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>
@@ -89,4 +83,4 @@ function ObjectComponent(props) {
 	)
 }
 
-export default ObjectComponent
+export default HeapObject

@@ -1,6 +1,12 @@
 import React, { useState, useRef } from "react"
+<<<<<<< HEAD
 import Region from "../Region"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
+=======
+import Stack from "../Stack"
+import Heap from "../Heap"
+import {HeapSmartAddProvider} from "../../contexts/heapSmartAddContext"
+>>>>>>> 5eeaac09990507aad9db1c498ed1fd8c13fdd162
 
 function App() {
 	const [isResizable, setIsResizable] = useState(false)
@@ -41,9 +47,13 @@ function App() {
 			draggable={false}
 			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
+<<<<<<< HEAD
 			<HeapAddModeContextProvider>
 				<Region name="stack" />
 			</HeapAddModeContextProvider>
+=======
+			<Stack />
+>>>>>>> 5eeaac09990507aad9db1c498ed1fd8c13fdd162
 			<div 
 				className="separator"
 				onDoubleClick={handleDoubleClick}
@@ -53,9 +63,15 @@ function App() {
 				ref={separator}
 			>
 			</div>
+<<<<<<< HEAD
 			<HeapAddModeContextProvider>
 				<Region name="heap" stackWidth={stackWidth} />
 			</HeapAddModeContextProvider>
+=======
+			<HeapSmartAddProvider>
+				<Heap stackWidth={stackWidth} />
+			</HeapSmartAddProvider>
+>>>>>>> 5eeaac09990507aad9db1c498ed1fd8c13fdd162
 		</div>
 	)
 }

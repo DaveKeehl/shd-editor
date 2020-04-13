@@ -7,7 +7,7 @@ function Header(props) {
 		<header>
 			<h1>{props.region.toUpperCase()} ({props.objectsCount})</h1>
 			{props.region === "stack" ?
-				<button onClick={props.addBlock}>
+				<button onClick={props.addBlock} aria-label="Create new object">
 					<img src={addBlock} alt="Add a Stack Frame"/>
 				</button>
 				:
