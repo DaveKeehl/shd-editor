@@ -6,30 +6,8 @@ function HeapObject(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
-	const [size, setSize] = useState({width: "", height: ""})
-	const [position, setPosition] = useState({top: "", left: ""})
-
-	const obj = useRef(null)
-
-	useEffect(() => {
-		const {width, height} = obj.current.getBoundingClientRect()
-		const leftLimit = props.stackWidth + 10
-		const topLimit = 55
-		let top = props.mouseTop - topLimit - 23
-		let left = props.mouseLeft - leftLimit - width/2
-
-		if (top-23 < topLimit && left < 0) {
-			top = 20
-			left = 20
-		} else if (top-23 < topLimit) {
-			top = 20
-		} else if (left < 0) {
-			left = 20
-		}
-
-		setPosition({top: top, left: left})
-		setSize({width: width, height: height})
-	}, [props.left, props.top])
+	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
+	const [isDragged, setIsDragged] = useState(false)	
 
 	function updateName(newName) {
 		setName(newName)
@@ -53,15 +31,34 @@ function HeapObject(props) {
 	}
 
 	function DragHandle() {
-		return <div className="object__drag-handle"></div>
+		return (
+			<div 
+				className="object__drag-handle"
+				onMouseDown={() => setIsDragged(true)}
+				onMouseUp={() => setIsDragged(false)}
+			>
+			</div>
+		)
 	}
+
+	function handleMouseMove(event) {
+		const {clientX, clientY} = event
+		if (isDragged) {
+			console.log(`X: ${clientX}, Y: ${clientY}`)
+			setPosition({X: clientX-360-10-20-160, Y: clientY-20-55-23})
+		}
+	}
+
+	const draggedStyles = (
+		
+	)
 
 	return (
 		<div 
 			className="object" 
-			ref={obj}
-			draggable={true}
-			style={props.region === "heap" ? {top: position.top, left: position.left} : null}
+			draggable={false}
+			onMouseMove={handleMouseMove}
+			style={{transform: `translate(${position.X}px, ${position.Y}px)`}}
 		>
 			<DragHandle />
 			<ObjectHeader 
