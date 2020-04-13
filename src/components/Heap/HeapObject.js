@@ -49,10 +49,6 @@ function HeapObject(props) {
 		}
 	}
 
-	const draggedStyles = (
-		
-	)
-
 	return (
 		<div 
 			className="object" 
