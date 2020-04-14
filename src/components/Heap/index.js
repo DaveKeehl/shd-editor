@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
@@ -22,7 +22,6 @@ function Heap(props) {
 					id={count} 
 					initialPosition={{X: clientX-props.stackWidth-10-20-160, Y: clientY-20-55-23}}
 					removeBlock={removeBlock}
-					stackWidth={props.stackWidth}
 				/>	
 			)
 			setCount(prevCount => prevCount+1)

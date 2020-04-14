@@ -1,6 +1,7 @@
-import React, {useState} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function HeapObject(props) {
 	const [name, setName] = useState("")
@@ -8,6 +9,12 @@ function HeapObject(props) {
 	const [variables, setVariables] = useState([])
 	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
 	const [isDragged, setIsDragged] = useState(false)
+
+	const {stackWidth} = useContext(ResizableStackContext)
+
+	useEffect(() => {
+		console.log("Resized stack width")
+	}, [stackWidth])
 
 	function updateName(newName) {
 		setName(newName)
@@ -33,8 +40,8 @@ function HeapObject(props) {
 	function handleMouseMove(event) {
 		const {clientX, clientY} = event
 		if (isDragged) {
-			console.log(`X: ${clientX}, Y: ${clientY}`)
-			setPosition({X: clientX-360-10-20-160, Y: clientY-20-55-23})
+			// console.log(`X: ${clientX}, Y: ${clientY}`)
+			setPosition({X: clientX-stackWidth-10-20-160, Y: clientY-20-55-23})
 		}
 	}
 

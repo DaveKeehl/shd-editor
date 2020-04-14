@@ -1,11 +1,11 @@
-import React, {useState, useRef} from "react"
+import React, {useState, useRef, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function App() {
-	const [isResizable, setIsResizable] = useState(false)
-	const [stackWidth, setStackWidth] = useState(360)
+	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
 
 	const separator = useRef(null)
 
