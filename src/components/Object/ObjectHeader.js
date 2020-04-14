@@ -30,6 +30,7 @@ function ObjectHeader(props) {
 				onChange={handleChange}
 				onKeyUp={handleKeyUp}
 				autoComplete="off"
+				spellCheck={false}
 			/>
 			<button 
 				className="object__header--remove" 

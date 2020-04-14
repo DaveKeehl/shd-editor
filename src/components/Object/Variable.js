@@ -27,6 +27,7 @@ function Variable(props) {
 			value={value}
 			autoComplete="off"
 			placeholder="value"
+			spellCheck={false}
 			onChange={handleChange}
 			onKeyUp={handleKeyUp}
 		/>
@@ -48,6 +49,7 @@ function Variable(props) {
 					placeholder="Name"
 					onChange={handleChange}
 					onKeyUp={handleKeyUp}
+					spellCheck={false}
 				/>
 				<input 
 					className="object__variable__type"
@@ -57,6 +59,7 @@ function Variable(props) {
 					placeholder="Type"
 					onChange={handleChange}
 					onKeyUp={handleKeyUp}
+					spellCheck={false}
 				/>
 				{props.nature === "reference" ? referenceField : valueField}
 			</form>
