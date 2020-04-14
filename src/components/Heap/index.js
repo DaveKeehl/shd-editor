@@ -20,7 +20,7 @@ function Heap(props) {
 				<HeapObject 
 					key={count} 
 					id={count} 
-					initialPosition={{X: clientX-props.stackWidth-10-20-160, Y: clientY-20-55-23}}
+					initialPosition={{X: clientX-props.stackWidth-20-10-160, Y: clientY-20-55-23}}
 					removeBlock={removeBlock}
 				/>	
 			)
@@ -28,6 +28,10 @@ function Heap(props) {
 			setObjects(prevObjects => [newBlock, ...prevObjects])
 			toggleAddMode()
 		}
+	}
+
+	function handleScroll(event) {
+		// console.log(event.target)
 	}
 	
 	return (
@@ -37,6 +41,7 @@ function Heap(props) {
 				className="heap__objects objects"
 				style={isAddModeActive ? {cursor: "crosshair"} : null}
 				onClick={handleClick}
+				onScroll={handleScroll}
 			>
 				{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
 			</div>
