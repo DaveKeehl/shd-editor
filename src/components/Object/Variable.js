@@ -14,6 +14,12 @@ function Variable(props) {
 		setData(prevData => ({...prevData, [name]: value }))
 	}
 
+	function handleKeyPress(event) {
+		if (event.keyCode === 13) {
+			event.target.blur()
+		}
+	}
+
 	const valueField = (
 		<input 
 			className="object__variable__value"
@@ -22,6 +28,7 @@ function Variable(props) {
 			autoComplete="off"
 			placeholder="value"
 			onChange={handleChange}
+			onKeyUp={handleKeyPress}
 		/>
 	)
 
@@ -29,11 +36,9 @@ function Variable(props) {
 
 	return (
 		<div className="object__variable">
-
 			<button onClick={removeVariable}>
 				<img src={removeVariableImg} alt="Remove variable"/>
 			</button>
-
 			<form>
 				<input 
 					className="object__variable__name"
@@ -42,8 +47,8 @@ function Variable(props) {
 					autoComplete="off"
 					placeholder="Name"
 					onChange={handleChange}
+					onKeyUp={handleKeyPress}
 				/>
-
 				<input 
 					className="object__variable__type"
 					name="type"
@@ -51,11 +56,10 @@ function Variable(props) {
 					autoComplete="off"
 					placeholder="Type"
 					onChange={handleChange}
+					onKeyUp={handleKeyPress}
 				/>
-
 				{props.nature === "reference" ? referenceField : valueField}
 			</form>
-
 		</div>
 	)
 }

@@ -43,7 +43,8 @@
 		display: flex
 		justify-content: center
 		border-radius: 8px
-		padding: 15px
+		// padding: 15px
+		padding: 18px 20px
 		margin: 0 10px 15px 10px
 		background: transparentize(black, .85)
 
@@ -60,7 +61,8 @@
 			opacity: 0
 			transition: opacity .1s
 			img
-				height: 20px
+				// height: 20px
+				height: 18px
 				opacity: .5
 
 		form
@@ -77,7 +79,7 @@
 			font-weight: bold
 			width: 100%
 			text-align: center
-			transition: box-shadow .1s
+			transition: all .1s
 			&:focus
 				outline: 0
 
@@ -88,6 +90,9 @@
 			&::placeholder
 				color: white
 				opacity: .7
+			&:focus
+				background: transparentize($white, .8)
+				border-radius: 3px
 
 		&__name
 			grid-column: 1 / 2
