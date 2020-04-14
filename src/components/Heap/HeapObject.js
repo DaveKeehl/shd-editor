@@ -63,10 +63,8 @@ function HeapObject(props) {
 	}
 
 	function handleMouseDown() {
-		console.log("click")
 		setIsDragged(true)
 		if (localDepthIndex <= depthIndex) {
-			console.log("idx can be increased by one")
 			setDepthIndex(prevIndex => prevIndex+1)
 			setLocalDepthIndex(depthIndex)
 		}
