@@ -1,7 +1,8 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState, useEffect, useContext, useRef} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
+import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 
 function HeapObject(props) {
 	const [name, setName] = useState("")
@@ -9,8 +10,12 @@ function HeapObject(props) {
 	const [variables, setVariables] = useState([])
 	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
 	const [isDragged, setIsDragged] = useState(false)
+	const [localDepthIndex, setLocalDepthIndex] = useState(0)
 
 	const {stackWidth} = useContext(ResizableStackContext)
+	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
+
+	const obj = useRef(null)
 
 	// useEffect(() => {
 	// 	console.log("Resized stack width")
@@ -57,6 +62,16 @@ function HeapObject(props) {
 		}
 	}
 
+	function handleMouseDown() {
+		console.log("click")
+		setIsDragged(true)
+		if (localDepthIndex <= depthIndex) {
+			console.log("idx can be increased by one")
+			setDepthIndex(prevIndex => prevIndex+1)
+			setLocalDepthIndex(depthIndex)
+		}
+	}
+
 	function handleMouseUp() {
 		setIsDragged(false)
 		if (position.X < 0 && position.Y < 0) {
@@ -75,11 +90,12 @@ function HeapObject(props) {
 			className="object" 
 			draggable={false}
 			onMouseMove={handleMouseMove}
-			style={{transform: `translate(${position.X}px, ${position.Y}px)`}}
+			ref={obj}
+			style={{transform: `translate(${position.X}px, ${position.Y}px)`, zIndex: localDepthIndex}}
 		>
 			<div 
 				className="object__drag-handle"
-				onMouseDown={() => setIsDragged(true)}
+				onMouseDown={handleMouseDown}
 				onMouseUp={handleMouseUp}
 			>
 			</div>

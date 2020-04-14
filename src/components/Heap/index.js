@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
+import {HeapDepthIndexContextProvider} from "../../contexts/heapDepthIndexContext"
 
 function Heap(props) {
 	const [count, setCount] = useState(0)
@@ -31,20 +32,22 @@ function Heap(props) {
 	}
 
 	function handleScroll(event) {
-		// console.log(event.target)
+		// console.log(event)
 	}
 	
 	return (
 		<div className="heap">
 			<Header region="heap" objectsCount={objects.length}/>
-			<div 
-				className="heap__objects objects"
-				style={isAddModeActive ? {cursor: "crosshair"} : null}
-				onClick={handleClick}
-				onScroll={handleScroll}
-			>
-				{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
-			</div>
+			<HeapDepthIndexContextProvider>
+				<div 
+					className="heap__objects objects"
+					style={isAddModeActive ? {cursor: "crosshair"} : null}
+					onClick={handleClick}
+					onWheel={handleScroll}
+				>
+					{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
+				</div>
+			</HeapDepthIndexContextProvider>
 		</div>
 	)
 }
