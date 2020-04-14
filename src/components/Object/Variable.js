@@ -14,7 +14,7 @@ function Variable(props) {
 		setData(prevData => ({...prevData, [name]: value }))
 	}
 
-	function handleKeyPress(event) {
+	function handleKeyUp(event) {
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}
@@ -28,7 +28,7 @@ function Variable(props) {
 			autoComplete="off"
 			placeholder="value"
 			onChange={handleChange}
-			onKeyUp={handleKeyPress}
+			onKeyUp={handleKeyUp}
 		/>
 	)
 
@@ -47,7 +47,7 @@ function Variable(props) {
 					autoComplete="off"
 					placeholder="Name"
 					onChange={handleChange}
-					onKeyUp={handleKeyPress}
+					onKeyUp={handleKeyUp}
 				/>
 				<input 
 					className="object__variable__type"
@@ -56,7 +56,7 @@ function Variable(props) {
 					autoComplete="off"
 					placeholder="Type"
 					onChange={handleChange}
-					onKeyUp={handleKeyPress}
+					onKeyUp={handleKeyUp}
 				/>
 				{props.nature === "reference" ? referenceField : valueField}
 			</form>

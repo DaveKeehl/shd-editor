@@ -14,7 +14,7 @@ function ObjectHeader(props) {
 		props.updateName(value)
 	}
 
-	function handleKeyPress(event) {
+	function handleKeyUp(event) {
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}
@@ -28,7 +28,7 @@ function ObjectHeader(props) {
 				value={className}
 				placeholder={props.region === "stack" ? "Class.method()" : "Class"}
 				onChange={handleChange}
-				onKeyUp={handleKeyPress}
+				onKeyUp={handleKeyUp}
 				autoComplete="off"
 			/>
 			<button 

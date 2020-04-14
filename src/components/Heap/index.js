@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
+import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {HeapDepthIndexContextProvider} from "../../contexts/heapDepthIndexContext"
 
 function Heap(props) {
@@ -9,6 +10,7 @@ function Heap(props) {
 	const [objects, setObjects] = useState([])
 
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
+	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -31,8 +33,11 @@ function Heap(props) {
 		}
 	}
 
-	function handleScroll(event) {
-		// console.log(event)
+	function handleMouseMove(event) {
+		const {clientX, clientY} = event
+		// console.log(useContext(HeapMousePositionContext))
+		setMousePosition({X: clientX, Y: clientY})
+		// console.log(`X: ${clientX}, Y: ${clientY}`)
 	}
 	
 	return (
@@ -43,7 +48,7 @@ function Heap(props) {
 					className="heap__objects objects"
 					style={isAddModeActive ? {cursor: "crosshair"} : null}
 					onClick={handleClick}
-					onWheel={handleScroll}
+					onMouseMove={handleMouseMove}
 				>
 					{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
 				</div>

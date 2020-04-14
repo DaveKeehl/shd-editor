@@ -3,6 +3,7 @@ import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
+import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 
 function HeapObject(props) {
 	const [name, setName] = useState("")
@@ -14,12 +15,21 @@ function HeapObject(props) {
 
 	const {stackWidth} = useContext(ResizableStackContext)
 	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
+	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
 
 	const obj = useRef(null)
 
 	// useEffect(() => {
 	// 	console.log("Resized stack width")
 	// }, [stackWidth])
+
+	useEffect(() => {
+		if (isDragged) {
+			// console.log(`X: ${clientX}, Y: ${clientY}`)
+			// setPosition({X: clientX-stackWidth-10-20-160, Y: clientY-20-55-23})
+			setPosition({X: mousePosition.X-stackWidth-10-20-160, Y: mousePosition.Y-20-55-23})
+		}
+	}, [mousePosition])
 
 	useEffect(() => {
 		if (props.initialPosition.X < 0 && props.initialPosition.Y < 0) {
@@ -54,13 +64,14 @@ function HeapObject(props) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
 	}
 
-	function handleMouseMove(event) {
-		const {clientX, clientY} = event
-		if (isDragged) {
-			// console.log(`X: ${clientX}, Y: ${clientY}`)
-			setPosition({X: clientX-stackWidth-10-20-160, Y: clientY-20-55-23})
-		}
-	}
+	// function handleMouseMove(event) {
+	// 	const {clientX, clientY} = event
+	// 	if (isDragged) {
+	// 		// console.log(`X: ${clientX}, Y: ${clientY}`)
+	// 		// setPosition({X: clientX-stackWidth-10-20-160, Y: clientY-20-55-23})
+	// 		setPosition({X: mousePosition.X-stackWidth-10-20-160, Y: mousePosition.Y-20-55-23})
+	// 	}
+	// }
 
 	function handleMouseDown() {
 		setIsDragged(true)
@@ -87,7 +98,7 @@ function HeapObject(props) {
 		<div 
 			className="object" 
 			draggable={false}
-			onMouseMove={handleMouseMove}
+			// onMouseMove={handleMouseMove}
 			ref={obj}
 			style={{transform: `translate(${position.X}px, ${position.Y}px)`, zIndex: localDepthIndex}}
 		>

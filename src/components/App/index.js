@@ -1,8 +1,9 @@
 import React, {useRef, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
-import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
+import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
+import {HeapMousePositionContextProvider} from "../../contexts/heapMousePositionContext"
 
 function App() {
 	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
@@ -47,7 +48,9 @@ function App() {
 			>
 			</div>
 			<HeapAddModeContextProvider>
-				<Heap stackWidth={stackWidth} />
+				<HeapMousePositionContextProvider>
+					<Heap stackWidth={stackWidth} />
+				</HeapMousePositionContextProvider>
 			</HeapAddModeContextProvider>
 		</div>
 	)
