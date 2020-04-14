@@ -20,8 +20,9 @@ function Heap(props) {
 				<HeapObject 
 					key={count} 
 					id={count} 
-					initialPosition={{X: clientX-360-10-20-160, Y: clientY-20-55-23}}
+					initialPosition={{X: clientX-props.stackWidth-10-20-160, Y: clientY-20-55-23}}
 					removeBlock={removeBlock}
+					stackWidth={props.stackWidth}
 				/>	
 			)
 			setCount(prevCount => prevCount+1)

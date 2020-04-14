@@ -11,10 +11,16 @@ function App() {
 
 	function handleMouseDown() {
 		setIsResizable(true)
+		separator.current.style.background = "#c3c3c3"
 	}
 
 	function handleMouseUp() {
 		setIsResizable(false)
+		separator.current.style.background = "#F3F3F3"
+	}
+
+	function handleDoubleClick() {
+		setStackWidth(360)
 	}
 
 	function handleMouseMove(event) {
@@ -37,6 +43,7 @@ function App() {
 				ref={separator}
 				onMouseDown={handleMouseDown}
 				onMouseUp={handleMouseUp}
+				onDoubleClick={handleDoubleClick}
 			>
 			</div>
 			<HeapAddModeContextProvider>
