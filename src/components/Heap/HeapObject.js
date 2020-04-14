@@ -12,9 +12,21 @@ function HeapObject(props) {
 
 	const {stackWidth} = useContext(ResizableStackContext)
 
+	// useEffect(() => {
+	// 	console.log("Resized stack width")
+	// }, [stackWidth])
+
 	useEffect(() => {
-		console.log("Resized stack width")
-	}, [stackWidth])
+		if (props.initialPosition.X < 0 && props.initialPosition.Y < 0) {
+			setPosition({X: 0, Y: 0})
+		}
+		else if (props.initialPosition.X < 0) {
+			setPosition({X: 0, Y: props.initialPosition.Y})
+		}
+		else if (props.initialPosition.Y < 0) {
+			setPosition({X: props.initialPosition.X, Y: 0})
+		}
+	}, [])
 
 	function updateName(newName) {
 		setName(newName)
@@ -45,6 +57,19 @@ function HeapObject(props) {
 		}
 	}
 
+	function handleMouseUp() {
+		setIsDragged(false)
+		if (position.X < 0 && position.Y < 0) {
+			setPosition({X: 0, Y: 0})
+		}
+		else if (position.X < 0) {
+			setPosition({X: 0, Y: position.Y})
+		}
+		else if (position.Y < 0) {
+			setPosition({X: position.X, Y: 0})
+		}
+	}
+
 	return (
 		<div 
 			className="object" 
@@ -55,7 +80,7 @@ function HeapObject(props) {
 			<div 
 				className="object__drag-handle"
 				onMouseDown={() => setIsDragged(true)}
-				onMouseUp={() => setIsDragged(false)}
+				onMouseUp={handleMouseUp}
 			>
 			</div>
 			<ObjectHeader 

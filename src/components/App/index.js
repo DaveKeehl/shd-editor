@@ -1,4 +1,4 @@
-import React, {useState, useRef, useContext} from "react"
+import React, {useRef, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
