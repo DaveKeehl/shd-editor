@@ -1,79 +1,82 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 
-function HeapObject(props) {
-	const [name, setName] = useState("")
-	const [count, setCount] = useState(0)
-	const [variables, setVariables] = useState([])
-	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
-	const [isDragged, setIsDragged] = useState(false)	
-
-	function updateName(newName) {
-		setName(newName)
+class HeapObject extends React.Component {
+	state = {
+		name: "",
+		count: 0,
+		variables: [],
+		position: {
+			X: this.props.initialPosition.X,
+			Y: this.props.initialPosition.Y
+		},
+		isDragged: false
 	}
 
-	function addVariable(nature) {
+
+	updateName = (newName) => {
+		this.setState({name: newName})
+	}
+
+	addVariable = (nature) => {
 		const newVariable = (
 			<Variable 
-				key={count} 
-				id={count} 
+				key={this.state.count} 
+				id={this.state.count} 
 				nature={nature}
-				removeVariable={removeVariable}
+				removeVariable={this.removeVariable}
 			/>
 		)
-		setCount(prevCount => prevCount+1)
-		setVariables(prevVariables => [...prevVariables, newVariable])
+		this.setState(prevState => ({count: prevState.count+1}))
+		this.setState(prevState => ({variables: [...prevState.variables, newVariable]}))
 	}
 
-	function removeVariable(id) {
-		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
+	removeVariable = (id) => {
+		this.setState(prevState => ({variables: prevState.variables.filter(variable => id !== variable.props.id)}))
 	}
 
-	function DragHandle() {
-		return (
-			<div 
-				className="object__drag-handle"
-				onMouseDown={() => setIsDragged(true)}
-				onMouseUp={() => setIsDragged(false)}
-			>
-			</div>
-		)
-	}
-
-	function handleMouseMove(event) {
+	handleMouseMove = (event) => {
 		const {clientX, clientY} = event
-		if (isDragged) {
+		if (this.state.isDragged) {
 			console.log(`X: ${clientX}, Y: ${clientY}`)
-			setPosition({X: clientX-360-10-20-160, Y: clientY-20-55-23})
+			this.setState({position: {X: clientX-360-10-20-160, Y: clientY-20-55-23}})
 		}
 	}
 
-	return (
-		<div 
-			className="object" 
-			draggable={false}
-			onMouseMove={handleMouseMove}
-			style={{transform: `translate(${position.X}px, ${position.Y}px)`}}
-		>
-			<DragHandle />
-			<ObjectHeader 
-				id={props.id} 
-				region="heap"
-				updateName={updateName}
-				removeBlock={props.removeBlock}
-			/>
-			<div>{variables}</div>
+	render() {
+		return (
 			<div 
-				className="object__separator" 
-				style={variables.length > 0 ? {display: "block"} : {display: "none"}}
-			></div>
-			<div className="object__buttons">
-				<button onClick={() => {addVariable("primitive")}}>Add Prim.</button>
-				<button onClick={() => {addVariable("reference")}}>Add Ref.</button>
+				className="object" 
+				draggable={false}
+				onMouseMove={this.handleMouseMove}
+				style={{transform: `translate(${this.state.position.X}px, ${this.state.position.Y}px)`}}
+			>
+				<div 
+					className="object__drag-handle"
+					onMouseDown={() => this.setState({isDragged: true})}
+					onMouseUp={() => this.setState({isDragged: false})}
+				>
+				</div>
+				<ObjectHeader 
+					id={this.props.id} 
+					region="heap"
+					updateName={this.updateName}
+					removeBlock={this.props.removeBlock}
+				/>
+				<div>{this.state.variables}</div>
+				<div 
+					className="object__separator" 
+					style={this.state.variables.length > 0 ? {display: "block"} : {display: "none"}}
+				></div>
+				<div className="object__buttons">
+					<button onClick={() => {this.addVariable("primitive")}}>Add Prim.</button>
+					<button onClick={() => {this.addVariable("reference")}}>Add Ref.</button>
+				</div>
 			</div>
-		</div>
-	)
+		)
+	}
+
 }
 
 export default HeapObject

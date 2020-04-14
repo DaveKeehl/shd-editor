@@ -6,7 +6,6 @@ import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
 function Heap(props) {
 	const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
-	// const [dragging, setDragging] = useState(false)
 
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
 
@@ -23,7 +22,6 @@ function Heap(props) {
 					id={count} 
 					initialPosition={{X: clientX-360-10-20-160, Y: clientY-20-55-23}}
 					removeBlock={removeBlock}
-					// setDragging={setDragging}
 				/>	
 			)
 			setCount(prevCount => prevCount+1)
@@ -31,39 +29,17 @@ function Heap(props) {
 			toggleAddMode()
 		}
 	}
-
-	// function handleMouseMove(event) {
-	// 	const {clientX, clientY} = event
-	// 	if (dragging) {
-	// 		console.log(`X: ${clientX}, Y: ${clientY}`)
-	// 	}
-	// }
-
-	// function handleMouseUp() {
-	// 	if (dragging) {
-	// 		setDragging(false)
-	// 	}
-	// }
-
-	function HeapObjects() {
-		const message = <p>Click on the "+" button to freely position an Object on the Heap.</p>
-		return (
-			<div 
-				className="heap__objects objects"
-				style={isAddModeActive ? {cursor: "crosshair"} : null}
-				onClick={handleClick}
-				// onMouseMove={handleMouseMove}
-				// onMouseUp={handleMouseUp}
-			>
-				{objects.length === 0 ? message : objects}
-			</div>
-		)
-	}
 	
 	return (
 		<div className="heap">
 			<Header region="heap" objectsCount={objects.length}/>
-			<HeapObjects />
+			<div 
+				className="heap__objects objects"
+				style={isAddModeActive ? {cursor: "crosshair"} : null}
+				onClick={handleClick}
+			>
+				{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
+			</div>
 		</div>
 	)
 }
