@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useRef, useEffect} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 
@@ -6,6 +6,22 @@ function StackFrame(props) {
 	const [name, setName] = useState("")
 	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
+
+	const frame = useRef(null)
+
+	function cumulativeOffset(element) {
+		var top = 0, left = 0;
+		do {
+			top += element.offsetTop  || 0;
+			left += element.offsetLeft || 0;
+			element = element.offsetParent;
+		} while(element);
+	
+		return {
+			top: top,
+			left: left
+		};
+	};
 
 	function updateName(newName) {
 		setName(newName)
