@@ -9,12 +9,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "images/favicon/logo192.png",
+      "src": "images/logo192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "images/favicon/logo512.png",
+      "src": "images/logo512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
