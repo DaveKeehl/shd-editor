@@ -15,6 +15,7 @@ class StateContextProvider extends Component {
 			count: 0,
 			variables: []
 		}
+		
 		this.setState(prevState => {
 			return {
 
