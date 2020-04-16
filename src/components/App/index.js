@@ -1,6 +1,7 @@
 import React, {useRef, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
+import {StateContextProvider} from "../../contexts/stateContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContextProvider} from "../../contexts/heapMousePositionContext"
@@ -38,20 +39,22 @@ function App() {
 			onMouseMove={handleMouseMove}
 			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
-			<Stack />
-			<div 
-				className="separator" 
-				ref={separator}
-				onMouseDown={handleMouseDown}
-				onMouseUp={handleMouseUp}
-				onDoubleClick={handleDoubleClick}
-			>
-			</div>
-			<HeapAddModeContextProvider>
-				<HeapMousePositionContextProvider>
-					<Heap stackWidth={stackWidth} />
-				</HeapMousePositionContextProvider>
-			</HeapAddModeContextProvider>
+			<StateContextProvider>
+				<Stack />
+				<div 
+					className="separator" 
+					ref={separator}
+					onMouseDown={handleMouseDown}
+					onMouseUp={handleMouseUp}
+					onDoubleClick={handleDoubleClick}
+				>
+				</div>
+				<HeapAddModeContextProvider>
+					<HeapMousePositionContextProvider>
+						<Heap stackWidth={stackWidth} />
+					</HeapMousePositionContextProvider>
+				</HeapAddModeContextProvider>
+			</StateContextProvider>
 		</div>
 	)
 }
