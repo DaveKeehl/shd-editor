@@ -1,32 +1,32 @@
-import React, {Component} from "react"
+import React, {useState} from "react"
 
 const StateContext = React.createContext()
 
-class StateContextProvider extends Component {
-	state = {
-		stack: [],
-		heap: []
-	}
+function StateContextProvider(props) {
+	const [stack, setStack] = useState([])
+	const [heap, setHeap] = useState([])
+	const [count, setCount] = useState(0)
 
-	addStackFrame = () => {
+	let diagram = {stack, heap}
+
+	// ADDERS, REMOVERS
+
+	const addStackFrame = () => {
+		console.log("Added new Stack Frame")
 		const newStackFrame = {
-			id: this.state.stack.length,
+			id: count,
 			name: "",
 			count: 0,
 			variables: []
 		}
-		
-		this.setState(prevState => {
-			return {
-
-				stack: prevState
-			}
-		})
+		setCount(prevState => prevState+1)
+		setStack(prevState => [newStackFrame, ...prevState])
 	}
 
-	addHeapObject = (initialPosition) => {
+	const addHeapObject = (initialPosition) => {
+		console.log("Added new Heap Object")
 		const newHeapObject = {
-			id: this.state.heap.length,
+			id: count,
 			name: "",
 			count: 0,
 			variables: [],
@@ -37,103 +37,333 @@ class StateContextProvider extends Component {
 			isDragged: false,
 			localDepthIndex: 0
 		}
+		setCount(prevState => prevState+1)
+		setHeap(prevState => [newHeapObject, ...prevState])
 	}
 
-	removeStackFrame = () => {
+	const removeStackFrame = (stackFrameID) => {
+		console.log(`Removed Stack Frame with ID ${stackFrameID}`)
+		setStack(prevState => prevState.filter(frame => frame.id !== stackFrameID))
 	}
 
-	removeHeapObject = () => {
+	const removeHeapObject = (heapObjectID) => {
+		console.log(`Removed Heap Object with ID ${heapObjectID}`)
+		setHeap(prevState => prevState.filter(object => object.id !== heapObjectID))
 	}
 
-	renameStackFrame = () => {
+	const addStackFrameVariable = (stackFrameID, variableNature) => {
+		const newVariable = {
+			id: count,
+			nature: variableNature,
+			name: "",
+			type: "",
+			value: ""
+		}
+		setCount(prevState => prevState+1)
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = [...frame.variables, newVariable]
+			}
+			return frame
+		}))
 	}
 
-	renameHeapObject = () => {
+	const addHeapObjectVariable = (heapObjectID, variableNature) => {
+		const newVariable = {
+			id: count,
+			nature: variableNature,
+			name: "",
+			type: "",
+			value: ""
+		}
+		setCount(prevState => prevState+1)
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = [...object.variables, newVariable]
+			}
+			return object
+		}))
 	}
 
-	addStackFramePrimitiveVariable = () => {
+	const removeStackFrameVariable = (stackFrameID, variableID) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = frame.variables.filter(variable => variable.id !== variableID)
+			}
+			return frame
+		}))
 	}
 
-	addStackFrameReferenceVariable = () => {
+	const removeHeapObjectVariable = (heapObjectID, variableID) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = object.variables.filter(variable => variable.id !== variableID)
+			}
+			return object
+		}))
 	}
 
-	addHeapObjectPrimitiveVariable = () => {
+	// GETTERS
+
+	const getStackFrames = () => {
+		return stack
 	}
 
-	addHeapObjectReferenceVariable = () => {
+	const getHeapObjects = () => {
+		return heap
 	}
 
-	removeStackFramePrimitiveVariable = () => {
+	const getStackFrame = (stackFrameID) => {
+		return stack.filter(frame => frame.id === stackFrameID)[0]
 	}
 
-	removeStackFrameReferenceVariable = () => {
+	const getHeapObject = (heapObjectID) => {
+		return this.state.heap.filter(heapObject => heapObject.id === heapObjectID)[0]
 	}
 
-	removeHeapObjectPrimitiveVariable = () => {
+	const getStackFrameVariable = (stackFrameID, variableID) => {
+		const frame = stack.filter(frame => frame.id === stackFrameID)[0]
+		return frame.variables.filter(variable => variable.id === variableID)[0]
 	}
 
-	removeHeapObjectReferenceVariable = () => {
+	const getHeapObjectVariable = (heapObjectID, variableID) => {
+		const object = heap.filter(object => object.id === heapObjectID)[0]
+		return object.variables.filter(variable => variable.id === variableID)[0]
 	}
 
-	modifyVariableName = () => {
+	// SETTERS
+
+	const setStackFrameName = (stackFrameID, newName) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.name = newName
+			}
+			return frame	
+		}))
 	}
 
-	modifyVariableType = () => {
+	const setHeapObjectName = (heapObjectID, newName) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.name = newName
+			}
+			return object	
+		}))
 	}
 
-	modifyVariableValue = () => {
+	const setStackFrameVariableName = (stackFrameID, variableID, newName) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = frame.variables.map(variable => {
+					if (variable.id === variableID) {
+						variable.name = newName
+					}
+					return variable
+				})
+			}
+			return frame
+		}))
 	}
 
-	addConnection = () => {
+	const setHeapObjectVariableName = (heapObjectID, variableID, newName) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = object.variables.map(variable => {
+					if (variable.id === variableID) {
+						variable.name = newName
+					}
+					return variable
+				})
+			}
+			return object
+		}))
 	}
 
-	removeConnection = () => {
+	const setStackFrameVariableType = (stackFrameID, variableID, newType) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = frame.variables.map(variable => {
+					if (variable.id === variableID) {
+						variable.type = newType
+					}
+					return variable
+				})
+			}
+			return frame
+		}))
 	}
 
-	clearConnections = () => {
+	const setHeapObjectVariableType = (heapObjectID, variableID, newType) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = object.variables.map(variable => {
+					if (variable.id === variableID) {
+						variable.type = newType
+					}
+					return variable
+				})
+			}
+			return object
+		}))
 	}
 
-	getStackFrame = (stackFrameID) => {
-		return this.state.stack.filter(stackFrame => stackFrame.id === stackFrameID)
+	const setStackFrameVariablePrimitiveValue = (stackFrameID, variableID, newPrimVal) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = frame.variables.map(variable => {
+					if (variable.id === variableID && variable.nature === "primitive") {
+						variable.value = newPrimVal
+					}
+					return variable
+				})
+			}
+			return frame
+		}))
 	}
 
-	getHeapObject = (heapObjectID) => {
-		return this.state.heap.filter(heapObject => heapObject.id === heapObjectID)
+	const setStackFrameVariableReferenceValue = (stackFrameID, variableID, newRefVal) => {
+		setStack(prevState => prevState.map(frame => {
+			if (frame.id === stackFrameID) {
+				frame.variables = frame.variables.map(variable => {
+					if (variable.id === variableID && variable.nature === "reference") {
+						variable.value = newRefVal
+					}
+					return variable
+				})
+			}
+			return frame
+		}))
 	}
 
-	getStackFrames = () => {
+	const setHeapObjectVariablePrimitiveValue = (heapObjectID, variableID, newPrimVal) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = object.variables.map(variable => {
+					if (variable.id === variableID && variable.nature === "primitive") {
+						variable.value = newPrimVal
+					}
+					return variable
+				})
+			}
+			return object
+		}))
 	}
 
-	getHeapObjects = () => {
+	const setHeapObjectVariableReferenceValue = (heapObjectID, variableID, newRefVal) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.variables = object.variables.map(variable => {
+					if (variable.id === variableID && variable.nature === "reference") {
+						variable.value = newRefVal
+					}
+					return variable
+				})
+			}
+			return object
+		}))
 	}
 
-	clearStack = () => {
-		this.setState({stack: []})
+	// CLEANUP
+
+	const clearConnections = () => {
+		setStack(prevState => prevState.map(frame => {
+			frame.variables = frame.variables.map(variable => {
+				if (variable.nature === "reference") {
+					variable.value = ""
+				}
+				return variable
+			})
+			return frame
+		}))
+		setHeap(prevState => prevState.map(object => {
+			object.variables = object.variables.map(variable => {
+				if (variable.nature === "reference") {
+					variable.value = ""
+				}
+				return variable
+			})
+			return object
+		}))
 	}
 
-	clearHeap = () => {
-		this.setState({heaps: []})
+	const clearStack = () => {
+		console.log("Removed all Stack Frames")
+		setStack([])
 	}
 
-	clearApp = () => {
-		this.clearStack()
-		this.clearHeap()
+	const clearHeap = () => {
+		console.log("Removed all Heap Objects")
+		setHeap([])
 	}
 
-	uploadJSON = (file) => {
+	const clearAll = () => {
+		clearStack()
+		clearHeap()
 	}
 
-	downloadJSON = () => {
+	// UPLOAD, DOWNLOAD
+
+	const uploadJSON = () => {
 	}
+
+	const downloadJSON = () => {
+	}
+
+	// APPLICATION STATE OBJECT
 	
-	render() {
-		const data = {}
-		return (
-			<StateContext.Provider value={data}>
-				{this.props.children}
-			</StateContext.Provider>
-		)
+	const data = {
+		diagram,
+
+		addStackFrame,
+		addHeapObject,
+
+		removeStackFrame,
+		removeHeapObject,
+
+		addStackFrameVariable,
+		addHeapObjectVariable,
+
+		removeStackFrameVariable,
+		removeHeapObjectVariable,
+
+		getStackFrames,
+		getHeapObjects,
+
+		getStackFrame,
+		getHeapObject,
+
+		getStackFrameVariable,
+		getHeapObjectVariable,
+
+		setStackFrameName,
+		setHeapObjectName,
+
+		setStackFrameVariableName,
+		setHeapObjectVariableName,
+
+		setStackFrameVariableType,
+		setHeapObjectVariableType,
+
+		setStackFrameVariablePrimitiveValue,
+		setHeapObjectVariablePrimitiveValue,
+
+		setStackFrameVariableReferenceValue,
+		setHeapObjectVariableReferenceValue,
+
+		clearConnections,
+		clearStack,
+		clearHeap,
+		clearAll,
+
+		uploadJSON,
+		downloadJSON
 	}
+
+	return (
+		<StateContext.Provider value={data}>
+			{props.children}
+		</StateContext.Provider>
+	)
 }
 
 export {StateContextProvider, StateContext}

@@ -1,6 +1,7 @@
 import React, {useRef, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
+import Tests from "./tests"
 import {StateContextProvider} from "../../contexts/stateContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
@@ -40,6 +41,7 @@ function App() {
 			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
 			<StateContextProvider>
+				<Tests />
 				<Stack />
 				<div 
 					className="separator" 

@@ -10,7 +10,7 @@ function Heap(props) {
 	const [objects, setObjects] = useState([])
 
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
-	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
+	const {setMousePosition} = useContext(HeapMousePositionContext)
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
