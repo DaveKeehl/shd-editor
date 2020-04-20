@@ -16,7 +16,6 @@ function StateContextProvider(props) {
 		const newStackFrame = {
 			id: count,
 			name: "",
-			count: 0,
 			variables: []
 		}
 		setCount(prevState => prevState+1)
@@ -28,7 +27,6 @@ function StateContextProvider(props) {
 		const newHeapObject = {
 			id: count,
 			name: "",
-			count: 0,
 			variables: [],
 			position: {
 				X: initialPosition.X,
@@ -303,16 +301,27 @@ function StateContextProvider(props) {
 
 	// UPLOAD, DOWNLOAD
 
-	const uploadJSON = () => {
+	const uploadJSON = (file) => {
+		const JSON = file.parse()
 	}
 
-	const downloadJSON = () => {
+	const downloadJSON = (filename = "diagram") => {
+		const json = JSON.stringify(diagram, null, 4)
+		const data = "data:text/json;charset=utf-8," + encodeURIComponent(json)
+		var downloadable = document.createElement('a')
+		downloadable.setAttribute("href", data)
+		downloadable.setAttribute("download", filename + ".json")
+		document.body.appendChild(downloadable) // required for firefox
+		downloadable.click()
+		downloadable.remove()
 	}
 
 	// APPLICATION STATE OBJECT
 	
 	const data = {
 		diagram,
+
+		count,
 
 		addStackFrame,
 		addHeapObject,

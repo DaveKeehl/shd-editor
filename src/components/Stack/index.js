@@ -1,21 +1,26 @@
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
 import Header from "../Header"
 import StackFrame from "./StackFrame"
+import {StateContext} from "../../contexts/stateContext"
 
 function Stack(props) {
-	const [count, setCount] = useState(0)
+	// const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
+
+	const app = useContext(StateContext)
 
 	function addBlock() {
 		const newBlock = (
 			<StackFrame 
-				key={count} 
-				id={count} 
+				key={app.count} 
+				id={app.count} 
 				removeBlock={removeBlock}
 			/>	
 		)
-		setCount(prevCount => prevCount+1)
+		// setCount(prevCount => prevCount+1)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
+		app.addStackFrame()
+		console.log(app.count)
 	}
 
 	function removeBlock(id) {

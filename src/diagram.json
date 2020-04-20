@@ -1,51 +1,18 @@
 {
-	"diagram" : {
-		"stack" : {
-			"objects": [
-				{
-					"classMethod" : "Class.method()",
-					"variables" : [
-						{
-							"nature" : "primitive",
-							"name" : "myVar",
-							"type" : "Int",
-							"value" : 5,
-							"id" : 0
-						},
-						{
-							"nature" : "reference",
-							"name" : "myVar",
-							"type" : "Int",
-							"value" : null,
-							"id" : 1
-						}
-					]
-				}
-			]
-		},
-		"heap" : [
-			{
-				"nature" : "primitive",
-				"name" : "myVar",
-				"type" : "Int",
-				"value" : 5,
-				"id" : 2,
-				"position" : {
-					"top" : 10,
-					"left" : 20
-				}
-			},
-			{
-				"nature" : "reference",
-				"name" : "myVar",
-				"type" : "Int",
-				"value" : 10,
-				"id" : 3,
-				"position" : {
-					"top" : 10,
-					"left" : 20
-				}
-			}
-		]
-	}
+    "stack": [
+        {
+            "id": 0,
+            "name": "Davide",
+            "variables": [
+                {
+                    "id": 1,
+                    "nature": "primitive",
+                    "name": "eatCount",
+                    "type": "Int",
+                    "value": 10
+                }
+            ]
+        }
+    ],
+    "heap": []
 }

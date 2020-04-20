@@ -1,0 +1,14 @@
+<svg width="732" height="195" viewBox="0 0 732 195" fill="none" xmlns="http://www.w3.org/2000/svg">
+	<path 
+		d="
+			M 0.5 97.5
+			H 717.5
+			M 717.5 97.5
+			L 628 187
+			M 717.5 97.5
+			L 628 8
+		" 
+		stroke="black" 
+		stroke-width="20"
+	/>
+</svg>
