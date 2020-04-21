@@ -1,16 +1,22 @@
-import React, {useRef, useContext} from "react"
+import React, {useState, useRef, useEffect, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
-// import Tests from "./tests"
-import {StateContextProvider} from "../../contexts/stateContext"
+import {StateContext} from "../../contexts/stateContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContextProvider} from "../../contexts/heapMousePositionContext"
 
 function App() {
+	const [diagram, setDiagram] = useState({})
+
+	const app = useContext(StateContext)
 	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
 
 	const separator = useRef(null)
+
+	useEffect(() => {
+		setDiagram(app.diagram)
+	}, [app.diagram])
 
 	function handleMouseDown() {
 		setIsResizable(true)
@@ -40,23 +46,20 @@ function App() {
 			onMouseMove={handleMouseMove}
 			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
-			<StateContextProvider>
-				{/* <Tests /> */}
-				<Stack />
-				<div 
-					className="separator" 
-					ref={separator}
-					onMouseDown={handleMouseDown}
-					onMouseUp={handleMouseUp}
-					onDoubleClick={handleDoubleClick}
-				>
-				</div>
-				<HeapAddModeContextProvider>
-					<HeapMousePositionContextProvider>
-						<Heap stackWidth={stackWidth} />
-					</HeapMousePositionContextProvider>
-				</HeapAddModeContextProvider>
-			</StateContextProvider>
+			<Stack />
+			<div 
+				className="separator" 
+				ref={separator}
+				onMouseDown={handleMouseDown}
+				onMouseUp={handleMouseUp}
+				onDoubleClick={handleDoubleClick}
+			>
+			</div>
+			<HeapAddModeContextProvider>
+				<HeapMousePositionContextProvider>
+					<Heap stackWidth={stackWidth} />
+				</HeapMousePositionContextProvider>
+			</HeapAddModeContextProvider>
 		</div>
 	)
 }

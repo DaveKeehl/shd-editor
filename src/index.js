@@ -2,13 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './style.sass';
 import App from './components/App';
+import {StateContextProvider} from "./contexts/stateContext"
 import {ResizableStackContextProvider} from "./contexts/resizableStackContext"
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-	<ResizableStackContextProvider>
-		<App />
-	</ResizableStackContextProvider>, 
+	<StateContextProvider>
+		<ResizableStackContextProvider>
+			<App />
+		</ResizableStackContextProvider>
+	</StateContextProvider>, 
 	document.getElementById('root')
 );
 

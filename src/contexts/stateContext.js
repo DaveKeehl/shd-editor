@@ -33,7 +33,7 @@ function StateContextProvider(props) {
 				Y: initialPosition.Y
 			},
 			// isDragged: false,
-			localDepthIndex: 0
+			depthIndex: 0
 		}
 		setCount(prevState => prevState+1)
 		setHeap(prevState => [newHeapObject, ...prevState])
@@ -192,7 +192,7 @@ function StateContextProvider(props) {
 	const setHeapObjectDepthIndex = (heapObjectID, newDepthIndex) => {
 		setHeap(prevState => prevState.map(object => {
 			if (object.id === heapObjectID) {
-				object.localDepthIndex = newDepthIndex
+				object.depthIndex = newDepthIndex
 			}
 			return object
 		}))
