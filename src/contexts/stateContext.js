@@ -180,122 +180,19 @@ function StateContextProvider(props) {
 		}
 	}
 
-	const setStackFrameVariableName = (stackFrameID, variableID, newName) => {
-		setStack(prevState => prevState.map(frame => {
-			if (frame.id === stackFrameID) {
-				frame.variables = frame.variables.map(variable => {
-					if (variable.id === variableID) {
-						variable.name = newName
-					}
-					return variable
-				})
-			}
-			return frame
-		}))
-	}
-
-	const setHeapObjectVariableName = (heapObjectID, variableID, newName) => {
-		setHeap(prevState => prevState.map(object => {
-			if (object.id === heapObjectID) {
-				object.variables = object.variables.map(variable => {
-					if (variable.id === variableID) {
-						variable.name = newName
-					}
-					return variable
-				})
-			}
-			return object
-		}))
-	}
-
-	const setStackFrameVariableType = (stackFrameID, variableID, newType) => {
-		setStack(prevState => prevState.map(frame => {
-			if (frame.id === stackFrameID) {
-				frame.variables = frame.variables.map(variable => {
-					if (variable.id === variableID) {
-						variable.type = newType
-					}
-					return variable
-				})
-			}
-			return frame
-		}))
-	}
-
-	const setHeapObjectVariableType = (heapObjectID, variableID, newType) => {
-		setHeap(prevState => prevState.map(object => {
-			if (object.id === heapObjectID) {
-				object.variables = object.variables.map(variable => {
-					if (variable.id === variableID) {
-						variable.type = newType
-					}
-					return variable
-				})
-			}
-			return object
-		}))
-	}
-
-	const setStackFrameVariablePrimitiveValue = (stackFrameID, variableID, newPrimVal) => {
-		setStack(prevState => prevState.map(frame => {
-			if (frame.id === stackFrameID) {
-				frame.variables = frame.variables.map(variable => {
-					if (variable.id === variableID && variable.nature === "primitive") {
-						variable.value = newPrimVal
-					}
-					return variable
-				})
-			}
-			return frame
-		}))
-	}
-
-	const setStackFrameVariableReferenceValue = (stackFrameID, variableID, newRefVal) => {
-		setStack(prevState => prevState.map(frame => {
-			if (frame.id === stackFrameID) {
-				frame.variables = frame.variables.map(variable => {
-					if (variable.id === variableID && variable.nature === "reference") {
-						variable.value = newRefVal
-					}
-					return variable
-				})
-			}
-			return frame
-		}))
-	}
-
-	const setHeapObjectVariablePrimitiveValue = (heapObjectID, variableID, newPrimVal) => {
-		setHeap(prevState => prevState.map(object => {
-			if (object.id === heapObjectID) {
-				object.variables = object.variables.map(variable => {
-					if (variable.id === variableID && variable.nature === "primitive") {
-						variable.value = newPrimVal
-					}
-					return variable
-				})
-			}
-			return object
-		}))
-	}
-
-	const setHeapObjectVariableReferenceValue = (heapObjectID, variableID, newRefVal) => {
-		setHeap(prevState => prevState.map(object => {
-			if (object.id === heapObjectID) {
-				object.variables = object.variables.map(variable => {
-					if (variable.id === variableID && variable.nature === "reference") {
-						variable.value = newRefVal
-					}
-					return variable
-				})
-			}
-			return object
-		}))
-	}
-
 	const setHeapObjectPosition = (heapObjectID, newPosition) => {
 		setHeap(prevState => prevState.map(object => {
 			if (object.id === heapObjectID) {
 				object.position = newPosition
+			}
+			return object
+		}))
+	}
+
+	const setHeapObjectDepthIndex = (heapObjectID, newDepthIndex) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.localDepthIndex = newDepthIndex
 			}
 			return object
 		}))
@@ -342,7 +239,16 @@ function StateContextProvider(props) {
 	// UPLOAD, DOWNLOAD
 
 	const uploadJSON = (file) => {
-		const JSON = file.parse()
+		
+		// clearAll()
+		// updateStack(file.stack)
+		// updateHeap(file.heap)
+		// convertStackToJSX()
+		// convertHeapToJSX()
+		
+		
+		// const JSON = file.parse()
+
 	}
 
 	const downloadJSON = (filename = "diagram") => {
@@ -365,19 +271,16 @@ function StateContextProvider(props) {
 
 		addStackFrame,
 		addHeapObject,
-
 		removeStackFrame,
 		removeHeapObject,
 
 		addStackFrameVariable,
 		addHeapObjectVariable,
-
 		removeStackFrameVariable,
 		removeHeapObjectVariable,
 
 		getStackFrames,
 		getHeapObjects,
-
 		getStackFrame,
 		getHeapObject,
 
@@ -389,20 +292,8 @@ function StateContextProvider(props) {
 
 		setVariableData,
 
-		setStackFrameVariableName,
-		setHeapObjectVariableName,
-
-		setStackFrameVariableType,
-		setHeapObjectVariableType,
-
-		setStackFrameVariablePrimitiveValue,
-		setHeapObjectVariablePrimitiveValue,
-
-		setStackFrameVariableReferenceValue,
-		setHeapObjectVariableReferenceValue,
-
 		setHeapObjectPosition,
-		// setHeapObjectDepthIndex,
+		setHeapObjectDepthIndex,
 
 		clearConnections,
 		clearStack,

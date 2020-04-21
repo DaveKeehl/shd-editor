@@ -14,7 +14,7 @@ function Variable(props) {
 
 	function handleChange(event) {
 		const {name, value} = event.target
-		setData(prevData => ({...prevData, [name]: value }))
+		setData(prevData => ({...prevData, [name]: value}))
 		app.setVariableData(props.region, props.parentID, props.id, {name,value})
 	}
 

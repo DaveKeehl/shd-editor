@@ -7,16 +7,16 @@ import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 
 function HeapObject(props) {
-	const [name, setName] = useState("")
-	const [variables, setVariables] = useState([])
-	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
-	const [isDragged, setIsDragged] = useState(false)
-	const [localDepthIndex, setLocalDepthIndex] = useState(0)
-
 	const app = useContext(StateContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
 	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
+	
+	const [name, setName] = useState("")
+	const [variables, setVariables] = useState([])
+	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
+	const [isDragged, setIsDragged] = useState(false)
+	const [localDepthIndex, setLocalDepthIndex] = useState("")
 
 	const obj = useRef(null)
 
@@ -47,6 +47,9 @@ function HeapObject(props) {
 			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
+		setDepthIndex(prevState => prevState+1)
+		setLocalDepthIndex(depthIndex+1)
+		app.setHeapObjectDepthIndex(props.id, depthIndex+1)
 	}, [])
 
 	function updateName(newName) {
@@ -76,9 +79,10 @@ function HeapObject(props) {
 
 	function handleMouseDown() {
 		setIsDragged(true)
-		if (localDepthIndex <= depthIndex) {
+		if (localDepthIndex < depthIndex) {
 			setDepthIndex(prevIndex => prevIndex+1)
 			setLocalDepthIndex(depthIndex+1)
+			app.setHeapObjectDepthIndex(props.id, depthIndex+1)
 		}
 	}
 
@@ -87,17 +91,17 @@ function HeapObject(props) {
 		if (position.X < 0 && position.Y < 0) {
 			const newPosition = {X: 0, Y: 0}
 			setPosition(newPosition)
-			app.setHeapObjectPosition(newPosition)
+			app.setHeapObjectPosition(props.id, newPosition)
 		}
 		else if (position.X < 0) {
 			const newPosition = {X: 0, Y: position.Y}
 			setPosition(newPosition)
-			app.setHeapObjectPosition(newPosition)
+			app.setHeapObjectPosition(props.id, newPosition)
 		}
 		else if (position.Y < 0) {
 			const newPosition = {X: position.X, Y: 0}
 			setPosition(newPosition)
-			app.setHeapObjectPosition(newPosition)
+			app.setHeapObjectPosition(props.id, newPosition)
 		}
 	}
 
