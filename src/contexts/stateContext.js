@@ -32,7 +32,7 @@ function StateContextProvider(props) {
 				X: initialPosition.X,
 				Y: initialPosition.Y
 			},
-			isDragged: false,
+			// isDragged: false,
 			localDepthIndex: 0
 		}
 		setCount(prevState => prevState+1)
@@ -149,6 +149,37 @@ function StateContextProvider(props) {
 		}))
 	}
 
+	const setVariableData = (region, parentID, variableID, newData) => {
+		if (region === "stack") {
+			setStack(prevState => prevState.map(frame => {
+				if (frame.id === parentID) {
+					frame.variables = frame.variables.map(variable => {
+						if (variable.id === variableID) {
+							const {name,value} = newData
+							variable[name] = value
+						}
+						return variable
+					})
+				}
+				return frame
+			}))
+		}
+		else if (region === "heap") {
+			setHeap(prevState => prevState.map(object => {
+				if (object.id === parentID) {
+					object.variables = object.variables.map(variable => {
+						if (variable.id === variableID) {
+							const {name,value} = newData
+							variable[name] = value
+						}
+						return variable
+					})
+				}
+				return object
+			}))
+		}
+	}
+
 	const setStackFrameVariableName = (stackFrameID, variableID, newName) => {
 		setStack(prevState => prevState.map(frame => {
 			if (frame.id === stackFrameID) {
@@ -261,6 +292,15 @@ function StateContextProvider(props) {
 		}))
 	}
 
+	const setHeapObjectPosition = (heapObjectID, newPosition) => {
+		setHeap(prevState => prevState.map(object => {
+			if (object.id === heapObjectID) {
+				object.position = newPosition
+			}
+			return object
+		}))
+	}
+
 	// CLEANUP
 
 	const clearConnections = () => {
@@ -347,6 +387,8 @@ function StateContextProvider(props) {
 		setStackFrameName,
 		setHeapObjectName,
 
+		setVariableData,
+
 		setStackFrameVariableName,
 		setHeapObjectVariableName,
 
@@ -358,6 +400,9 @@ function StateContextProvider(props) {
 
 		setStackFrameVariableReferenceValue,
 		setHeapObjectVariableReferenceValue,
+
+		setHeapObjectPosition,
+		// setHeapObjectDepthIndex,
 
 		clearConnections,
 		clearStack,

@@ -1,9 +1,12 @@
-import React, { useState } from "react"
+import React, {useState, useContext} from "react"
 import removeVariableImg from "../../images/delete-icon.svg"
 import ArrowStart from "./ArrowStart"
+import {StateContext} from "../../contexts/stateContext"
 
 function Variable(props) {
 	const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
+
+	const app = useContext(StateContext)
 
 	function removeVariable() {
 		props.removeVariable(props.id)
@@ -12,6 +15,7 @@ function Variable(props) {
 	function handleChange(event) {
 		const {name, value} = event.target
 		setData(prevData => ({...prevData, [name]: value }))
+		app.setVariableData(props.region, props.parentID, props.id, {name,value})
 	}
 
 	function handleKeyUp(event) {

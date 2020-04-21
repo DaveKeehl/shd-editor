@@ -1,43 +1,47 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
+import {StateContext} from "../../contexts/stateContext"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {HeapDepthIndexContextProvider} from "../../contexts/heapDepthIndexContext"
 
 function Heap(props) {
-	const [count, setCount] = useState(0)
 	const [objects, setObjects] = useState([])
 
+	const app = useContext(StateContext)
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
 	const {setMousePosition} = useContext(HeapMousePositionContext)
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
+		app.removeHeapObject(id)
 	}
 
 	function handleClick(event) {
 		if (isAddModeActive) {
 			const {clientX, clientY} = event
+			const initialPosition = {
+				X: clientX-props.stackWidth-20-10-160,
+				Y: clientY-20-55-23
+			}
 			const newBlock = (
 				<HeapObject 
-					key={count} 
-					id={count} 
-					initialPosition={{X: clientX-props.stackWidth-20-10-160, Y: clientY-20-55-23}}
+					key={app.count} 
+					id={app.count} 
+					initialPosition={initialPosition}
 					removeBlock={removeBlock}
 				/>	
 			)
-			setCount(prevCount => prevCount+1)
 			setObjects(prevObjects => [newBlock, ...prevObjects])
+			app.addHeapObject(initialPosition)
 			toggleAddMode()
 		}
 	}
 
 	function handleMouseMove(event) {
 		const {clientX, clientY} = event
-		// console.log(useContext(HeapMousePositionContext))
 		setMousePosition({X: clientX, Y: clientY})
-		// console.log(`X: ${clientX}, Y: ${clientY}`)
 	}
 	
 	return (

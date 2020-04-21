@@ -1,31 +1,37 @@
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
+import {StateContext} from "../../contexts/stateContext"
 
 function StackFrame(props) {
 	const [name, setName] = useState("")
-	const [count, setCount] = useState(0)
 	const [variables, setVariables] = useState([])
+
+	const app = useContext(StateContext)
 
 	function updateName(newName) {
 		setName(newName)
+		app.setStackFrameName(props.id, newName)
 	}
 
 	function addVariable(nature) {
 		const newVariable = (
 			<Variable 
-				key={count} 
-				id={count} 
+				key={app.count} 
+				id={app.count} 
 				nature={nature}
+				region="stack"
+				parentID={props.id}
 				removeVariable={removeVariable}
 			/>
 		)
-		setCount(prevCount => prevCount+1)
 		setVariables(prevVariables => [...prevVariables, newVariable])
+		app.addStackFrameVariable(props.id, nature)
 	}
 
 	function removeVariable(id) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
+		app.removeStackFrameVariable(props.id, id)
 	}
 
 	return (
