@@ -112,21 +112,21 @@ function StateContextProvider(props) {
 	}
 
 	const getStackFrame = (stackFrameID) => {
-		return stack.filter(frame => frame.id === stackFrameID)[0]
+		return stack.find(frame => frame.id === stackFrameID)
 	}
 
 	const getHeapObject = (heapObjectID) => {
-		return this.state.heap.filter(heapObject => heapObject.id === heapObjectID)[0]
+		return heap.find(heapObject => heapObject.id === heapObjectID)
 	}
 
 	const getStackFrameVariable = (stackFrameID, variableID) => {
-		const frame = stack.filter(frame => frame.id === stackFrameID)[0]
-		return frame.variables.filter(variable => variable.id === variableID)[0]
+		const frame = stack.find(frame => frame.id === stackFrameID)
+		return frame.variables.find(variable => variable.id === variableID)
 	}
 
 	const getHeapObjectVariable = (heapObjectID, variableID) => {
-		const object = heap.filter(object => object.id === heapObjectID)[0]
-		return object.variables.filter(variable => variable.id === variableID)[0]
+		const object = heap.find(object => object.id === heapObjectID)
+		return object.variables.find(variable => variable.id === variableID)
 	}
 
 	// SETTERS
