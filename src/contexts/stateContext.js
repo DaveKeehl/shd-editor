@@ -275,8 +275,9 @@ function StateContextProvider(props) {
 			const height = 153 + object.variables.length * 103 + (object.variables.length > 0 ? 31 : 0) + (object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
 			const width = 320
 
+			// Check if mouse is inside current analyzed object
 			if (mouseX >= leftLimit+X && mouseX <= leftLimit+X+width && mouseY >= topLimit+Y && mouseY <= topLimit+Y+height) {
-				console.log("Mouse is inside current analyzed object")
+
 				leftLimit = leftLimit + X
 				topLimit = topLimit + Y
 
@@ -288,11 +289,17 @@ function StateContextProvider(props) {
 					console.log(`start (X): ${start}, end (Y): ${end}`)
 					console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`)
 
-
 					// Check if mouse is inside the current analyzed variable
 					if (object.variables.length > 0 && mouseX >= leftLimit+30 && mouseX <= leftLimit+width-30 && mouseY >= start && mouseY <= end) {
 						console.log("Mouse is inside current analyzed variable")
+
 						console.log(idx)
+						// Check if the current analyzed variable is a reference variable
+						if (variable.nature === "primitive") {
+							console.log(variable)
+							console.log(`Connect arrow to variable with ID ${variable.id}`)
+						}
+
 						return true
 					} else {
 						console.log("Mouse is outside current analyzed variable")
@@ -300,6 +307,10 @@ function StateContextProvider(props) {
 					}
 
 				})
+
+				console.log("Mouse is inside current analyzed object")
+				return true
+
 			} else {
 				console.log("Mouse is outside current analyzed object")
 				return false
