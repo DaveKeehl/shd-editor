@@ -266,30 +266,48 @@ function StateContextProvider(props) {
 	
 	const isMouseOnHeapObject = (mouseX, mouseY, stackWidth) => {
 
-		console.log(`Mouse X: ${mouseX}, Mouse Y: ${mouseY}`)
-
-		const leftLimit = stackWidth + 20
-		const topLimit = 55 + 20
+		let leftLimit = stackWidth + 20
+		let topLimit = 55 + 20
 
 		const foundObject = heap.find(object => {
 
 			const {X,Y} = object.position
-			console.log(`Obj X: ${X}, Obj Y: ${Y}`)
-
 			const height = 153 + object.variables.length * 103 + (object.variables.length > 0 ? 31 : 0) + (object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
 			const width = 320
-			console.log(`height: ${height}, width: ${width}`)
 
 			if (mouseX >= leftLimit+X && mouseX <= leftLimit+X+width && mouseY >= topLimit+Y && mouseY <= topLimit+Y+height) {
 				console.log("Mouse is inside current analyzed object")
-				return true
+				leftLimit = leftLimit + X
+				topLimit = topLimit + Y
+
+				const foundVariable = object.variables.find(variable => {
+
+					const idx = object.variables.indexOf(variable)
+					const start = topLimit + 20 + 27 + 39 + 15 + (103 + 15) * idx
+					const end = start + 103
+					console.log(`start (X): ${start}, end (Y): ${end}`)
+					console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`)
+
+
+					// Check if mouse is inside the current analyzed variable
+					if (object.variables.length > 0 && mouseX >= leftLimit+30 && mouseX <= leftLimit+width-30 && mouseY >= start && mouseY <= end) {
+						console.log("Mouse is inside current analyzed variable")
+						console.log(idx)
+						return true
+					} else {
+						console.log("Mouse is outside current analyzed variable")
+						return false
+					}
+
+				})
+			} else {
+				console.log("Mouse is outside current analyzed object")
+				return false
 			}
-			return false
-			console.log("Mouse is outside current analyzed object")
 		})
 
-		console.log(foundObject)
 		if (foundObject !== undefined) {
+			console.log(foundObject)
 			return true
 		} else {
 			return false
