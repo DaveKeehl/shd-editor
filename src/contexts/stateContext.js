@@ -262,6 +262,40 @@ function StateContextProvider(props) {
 		downloadable.remove()
 	}
 
+	// FUNCTIONS RELATED TO ARROWS
+	
+	const isMouseOnHeapObject = (mouseX, mouseY, stackWidth) => {
+
+		console.log(`Mouse X: ${mouseX}, Mouse Y: ${mouseY}`)
+
+		const leftLimit = stackWidth + 20
+		const topLimit = 55 + 20
+
+		const foundObject = heap.find(object => {
+
+			const {X,Y} = object.position
+			console.log(`Obj X: ${X}, Obj Y: ${Y}`)
+
+			const height = 153 + object.variables.length * 103 + (object.variables.length > 0 ? 31 : 0) + (object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
+			const width = 320
+			console.log(`height: ${height}, width: ${width}`)
+
+			if (mouseX >= leftLimit+X && mouseX <= leftLimit+X+width && mouseY >= topLimit+Y && mouseY <= topLimit+Y+height) {
+				console.log("Mouse is inside current analyzed object")
+				return true
+			}
+			return false
+			console.log("Mouse is outside current analyzed object")
+		})
+
+		console.log(foundObject)
+		if (foundObject !== undefined) {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	// APPLICATION STATE OBJECT
 	
 	const data = {
@@ -301,7 +335,9 @@ function StateContextProvider(props) {
 		clearAll,
 
 		uploadJSON,
-		downloadJSON
+		downloadJSON,
+
+		isMouseOnHeapObject
 	}
 
 	return (
