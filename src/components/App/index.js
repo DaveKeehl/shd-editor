@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
+import Arrows from "../Arrows"
 import {StateContext} from "../../contexts/stateContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
@@ -33,33 +34,35 @@ function App() {
 	}
 
 	function handleMouseMove(event) {
-		const {clientX} = event
+		const { clientX } = event
 		if (isResizable && clientX >= 360 && clientX <= 500) {
 			setStackWidth(clientX)
 		}
 	}
 
 	return (
-		<div 
+		<div
 			className="App"
 			onMouseUp={handleMouseUp}
 			onMouseMove={handleMouseMove}
-			style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}
 		>
-			<Stack />
-			<div 
-				className="separator" 
-				ref={separator}
-				onMouseDown={handleMouseDown}
-				onMouseUp={handleMouseUp}
-				onDoubleClick={handleDoubleClick}
-			>
-			</div>
-			<HeapAddModeContextProvider>
-				<HeapMousePositionContextProvider>
-					<Heap stackWidth={stackWidth} />
-				</HeapMousePositionContextProvider>
-			</HeapAddModeContextProvider>
+			<Arrows />
+			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>
+				<Stack />
+				<div
+					className="separator"
+					ref={separator}
+					onMouseDown={handleMouseDown}
+					onMouseUp={handleMouseUp}
+					onDoubleClick={handleDoubleClick}
+				>
+				</div>
+				<HeapAddModeContextProvider>
+					<HeapMousePositionContextProvider>
+						<Heap stackWidth={stackWidth} />
+					</HeapMousePositionContextProvider>
+				</HeapAddModeContextProvider>
+			</main>
 		</div>
 	)
 }
