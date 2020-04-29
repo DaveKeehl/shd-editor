@@ -31,15 +31,17 @@ function App() {
 		separator.current.style.background = "#F3F3F3"
 		if (isArrowDragged) {
 			setIsArrowDragged(false)
+			const arrowTargetData = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
 			// If the mouse position is on a Heap Object variable, then draw the arrow
-			if (app.isMouseOnHeapObject(event.clientX, event.clientY, stackWidth) === true) {
+			if (arrowTargetData !== undefined) {
+				console.log("success")
+				console.log(arrowTargetData)
 				setEnd({X: event.clientX, Y: event.clientY})
-				// console.log("Mouse is on object")
 			}
 			// Otherwise don't draw the arrow
 			else {
+				console.log("fail")
 				setEnd({X: start.X, Y: start.Y})
-				// console.log("Mouse is not on object")
 			}
 		}
 	}

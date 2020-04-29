@@ -264,65 +264,74 @@ function StateContextProvider(props) {
 
 	// FUNCTIONS RELATED TO ARROWS
 	
-	const isMouseOnHeapObject = (mouseX, mouseY, stackWidth) => {
+	// getArrowTargetData
+
+	const getArrowTargetData = (mouseX, mouseY, stackWidth) => {
+
+		let arrowTargetData = undefined
 
 		let leftLimit = stackWidth + 20
 		let topLimit = 55 + 20
 
+		// Returns the object on which the mouse is over
 		const foundObject = heap.find(object => {
 
 			const {X,Y} = object.position
-			const height = 153 + object.variables.length * 103 + (object.variables.length > 0 ? 31 : 0) + (object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
+			const height = (
+				153 +
+				object.variables.length * 103 +
+				(object.variables.length > 0 ? 31 : 0) +
+				(object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
+			)
 			const width = 320
 
 			// Check if mouse is inside current analyzed object
-			if (mouseX >= leftLimit+X && mouseX <= leftLimit+X+width && mouseY >= topLimit+Y && mouseY <= topLimit+Y+height) {
+			if (
+				(mouseX >= leftLimit + X) && 
+				(mouseX <= leftLimit + X + width) && 
+				(mouseY >= topLimit + Y) && 
+				(mouseY <= topLimit + Y + height)
+			) {
 
 				leftLimit = leftLimit + X
 				topLimit = topLimit + Y
 
+				// Returns the variable on which the mouse is over
 				const foundVariable = object.variables.find(variable => {
 
 					const idx = object.variables.indexOf(variable)
 					const start = topLimit + 20 + 27 + 39 + 15 + (103 + 15) * idx
 					const end = start + 103
-					console.log(`start (X): ${start}, end (Y): ${end}`)
-					console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`)
 
 					// Check if mouse is inside the current analyzed variable
-					if (object.variables.length > 0 && mouseX >= leftLimit+30 && mouseX <= leftLimit+width-30 && mouseY >= start && mouseY <= end) {
-						console.log("Mouse is inside current analyzed variable")
-
-						console.log(idx)
-						// Check if the current analyzed variable is a reference variable
+					if (
+						(object.variables.length > 0) && 
+						(mouseX >= leftLimit + 30) && 
+						(mouseX <= leftLimit + width - 30) && 
+						(mouseY >= start) && 
+						(mouseY <= end)
+					) {
+						// Check if the current analyzed variable is a primitive variable
 						if (variable.nature === "primitive") {
-							console.log(variable)
-							console.log(`Connect arrow to variable with ID ${variable.id}`)
+							arrowTargetData = {
+								target: variable,
+								targetIdx: idx,
+								targetParent: object,
+							}
+							return true
 						}
-
-						return true
-					} else {
-						console.log("Mouse is outside current analyzed variable")
-						return false
 					}
-
+					return false
 				})
 
-				console.log("Mouse is inside current analyzed object")
 				return true
 
 			} else {
-				console.log("Mouse is outside current analyzed object")
 				return false
 			}
 		})
 
-		if (foundObject !== undefined) {
-			console.log(foundObject)
-			return true
-		} else {
-			return false
-		}
+		return arrowTargetData
 	}
 
 	// APPLICATION STATE OBJECT
@@ -366,7 +375,7 @@ function StateContextProvider(props) {
 		uploadJSON,
 		downloadJSON,
 
-		isMouseOnHeapObject
+		getArrowTargetData
 	}
 
 	return (
