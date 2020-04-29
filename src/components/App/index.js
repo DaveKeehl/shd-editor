@@ -12,7 +12,7 @@ function App() {
 	const [diagram, setDiagram] = useState({})
 
 	const app = useContext(StateContext)
-	const {isArrowDragged, setIsArrowDragged, start, setEnd} = useContext(ArrowsContext)
+	const {caller, isArrowDragged, setIsArrowDragged, start, setEnd} = useContext(ArrowsContext)
 	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
 
 	const separator = useRef(null)
@@ -29,16 +29,21 @@ function App() {
 	function handleMouseUp(event) {
 		setIsResizable(false)
 		separator.current.style.background = "#F3F3F3"
+
 		if (isArrowDragged) {
 			setIsArrowDragged(false)
 			const arrowTargetData = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
-			// If the mouse position is on a Heap Object variable, then draw the arrow
+
 			if (arrowTargetData !== undefined) {
 				console.log("success")
 				console.log(arrowTargetData)
-				setEnd({X: event.clientX, Y: event.clientY})
+				setEnd({
+					X: stackWidth + 10 + 20 + arrowTargetData.targetParent.position.X, 
+					Y: 55 + 20 + arrowTargetData.targetParent.position.Y + 101 + 118 * arrowTargetData.targetIdx + 103/2
+				})
+				// app.setVariableData(region, parentID, variableID, newData)
+				app.setVariableData(caller.region, caller.parentId, caller.id, {name: "value", value: arrowTargetData.target.id})
 			}
-			// Otherwise don't draw the arrow
 			else {
 				console.log("fail")
 				setEnd({X: start.X, Y: start.Y})
@@ -53,7 +58,7 @@ function App() {
 	function handleMouseMove(event) {
 		const {clientX,clientY} = event
 		if (isArrowDragged) {
-			// console.log(`X: ${clientX}, Y: ${clientY}`)
+			console.log(`X: ${clientX}, Y: ${clientY}`)
 		}
 		if (isResizable && clientX >= 360 && clientX <= 500) {
 			setStackWidth(clientX)

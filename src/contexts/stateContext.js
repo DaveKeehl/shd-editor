@@ -111,6 +111,25 @@ function StateContextProvider(props) {
 		return heap
 	}
 
+	const getParent = (variableID) => {
+		let parent = ""
+		stack.forEach(frame => {
+			frame.variables.forEach(variable => {
+				if (variable.id === variableID) {
+					parent = frame
+				}
+			})
+		})
+		heap.forEach(object => {
+			object.variables.forEach(variable => {
+				if (variable.id === variableID) {
+					parent = object
+				}
+			})
+		})
+		return parent
+	}
+
 	const getStackFrame = (stackFrameID) => {
 		return stack.find(frame => frame.id === stackFrameID)
 	}
@@ -264,8 +283,6 @@ function StateContextProvider(props) {
 
 	// FUNCTIONS RELATED TO ARROWS
 	
-	// getArrowTargetData
-
 	const getArrowTargetData = (mouseX, mouseY, stackWidth) => {
 
 		let arrowTargetData = undefined
@@ -351,6 +368,8 @@ function StateContextProvider(props) {
 		removeStackFrameVariable,
 		removeHeapObjectVariable,
 
+		getParent,
+
 		getStackFrames,
 		getHeapObjects,
 		getStackFrame,
@@ -375,7 +394,7 @@ function StateContextProvider(props) {
 		uploadJSON,
 		downloadJSON,
 
-		getArrowTargetData
+		getArrowTargetData,
 	}
 
 	return (

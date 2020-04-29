@@ -1,12 +1,23 @@
 import React, {useContext} from "react"
+import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
-function ArrowStart() {
-	const {setIsArrowDragged, start, setStart, setEnd} = useContext(ArrowsContext)
+function ArrowStart(props) {
+	const app = useContext(StateContext)
+	const {setCaller, setIsArrowDragged, start, setStart, setEnd} = useContext(ArrowsContext)
+	const {stackWidth} = useContext(ResizableStackContext)
 
 	function handleMouseDown(event) {
 		setIsArrowDragged(true)
-		setStart({X: event.clientX, Y: event.clientY})
+		setCaller({region: props.region, parentId: props.parentID, id: props.variableID})
+		const parentID = app.getParent(props.variableID).id
+		const varWidth = stackWidth - 40 - 40 - 20
+		const inputWidth = (varWidth - 40 - 10)/2
+		setStart({
+			X: stackWidth - 70 - inputWidth/2, 
+			Y: event.clientY
+		})
 	}
 
 	function handleMouseUp(event) {
