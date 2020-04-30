@@ -31,7 +31,7 @@ function Stack(props) {
 
 	function handleScroll() {
 		setStackScrollAmount(stackFramesRef.current.scrollTop)
-		console.log(stackFramesRef.current.scrollTop)
+		// console.log(stackFramesRef.current.scrollTop)
 	}
 
 	return (

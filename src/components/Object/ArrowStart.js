@@ -11,7 +11,6 @@ function ArrowStart(props) {
 	function handleMouseDown(event) {
 		setIsArrowDragged(true)
 		setCaller({region: props.region, parentId: props.parentID, id: props.variableID})
-		// const parentID = app.getParent(props.variableID).id
 
 		const varWidth = stackWidth - 40 - 40 - 20
 		const inputWidth = (varWidth - 40 - 10)/2
@@ -20,6 +19,7 @@ function ArrowStart(props) {
 		let accumulator = 20
 
 		for (const frame of app.diagram.stack) {
+
 			let startY = accumulator
 			let endY = (
 				startY + 
@@ -28,21 +28,47 @@ function ArrowStart(props) {
 				(frame.variables.length > 0 ? 31 : 0) + 
 				(frame.variables.length > 1 ? 15 * (frame.variables.length-1) : 0)
 			)
-			console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
+
+			// console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
+
 			if (virtualY >= startY && virtualY <= endY) {
+
 				console.log(frame.id)
+
+				let varAccumulator = startY + 20 + 39 + 15
+
+				// 1. Find closest variable
+				for (const variable of frame.variables) {
+
+					let varStartY = varAccumulator
+					let varEndY = varStartY + 103
+
+					// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}, virtualY: ${virtualY}`)
+
+					if (virtualY >= varStartY && virtualY <= varEndY) {
+
+						console.log(variable.id)
+
+						// 2. Set start arrow position
+						setStart({
+							X: stackWidth - 70 - inputWidth/2, 
+							Y: varStartY + 18 + 31 + 5 + 31/2 - stackScrollAmount + 55
+						})
+
+						break
+
+					} else {
+						varAccumulator = (varEndY + 15)
+					}
+				}
+
 				break
-				// return true
+				
 			} else {
 				accumulator = (endY + 10)
 			}
 		}
-		// console.log(virtualY)
-		setStart({
-			X: stackWidth - 70 - inputWidth/2, 
-			Y: event.clientY
-		})
-		// console.log(stackScrollAmount)
+
 	}
 
 	function handleMouseUp(event) {

@@ -35,8 +35,8 @@ function App() {
 			const target = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
 
 			if (target !== undefined) {
-				console.log("success")
-				console.log(target)
+				// console.log("success")
+				// console.log(target)
 				setEnd({
 					X: stackWidth + 10 + 20 + target.position.X, 
 					Y: 55 + 20 + target.position.Y + 101
@@ -44,7 +44,7 @@ function App() {
 				app.setVariableData(caller.region, caller.parentId, caller.id, {name: "value", value: target.id})
 			}
 			else {
-				console.log("fail")
+				// console.log("fail")
 				setEnd({X: start.X, Y: start.Y})
 			}
 		}
