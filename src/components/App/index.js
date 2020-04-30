@@ -32,17 +32,16 @@ function App() {
 
 		if (isArrowDragged) {
 			setIsArrowDragged(false)
-			const arrowTargetData = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
+			const target = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
 
-			if (arrowTargetData !== undefined) {
+			if (target !== undefined) {
 				console.log("success")
-				console.log(arrowTargetData)
+				console.log(target)
 				setEnd({
-					X: stackWidth + 10 + 20 + arrowTargetData.targetParent.position.X, 
-					Y: 55 + 20 + arrowTargetData.targetParent.position.Y + 101 + 118 * arrowTargetData.targetIdx + 103/2
+					X: stackWidth + 10 + 20 + target.position.X, 
+					Y: 55 + 20 + target.position.Y + 101
 				})
-				// app.setVariableData(region, parentID, variableID, newData)
-				app.setVariableData(caller.region, caller.parentId, caller.id, {name: "value", value: arrowTargetData.target.id})
+				app.setVariableData(caller.region, caller.parentId, caller.id, {name: "value", value: target.id})
 			}
 			else {
 				console.log("fail")
@@ -58,7 +57,7 @@ function App() {
 	function handleMouseMove(event) {
 		const {clientX,clientY} = event
 		if (isArrowDragged) {
-			console.log(`X: ${clientX}, Y: ${clientY}`)
+			// console.log(`X: ${clientX}, Y: ${clientY}`)
 		}
 		if (isResizable && clientX >= 360 && clientX <= 500) {
 			setStackWidth(clientX)

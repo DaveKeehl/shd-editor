@@ -6,12 +6,11 @@ import {StateContext} from "../../contexts/stateContext"
 function Variable(props) {
 	const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
 	const app = useContext(StateContext)
-
+	
 	const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
 	const thisVar = parent.variables.find(variable => variable.id === props.id)
 
 	useEffect(() => {
-		console.log("update")
 		setData(prevData => ({...prevData, value: thisVar.value}))
 	}, [thisVar.value])
 
@@ -46,7 +45,12 @@ function Variable(props) {
 
 	const referenceField = (
 		<div className="object__variable__value">
-			<ArrowStart region={props.region} parentID={props.parentID} variableID={props.id} />
+			<ArrowStart 
+				region={props.region} 
+				parentID={props.parentID} 
+				variableID={props.id} 
+				stackScrollAmount={props.stackScrollAmount} 
+			/>
 		</div>
 	)
 

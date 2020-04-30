@@ -2,6 +2,7 @@ import React, {useState, useContext, useRef} from "react"
 import Header from "../Header"
 import StackFrame from "./StackFrame"
 import {StateContext} from "../../contexts/stateContext"
+import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function Stack(props) {
 	const [objects, setObjects] = useState([])
@@ -9,6 +10,7 @@ function Stack(props) {
 	const stackFramesRef = useRef(null)
 
 	const app = useContext(StateContext)
+	const {setStackScrollAmount} = useContext(ArrowsContext)
 
 	function addBlock() {
 		const newBlock = (
@@ -28,6 +30,7 @@ function Stack(props) {
 	}
 
 	function handleScroll() {
+		setStackScrollAmount(stackFramesRef.current.scrollTop)
 		console.log(stackFramesRef.current.scrollTop)
 	}
 

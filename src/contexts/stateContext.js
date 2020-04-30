@@ -285,14 +285,11 @@ function StateContextProvider(props) {
 	
 	const getArrowTargetData = (mouseX, mouseY, stackWidth) => {
 
-		let arrowTargetData = undefined
-
 		let leftLimit = stackWidth + 20
 		let topLimit = 55 + 20
 
 		// Returns the object on which the mouse is over
 		const foundObject = heap.find(object => {
-
 			const {X,Y} = object.position
 			const height = (
 				153 +
@@ -309,46 +306,12 @@ function StateContextProvider(props) {
 				(mouseY >= topLimit + Y) && 
 				(mouseY <= topLimit + Y + height)
 			) {
-
-				leftLimit = leftLimit + X
-				topLimit = topLimit + Y
-
-				// Returns the variable on which the mouse is over
-				const foundVariable = object.variables.find(variable => {
-
-					const idx = object.variables.indexOf(variable)
-					const start = topLimit + 20 + 27 + 39 + 15 + (103 + 15) * idx
-					const end = start + 103
-
-					// Check if mouse is inside the current analyzed variable
-					if (
-						(object.variables.length > 0) && 
-						(mouseX >= leftLimit + 30) && 
-						(mouseX <= leftLimit + width - 30) && 
-						(mouseY >= start) && 
-						(mouseY <= end)
-					) {
-						// Check if the current analyzed variable is a primitive variable
-						if (variable.nature === "primitive") {
-							arrowTargetData = {
-								target: variable,
-								targetIdx: idx,
-								targetParent: object,
-							}
-							return true
-						}
-					}
-					return false
-				})
-
 				return true
-
-			} else {
-				return false
 			}
+			return false
 		})
 
-		return arrowTargetData
+		return foundObject
 	}
 
 	// APPLICATION STATE OBJECT

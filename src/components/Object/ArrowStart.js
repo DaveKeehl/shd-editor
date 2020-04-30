@@ -5,19 +5,44 @@ import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function ArrowStart(props) {
 	const app = useContext(StateContext)
-	const {setCaller, setIsArrowDragged, start, setStart, setEnd} = useContext(ArrowsContext)
+	const {stackScrollAmount, setCaller, setIsArrowDragged, start, setStart, setEnd} = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 
 	function handleMouseDown(event) {
 		setIsArrowDragged(true)
 		setCaller({region: props.region, parentId: props.parentID, id: props.variableID})
-		const parentID = app.getParent(props.variableID).id
+		// const parentID = app.getParent(props.variableID).id
+
 		const varWidth = stackWidth - 40 - 40 - 20
 		const inputWidth = (varWidth - 40 - 10)/2
+
+		const virtualY = stackScrollAmount + event.clientY - 55
+		let accumulator = 20
+
+		for (const frame of app.diagram.stack) {
+			let startY = accumulator
+			let endY = (
+				startY + 
+				126 + 
+				frame.variables.length * 103 + 
+				(frame.variables.length > 0 ? 31 : 0) + 
+				(frame.variables.length > 1 ? 15 * (frame.variables.length-1) : 0)
+			)
+			console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
+			if (virtualY >= startY && virtualY <= endY) {
+				console.log(frame.id)
+				break
+				// return true
+			} else {
+				accumulator = (endY + 10)
+			}
+		}
+		// console.log(virtualY)
 		setStart({
 			X: stackWidth - 70 - inputWidth/2, 
 			Y: event.clientY
 		})
+		// console.log(stackScrollAmount)
 	}
 
 	function handleMouseUp(event) {
