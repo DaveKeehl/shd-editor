@@ -27,8 +27,6 @@ function ArrowsContextProvider(props) {
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
-		console.log("Updating FROM...")
-		console.log(from)
 		const {region, parentId, id} = from
 		setNewArrow(prev => ({...prev, from: {
 			region: region,
@@ -44,7 +42,6 @@ function ArrowsContextProvider(props) {
 
 	// START: set of absolute coordinates where the new arrow starts
 	function setStart(start) {
-		console.log(start)
 		const {X,Y} = start
 		setNewArrow(prev => ({
 			...prev, 
@@ -74,14 +71,22 @@ function ArrowsContextProvider(props) {
 	}
 
 	function computeIntersection(A, B, width, height) {
-		const {x1,y1} = A
-		const {x2,y2} = B
-		const intersection = {x: "", y: ""}
+		console.log(`width: ${width}, height: ${height}`)
+		console.log(B)
+		const {X: x1, Y: y1} = A
+		const {X: x2, Y: y2} = B
+		const intersection = {X: "", Y: ""}
 		const slope = (y2 - y1) / (x2 - x1)
 		const horizontalTest = slope * (width/2)
 		const verticalTest = (height/2) / slope
-		const edge = ""
-		if (horizontalTest >= -(height/2) && horizontalTest <= (height/2)) {
+		const leftLimit = -(height/2)
+		const rightLimit =  height/2
+		const topLimit = -(width/2)
+		const bottomLimit = (width/2)
+		let edge = ""
+		// console.log(`leftLimit: ${leftLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${rightLimit}`)
+		// console.log(`topLimit: ${topLimit}, horizontalTest: ${verticalTest}, rightLimit: ${bottomLimit}`)
+		if (horizontalTest >= leftLimit && horizontalTest <= rightLimit) {
 			if (x1 > x2) {
 				edge = "right"
 			} 
@@ -89,7 +94,7 @@ function ArrowsContextProvider(props) {
 				edge = "left"
 			}
 		}
-		else if (verticalTest >= -(width/2) && verticalTest <= (width/2)) {
+		else if (verticalTest >= topLimit && verticalTest <= bottomLimit) {
 			if (y1 > y2) {
 				edge = "top"
 			} 
@@ -97,24 +102,26 @@ function ArrowsContextProvider(props) {
 				edge = "bottom"
 			}
 		}
+		console.log(edge)
 		if (edge === "left" || edge === "right") {
 			if (edge === "left") {
-				intersection.x = x2 - (width/2)
+				intersection.X = x2 - (width/2)
 			} else {
-				intersection.x = x2 + (width/2)
+				intersection.X = x2 + (width/2)
 			}
 			// CAUTION WITH THE SLOPE SIGN
-			intersection.y = y2 - slope * (width/2)
+			intersection.Y = y2 - slope * (width/2)
 		}
 		else if (edge === "top" || edge === "bottom") {
 			if (edge === "top") {
-				intersection.y = y2 - (width/2)
+				intersection.Y = y2 - (width/2)
 			} else {
-				intersection.y = y2 + (width/2)
+				intersection.Y = y2 + (width/2)
 			}
 			// CAUTION WITH THE SLOPE SIGN
-			intersection.x = x2 + (width/2) / slope
+			intersection.X = x2 + (width/2) / slope
 		}
+		// console.log(intersection)
 		return intersection
 	}
 

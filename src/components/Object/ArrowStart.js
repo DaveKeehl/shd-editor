@@ -42,7 +42,7 @@ function ArrowStart(props) {
 
 			if (virtualY >= startY && virtualY <= endY) {
 
-				console.log(frame.id)
+				// console.log(frame.id)
 
 				let varAccumulator = startY + 20 + 39 + 15
 
@@ -56,7 +56,7 @@ function ArrowStart(props) {
 
 					if (virtualY >= varStartY && virtualY <= varEndY) {
 
-						console.log(variable.id)
+						// console.log(variable.id)
 
 						// 2. Set start arrow position
 						arrows.setStart({

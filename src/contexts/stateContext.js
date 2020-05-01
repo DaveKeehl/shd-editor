@@ -12,7 +12,7 @@ function StateContextProvider(props) {
 	// ADDERS, REMOVERS
 
 	const addStackFrame = () => {
-		console.log("Added new Stack Frame")
+		// console.log("Added new Stack Frame")
 		const newStackFrame = {
 			id: count,
 			name: "",
@@ -23,7 +23,7 @@ function StateContextProvider(props) {
 	}
 
 	const addHeapObject = (initialPosition) => {
-		console.log("Added new Heap Object")
+		// console.log("Added new Heap Object")
 		const newHeapObject = {
 			id: count,
 			name: "",
@@ -40,12 +40,12 @@ function StateContextProvider(props) {
 	}
 
 	const removeStackFrame = (stackFrameID) => {
-		console.log(`Removed Stack Frame with ID ${stackFrameID}`)
+		// console.log(`Removed Stack Frame with ID ${stackFrameID}`)
 		setStack(prevState => prevState.filter(frame => frame.id !== stackFrameID))
 	}
 
 	const removeHeapObject = (heapObjectID) => {
-		console.log(`Removed Heap Object with ID ${heapObjectID}`)
+		// console.log(`Removed Heap Object with ID ${heapObjectID}`)
 		setHeap(prevState => prevState.filter(object => object.id !== heapObjectID))
 	}
 
