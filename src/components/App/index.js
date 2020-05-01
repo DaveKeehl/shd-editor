@@ -62,6 +62,7 @@ function App() {
 		const {clientX,clientY} = event
 		if (arrows.isArrowDragged) {
 			// console.log(`X: ${clientX}, Y: ${clientY}`)
+			arrows.setEnd({X: clientX, Y: clientY})
 		}
 		if (isResizable && clientX >= 360 && clientX <= 500) {
 			setStackWidth(clientX)
