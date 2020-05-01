@@ -72,33 +72,32 @@ function ArrowsContextProvider(props) {
 
 	function computeIntersection(A, B, width, height) {
 		console.log(`width: ${width}, height: ${height}`)
-		console.log(B)
+		console.log(`A: {${A.X}, ${A.Y}}, B: {${B.X}, ${B.Y}}`)
 		const {X: x1, Y: y1} = A
 		const {X: x2, Y: y2} = B
 		const intersection = {X: "", Y: ""}
 		const slope = (y2 - y1) / (x2 - x1)
 		const horizontalTest = slope * (width/2)
 		const verticalTest = (height/2) / slope
-		const leftLimit = -(height/2)
-		const rightLimit =  height/2
-		const topLimit = -(width/2)
-		const bottomLimit = (width/2)
+		const horLimit = height / 2
+		const verLimit = width / 2
 		let edge = ""
-		// console.log(`leftLimit: ${leftLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${rightLimit}`)
-		// console.log(`topLimit: ${topLimit}, horizontalTest: ${verticalTest}, rightLimit: ${bottomLimit}`)
-		if (horizontalTest >= leftLimit && horizontalTest <= rightLimit) {
-			if (x1 > x2) {
-				edge = "right"
-			} 
-			else if (x1 < x2) {
+		console.log(`slope: ${slope}`)
+		console.log(`leftLimit: ${-horLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${horLimit}`)
+		console.log(`topLimit: ${-verLimit}, verticalTest: ${verticalTest}, rightLimit: ${verLimit}`)
+		if (horizontalTest >= -horLimit && horizontalTest <= horLimit) {
+			if (x1 < x2) {
 				edge = "left"
+			} 
+			else if (x1 > x2) {
+				edge = "right"
 			}
 		}
-		else if (verticalTest >= topLimit && verticalTest <= bottomLimit) {
-			if (y1 > y2) {
+		else if (verticalTest >= -verLimit && verticalTest <= verLimit) {
+			if (y1 < y2) {
 				edge = "top"
 			} 
-			else if (y1 < y2) {
+			else if (y1 > y2) {
 				edge = "bottom"
 			}
 		}
@@ -106,22 +105,22 @@ function ArrowsContextProvider(props) {
 		if (edge === "left" || edge === "right") {
 			if (edge === "left") {
 				intersection.X = x2 - (width/2)
+				intersection.Y = y2 - slope * (width/2)
 			} else {
 				intersection.X = x2 + (width/2)
+				intersection.Y = y2 + slope * (width/2)
 			}
-			// CAUTION WITH THE SLOPE SIGN
-			intersection.Y = y2 - slope * (width/2)
 		}
 		else if (edge === "top" || edge === "bottom") {
 			if (edge === "top") {
-				intersection.Y = y2 - (width/2)
+				intersection.X = x2 - (height/2) / slope
+				intersection.Y = y2 - (height/2)
 			} else {
-				intersection.Y = y2 + (width/2)
+				intersection.X = x2 + (height/2) / slope
+				intersection.Y = y2 + (height/2)
 			}
-			// CAUTION WITH THE SLOPE SIGN
-			intersection.X = x2 + (width/2) / slope
 		}
-		// console.log(intersection)
+		console.log(`Intersection at: {${intersection.X}, ${intersection.Y}}`)
 		return intersection
 	}
 

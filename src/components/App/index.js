@@ -33,12 +33,12 @@ function App() {
 		if (arrows.isArrowDragged) {
 			arrows.setIsArrowDragged(false)
 			const to = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
-			console.log(to)
+			// console.log(to)
 			if (to !== undefined) {
 				arrows.setTo(to.id)
 
 				const position = to.position
-				console.log(`Position X: ${position.X}, Position Y: ${position.Y}`)
+				// console.log(`Position X: ${position.X}, Position Y: ${position.Y}`)
 				const height = (
 					153 +
 					to.variables.length * 103 +
@@ -51,13 +51,13 @@ function App() {
 					X: stackWidth + 10 + 20 + position.X + width/2, 
 					Y: 55 + 20 + position.Y + height/2
 				}
-				const end = arrows.computeIntersection(start, center, width, height)
-				arrows.setEnd({
-					// X: stackWidth + 10 + 20 + to.position.X, 
-					// Y: 55 + 20 + to.position.Y + 101
-					X: end.X,
-					Y: end.Y
-				})
+				const intersection = arrows.computeIntersection(start, center, width, height)
+				// arrows.setEnd({
+				// 	// X: stackWidth + 10 + 20 + to.position.X, 
+				// 	// Y: 55 + 20 + to.position.Y + 101
+				// 	X: intersection[0],
+				// 	Y: intersection[1]
+				// })
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
 			}
