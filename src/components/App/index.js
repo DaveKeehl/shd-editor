@@ -12,7 +12,7 @@ function App() {
 	const [diagram, setDiagram] = useState({})
 
 	const app = useContext(StateContext)
-	const {caller, isArrowDragged, setIsArrowDragged, start, setEnd} = useContext(ArrowsContext)
+	const arrows = useContext(ArrowsContext)
 	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
 
 	const separator = useRef(null)
@@ -30,22 +30,26 @@ function App() {
 		setIsResizable(false)
 		separator.current.style.background = "#F3F3F3"
 
-		if (isArrowDragged) {
-			setIsArrowDragged(false)
-			const target = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
-
-			if (target !== undefined) {
-				// console.log("success")
-				// console.log(target)
-				setEnd({
-					X: stackWidth + 10 + 20 + target.position.X, 
-					Y: 55 + 20 + target.position.Y + 101
+		if (arrows.isArrowDragged) {
+			arrows.setIsArrowDragged(false)
+			const to = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
+			
+			if (to !== undefined) {
+				arrows.setTo(to.id)
+				arrows.setEnd({
+					X: stackWidth + 10 + 20 + to.position.X, 
+					Y: 55 + 20 + to.position.Y + 101
 				})
-				app.setVariableData(caller.region, caller.parentId, caller.id, {name: "value", value: target.id})
+				const {region, parentId, id} = arrows.newArrow.from
+				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
 			}
 			else {
 				// console.log("fail")
-				setEnd({X: start.X, Y: start.Y})
+				const {X,Y} = arrows.newArrow.coordinates.start
+				arrows.setEnd({
+					X: X, 
+					Y: Y
+				})
 			}
 		}
 	}
@@ -56,7 +60,7 @@ function App() {
 
 	function handleMouseMove(event) {
 		const {clientX,clientY} = event
-		if (isArrowDragged) {
+		if (arrows.isArrowDragged) {
 			// console.log(`X: ${clientX}, Y: ${clientY}`)
 		}
 		if (isResizable && clientX >= 360 && clientX <= 500) {

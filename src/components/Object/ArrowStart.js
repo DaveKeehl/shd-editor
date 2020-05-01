@@ -5,20 +5,29 @@ import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function ArrowStart(props) {
 	const app = useContext(StateContext)
-	const {stackScrollAmount, setCaller, setIsArrowDragged, start, setStart, setEnd} = useContext(ArrowsContext)
+	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 
 	function handleMouseDown(event) {
-		setIsArrowDragged(true)
-		setCaller({region: props.region, parentId: props.parentID, id: props.variableID})
+		arrows.setIsArrowDragged(true)
+		arrows.setFrom({
+			region: props.region, 
+			parentId: props.parentID, 
+			id: props.variableID
+		})
 
 		const varWidth = stackWidth - 40 - 40 - 20
-		const inputWidth = (varWidth - 40 - 10)/2
+		const inputWidth = (varWidth - 40 - 10) / 2
 
-		const virtualY = stackScrollAmount + event.clientY - 55
+		const virtualY = arrows.stackScrollAmount + event.clientY - 55
 		let accumulator = 20
 
 		for (const frame of app.diagram.stack) {
+
+			// Break, if the mouse is not over a frame in the stack
+			if (event.clientX > 360) {
+				break
+			}
 
 			let startY = accumulator
 			let endY = (
@@ -50,9 +59,9 @@ function ArrowStart(props) {
 						console.log(variable.id)
 
 						// 2. Set start arrow position
-						setStart({
+						arrows.setStart({
 							X: stackWidth - 70 - inputWidth/2, 
-							Y: varStartY + 18 + 31 + 5 + 31/2 - stackScrollAmount + 55
+							Y: varStartY + 18 + 31 + 5 + 31/2 - arrows.stackScrollAmount + 55
 						})
 
 						break
@@ -72,8 +81,12 @@ function ArrowStart(props) {
 	}
 
 	function handleMouseUp(event) {
-		setIsArrowDragged(false)
-		setEnd({X: start.X, Y: start.Y})
+		arrows.setIsArrowDragged(false)
+		const {X,Y} = arrows.newArrow.coordinates.start
+		arrows.setEnd({
+			X: X, 
+			Y: Y
+		})
 	}
 
 	return (
