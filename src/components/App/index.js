@@ -32,9 +32,14 @@ function App() {
 
 		if (arrows.isArrowDragged) {
 			arrows.setIsArrowDragged(false)
-			const to = app.getArrowTargetData(event.clientX, event.clientY, stackWidth)
-			// console.log(to)
-			if (to !== undefined) {
+			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			console.log(to)
+
+			// HANDLE CASE WHEN START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
+			if (to !== undefined && arrows.newArrow.from.parentId === to.id) {
+				console.log("gotcha!")
+			}
+			else if (to !== undefined) {
 				arrows.setTo(to.id)
 
 				const position = to.position
@@ -52,12 +57,12 @@ function App() {
 					Y: 55 + 20 + position.Y + height/2
 				}
 				const intersection = arrows.computeIntersection(start, center, width, height)
-				// arrows.setEnd({
-				// 	// X: stackWidth + 10 + 20 + to.position.X, 
-				// 	// Y: 55 + 20 + to.position.Y + 101
-				// 	X: intersection[0],
-				// 	Y: intersection[1]
-				// })
+				arrows.setEnd({
+					// X: stackWidth + 10 + 20 + to.position.X, 
+					// Y: 55 + 20 + to.position.Y + 101
+					X: intersection.X,
+					Y: intersection.Y
+				})
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
 			}

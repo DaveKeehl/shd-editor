@@ -16,65 +16,104 @@ function ArrowStart(props) {
 			id: props.variableID
 		})
 
+		// UPDATE START COORDINATES
+
 		const varWidth = stackWidth - 40 - 40 - 20
 		const inputWidth = (varWidth - 40 - 10) / 2
+		const inputHeight = 31
 
-		const virtualY = arrows.stackScrollAmount + event.clientY - 55
-		let accumulator = 20
+		if (props.region === "heap") {
+			console.log("start region: heap")
 
-		for (const frame of app.diagram.stack) {
+			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			const startX = stackWidth + 30 + to.position.X
+			const startY = 55 + 20 + to.position.Y
 
-			// Break, if the mouse is not over a frame in the stack
-			if (event.clientX > 360) {
-				break
-			}
+			console.log(to)
+			console.log(`startX: ${startX}, startY: ${startY}`)
 
-			let startY = accumulator
-			let endY = (
-				startY + 
-				126 + 
-				frame.variables.length * 103 + 
-				(frame.variables.length > 0 ? 31 : 0) + 
-				(frame.variables.length > 1 ? 15 * (frame.variables.length-1) : 0)
-			)
+			let accumulator = 101
 
-			// console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
+			for (const variable of to.variables) {
 
-			if (virtualY >= startY && virtualY <= endY) {
+				const varStartY = startY + accumulator
+				const varEndY = varStartY + 103
 
-				// console.log(frame.id)
+				console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
 
-				let varAccumulator = startY + 20 + 39 + 15
-
-				// 1. Find closest variable
-				for (const variable of frame.variables) {
-
-					let varStartY = varAccumulator
-					let varEndY = varStartY + 103
-
-					// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}, virtualY: ${virtualY}`)
-
-					if (virtualY >= varStartY && virtualY <= varEndY) {
-
-						// console.log(variable.id)
-
-						// 2. Set start arrow position
-						arrows.setStart({
-							X: stackWidth - 70 - inputWidth/2, 
-							Y: varStartY + 18 + 31 + 5 + 31/2 - arrows.stackScrollAmount + 55
-						})
-
-						break
-
-					} else {
-						varAccumulator = (varEndY + 15)
-					}
+				if (event.clientY >= varStartY && event.clientY <= varEndY) {
+					console.log("found correct variable")
+					arrows.setStart({
+						X: startX + 320 - 50 - inputWidth/2, 
+						Y: startY + varEndY - 18 - inputHeight/2
+					})
+					break
+				} else {
+					accumulator = accumulator + 103 + 15
 				}
 
-				break
-				
-			} else {
-				accumulator = (endY + 10)
+			}
+
+		} else {
+			console.log("start region: stack")
+	
+			const virtualY = arrows.stackScrollAmount + event.clientY - 55
+			let accumulator = 20
+	
+			for (const frame of app.diagram.stack) {
+	
+				// Break, if the mouse is not over a frame in the stack
+				if (event.clientX > 360) {
+					break
+				}
+	
+				let startY = accumulator
+				let endY = (
+					startY + 
+					126 + 
+					frame.variables.length * 103 + 
+					(frame.variables.length > 0 ? 31 : 0) + 
+					(frame.variables.length > 1 ? 15 * (frame.variables.length-1) : 0)
+				)
+	
+				// console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
+	
+				if (virtualY >= startY && virtualY <= endY) {
+	
+					// console.log(frame.id)
+	
+					let varAccumulator = startY + 20 + 39 + 15
+	
+					// 1. Find closest variable
+					for (const variable of frame.variables) {
+	
+						let varStartY = varAccumulator
+						let varEndY = varStartY + 103
+	
+						// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}, virtualY: ${virtualY}`)
+	
+						if (virtualY >= varStartY && virtualY <= varEndY) {
+	
+							// console.log(variable.id)
+	
+							// 2. Set start arrow position
+							arrows.setStart({
+								X: stackWidth - 70 - inputWidth/2, 
+								Y: varStartY + 18 + 31 + 5 + inputHeight/2 - arrows.stackScrollAmount + 55
+							})
+	
+							break
+	
+						} else {
+							varAccumulator = (varEndY + 15)
+						}
+					}
+	
+					break
+					
+				} else {
+					accumulator = (endY + 10)
+				}
 			}
 		}
 
