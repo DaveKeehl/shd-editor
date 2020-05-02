@@ -38,6 +38,37 @@ function App() {
 			// HANDLE CASE WHEN START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (to !== undefined && arrows.newArrow.from.parentId === to.id) {
 				console.log("gotcha!")
+
+				const startX = stackWidth + 30 + to.position.X
+				const startY = 55 + 20 + to.position.Y
+				const inputHeight = 31
+	
+				console.log(to)
+				console.log(`startX: ${startX}, startY: ${startY}`)
+	
+				let accumulator = 101
+	
+				for (const variable of to.variables) {
+	
+					const varStartY = startY + accumulator
+					const varEndY = varStartY + 103
+	
+					console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
+	
+					if (event.clientY >= varStartY && event.clientY <= varEndY) {
+						console.log("found correct variable")
+						arrows.setEnd({
+							X: startX + 320, 
+							Y: varEndY - 18 - inputHeight/2
+						})
+						break
+					} else {
+						accumulator = accumulator + 103 + 15
+					}
+	
+				}
+
+
 			}
 			else if (to !== undefined) {
 				arrows.setTo(to.id)

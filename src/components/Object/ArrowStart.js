@@ -43,11 +43,22 @@ function ArrowStart(props) {
 
 				if (event.clientY >= varStartY && event.clientY <= varEndY) {
 					console.log("found correct variable")
+
+					const arrowStart = {
+						X: startX + 320 - 50 - inputWidth/2,
+						Y: varEndY - 18 - inputHeight/2
+					}
 					arrows.setStart({
-						X: startX + 320 - 50 - inputWidth/2, 
-						Y: startY + varEndY - 18 - inputHeight/2
+						X: arrowStart.X, 
+						Y: arrowStart.Y
 					})
+					arrows.setEnd({
+						X: arrowStart.X, 
+						Y: arrowStart.Y
+					})
+
 					break
+
 				} else {
 					accumulator = accumulator + 103 + 15
 				}
@@ -96,10 +107,19 @@ function ArrowStart(props) {
 	
 							// console.log(variable.id)
 	
+							const arrowStart = {
+								X: stackWidth - 70 - inputWidth/2,
+								Y: varStartY + 18 + 31 + 5 + inputHeight/2 - arrows.stackScrollAmount + 55
+							}
+
 							// 2. Set start arrow position
 							arrows.setStart({
-								X: stackWidth - 70 - inputWidth/2, 
-								Y: varStartY + 18 + 31 + 5 + inputHeight/2 - arrows.stackScrollAmount + 55
+								X: arrowStart.X, 
+								Y: arrowStart.Y
+							})
+							arrows.setEnd({
+								X: arrowStart.X, 
+								Y: arrowStart.Y
 							})
 	
 							break
