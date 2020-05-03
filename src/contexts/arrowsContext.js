@@ -30,29 +30,29 @@ function ArrowsContextProvider(props) {
 
 	useEffect(() => {
 		if (!isArrowDragged && newArrow.to !== "") {
-			console.log("new arrow is released")
+			// console.log("new arrow is released")
 			if (arrows.length === 0) {
 				console.log("first arrow")
 				storeNewArrow()
 				resetNewArrow()
-			} else {
+			} 
+			else {
+				const updated = [...arrows, newArrow]
+				console.log(updated)
+				let found = false
 				for (const arrow of arrows) {
-					console.log("Arrow:")
-					console.log(arrow)
-					console.log("New arrow:")
-					console.log(newArrow)
-					if (arrow.from.id === newArrow.from.id && arrow.to === newArrow.to) {
+					const last = updated.length-1
+					if (arrow.from.id === updated[last].from.id && arrow.to === updated[last].to) {
+						found = true
 						console.log(`there's already an arrow starting from key=${newArrow.from.id} and ending in key=${newArrow.to}`)
-						break
-					} 
-					else {
-						console.log("new arrow here")
-						storeNewArrow()
-						resetNewArrow()
 						break
 					}
 				}
-				console.log(arrows)
+				if (!found) {
+					console.log("new arrow here")
+					storeNewArrow()
+					resetNewArrow()
+				}
 			}
 		}
 	}, [newArrow])
