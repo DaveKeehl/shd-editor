@@ -19,12 +19,14 @@ function ArrowStart(props) {
 
 		// UPDATE START COORDINATES
 
-		const varWidth = stackWidth - 40 - 40 - 20
-		const inputWidth = (varWidth - 40 - 10) / 2
+		// const varWidth = stackWidth - 40 - 40 - 20
+		// const inputWidth = (varWidth - 40 - 10) / 2
 		const inputHeight = 31
 
 		if (props.region === "heap") {
 			// console.log("start region: heap")
+
+			const inputWidth = 105
 
 			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
 			const startX = stackWidth + 30 + to.position.X
@@ -68,6 +70,9 @@ function ArrowStart(props) {
 
 		} else {
 			// console.log("start region: stack")
+
+			const varWidth = stackWidth - 40 - 40 - 20
+			const inputWidth = (varWidth - 40 - 10) / 2
 	
 			const virtualY = arrows.stackScrollAmount + event.clientY - 55
 			let accumulator = 20
