@@ -32,24 +32,24 @@ function ArrowsContextProvider(props) {
 		if (!isArrowDragged && newArrow.to !== "") {
 			// console.log("new arrow is released")
 			if (arrows.length === 0) {
-				console.log("first arrow")
+				// console.log("first arrow")
 				storeNewArrow()
 				resetNewArrow()
 			} 
 			else {
 				const updated = [...arrows, newArrow]
-				console.log(updated)
+				// console.log(updated)
 				let found = false
 				for (const arrow of arrows) {
 					const last = updated.length-1
 					if (arrow.from.id === updated[last].from.id && arrow.to === updated[last].to) {
 						found = true
-						console.log(`there's already an arrow starting from key=${newArrow.from.id} and ending in key=${newArrow.to}`)
+						// console.log(`there's already an arrow starting from key=${newArrow.from.id} and ending in key=${newArrow.to}`)
 						break
 					}
 				}
 				if (!found) {
-					console.log("new arrow here")
+					// console.log("new arrow here")
 					storeNewArrow()
 					resetNewArrow()
 				}
@@ -60,21 +60,19 @@ function ArrowsContextProvider(props) {
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
 		const {region, parentId, id} = from
-		setNewArrow(prev => ({...prev, from: {
-			region: region,
-			parentId: parentId,
-			id: id
-		}}))
+		setNewArrow(prev => ({
+			...prev, 
+			from: {
+				region: region,
+				parentId: parentId,
+				id: id
+			}
+		}))
 	}
 
 	// TO: the heap object on which the new arrow is released
 	function setTo(to) {
-		setNewArrow(prev => {
-			// console.log(to)
-			return {
-				...prev, to: to
-			}
-		})
+		setNewArrow(prev => ({...prev, to: to}))
 	}
 
 	// START: set of absolute coordinates where the new arrow starts

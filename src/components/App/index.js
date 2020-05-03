@@ -60,7 +60,6 @@ function App() {
 							X: startX + 320, 
 							Y: varEndY - 18 - inputHeight/2
 						})
-						// arrows.storeNewArrow()
 						break
 					} else {
 						accumulator = accumulator + 103 + 15
@@ -68,7 +67,11 @@ function App() {
 	
 				}
 
+				const {region, parentId, id} = arrows.newArrow.from
+				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
+
 			}
+			// ARROW-END WAS RELEASED ON A HEAP OBJECT
 			else if (to !== undefined) {
 
 				arrows.setTo(to.id)
@@ -94,8 +97,8 @@ function App() {
 				})
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
-				// arrows.storeNewArrow()
 			}
+			// ARROW-END POSITION WASN'T VALID -> IT SNAPS BACK TO ARROW-START POSITION
 			else {
 				// console.log("fail")
 				const {X,Y} = arrows.newArrow.coordinates.start
@@ -104,7 +107,6 @@ function App() {
 					Y: Y
 				})
 			}
-			// console.log(arrows.newArrow)
 		}
 	}
 
