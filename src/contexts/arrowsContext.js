@@ -1,10 +1,11 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 
 const ArrowsContext = React.createContext()
 
 function ArrowsContextProvider(props) {
 	const [arrows, setArrows] = useState([])
-	const [newArrow, setNewArrow] = useState({
+
+	const arrow = {
 		from: {
 			region: "",
 			parentId: "",
@@ -21,9 +22,23 @@ function ArrowsContextProvider(props) {
 				Y: ""
 			}
 		}
-	})
+	}
+
+	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
+
+	useEffect(() => {
+		if (!isArrowDragged && newArrow.to !== "") {
+
+			
+
+			// console.log(newArrow)
+			storeNewArrow()
+			resetNewArrow()
+			// console.log(newArrow)
+		}
+	}, [newArrow])
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
@@ -37,7 +52,12 @@ function ArrowsContextProvider(props) {
 
 	// TO: the heap object on which the new arrow is released
 	function setTo(to) {
-		setNewArrow(prev => ({...prev, to: to}))
+		setNewArrow(prev => {
+			// console.log(to)
+			return {
+				...prev, to: to
+			}
+		})
 	}
 
 	// START: set of absolute coordinates where the new arrow starts
@@ -71,8 +91,8 @@ function ArrowsContextProvider(props) {
 	}
 
 	function computeIntersection(A, B, width, height) {
-		console.log(`width: ${width}, height: ${height}`)
-		console.log(`A: {${A.X}, ${A.Y}}, B: {${B.X}, ${B.Y}}`)
+		// console.log(`width: ${width}, height: ${height}`)
+		// console.log(`A: {${A.X}, ${A.Y}}, B: {${B.X}, ${B.Y}}`)
 		const {X: x1, Y: y1} = A
 		const {X: x2, Y: y2} = B
 		const intersection = {X: "", Y: ""}
@@ -82,9 +102,9 @@ function ArrowsContextProvider(props) {
 		const horLimit = height / 2
 		const verLimit = width / 2
 		let edge = ""
-		console.log(`slope: ${slope}`)
-		console.log(`leftLimit: ${-horLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${horLimit}`)
-		console.log(`topLimit: ${-verLimit}, verticalTest: ${verticalTest}, rightLimit: ${verLimit}`)
+		// console.log(`slope: ${slope}`)
+		// console.log(`leftLimit: ${-horLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${horLimit}`)
+		// console.log(`topLimit: ${-verLimit}, verticalTest: ${verticalTest}, rightLimit: ${verLimit}`)
 		if (horizontalTest >= -horLimit && horizontalTest <= horLimit) {
 			if (x1 < x2) {
 				edge = "left"
@@ -101,7 +121,7 @@ function ArrowsContextProvider(props) {
 				edge = "bottom"
 			}
 		}
-		console.log(edge)
+		// console.log(edge)
 		if (edge === "left" || edge === "right") {
 			if (edge === "left") {
 				intersection.X = x2 - (width/2)
@@ -120,8 +140,16 @@ function ArrowsContextProvider(props) {
 				intersection.Y = y2 + (height/2)
 			}
 		}
-		console.log(`Intersection at: {${intersection.X}, ${intersection.Y}}`)
+		// console.log(`Intersection at: {${intersection.X}, ${intersection.Y}}`)
 		return intersection
+	}
+
+	function resetNewArrow() {
+		setNewArrow(arrow)
+	}
+
+	function storeNewArrow() {
+		setArrows(prev => [...prev, newArrow])
 	}
 
 	const states = {
@@ -133,7 +161,9 @@ function ArrowsContextProvider(props) {
 		setEnd,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
-		computeIntersection
+		computeIntersection,
+		storeNewArrow,
+		resetNewArrow
 	}
 
 	return (

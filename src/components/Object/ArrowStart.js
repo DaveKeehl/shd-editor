@@ -9,6 +9,7 @@ function ArrowStart(props) {
 	const {stackWidth} = useContext(ResizableStackContext)
 
 	function handleMouseDown(event) {
+		arrows.resetNewArrow()
 		arrows.setIsArrowDragged(true)
 		arrows.setFrom({
 			region: props.region, 
@@ -23,14 +24,14 @@ function ArrowStart(props) {
 		const inputHeight = 31
 
 		if (props.region === "heap") {
-			console.log("start region: heap")
+			// console.log("start region: heap")
 
 			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
 			const startX = stackWidth + 30 + to.position.X
 			const startY = 55 + 20 + to.position.Y
 
-			console.log(to)
-			console.log(`startX: ${startX}, startY: ${startY}`)
+			// console.log(to)
+			// console.log(`startX: ${startX}, startY: ${startY}`)
 
 			let accumulator = 101
 
@@ -39,10 +40,10 @@ function ArrowStart(props) {
 				const varStartY = startY + accumulator
 				const varEndY = varStartY + 103
 
-				console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
+				// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
 
 				if (event.clientY >= varStartY && event.clientY <= varEndY) {
-					console.log("found correct variable")
+					// console.log("found correct variable")
 
 					const arrowStart = {
 						X: startX + 320 - 50 - inputWidth/2,
@@ -66,7 +67,7 @@ function ArrowStart(props) {
 			}
 
 		} else {
-			console.log("start region: stack")
+			// console.log("start region: stack")
 	
 			const virtualY = arrows.stackScrollAmount + event.clientY - 55
 			let accumulator = 20

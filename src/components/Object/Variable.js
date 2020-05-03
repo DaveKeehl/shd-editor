@@ -49,7 +49,6 @@ function Variable(props) {
 				region={props.region} 
 				parentID={props.parentID} 
 				variableID={props.id} 
-				stackScrollAmount={props.stackScrollAmount} 
 			/>
 		</div>
 	)

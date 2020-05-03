@@ -33,18 +33,18 @@ function App() {
 		if (arrows.isArrowDragged) {
 			arrows.setIsArrowDragged(false)
 			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			console.log(to)
+			// console.log(to)
 
 			// HANDLE CASE WHEN START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (to !== undefined && arrows.newArrow.from.parentId === to.id) {
-				console.log("gotcha!")
+
+				// console.log("arrow caused loop")
+
+				arrows.setTo(to.id)
 
 				const startX = stackWidth + 30 + to.position.X
 				const startY = 55 + 20 + to.position.Y
 				const inputHeight = 31
-	
-				console.log(to)
-				console.log(`startX: ${startX}, startY: ${startY}`)
 	
 				let accumulator = 101
 	
@@ -53,14 +53,14 @@ function App() {
 					const varStartY = startY + accumulator
 					const varEndY = varStartY + 103
 	
-					console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
+					// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
 	
 					if (event.clientY >= varStartY && event.clientY <= varEndY) {
-						console.log("found correct variable")
 						arrows.setEnd({
 							X: startX + 320, 
 							Y: varEndY - 18 - inputHeight/2
 						})
+						// arrows.storeNewArrow()
 						break
 					} else {
 						accumulator = accumulator + 103 + 15
@@ -68,9 +68,9 @@ function App() {
 	
 				}
 
-
 			}
 			else if (to !== undefined) {
+
 				arrows.setTo(to.id)
 
 				const position = to.position
@@ -89,13 +89,12 @@ function App() {
 				}
 				const intersection = arrows.computeIntersection(start, center, width, height)
 				arrows.setEnd({
-					// X: stackWidth + 10 + 20 + to.position.X, 
-					// Y: 55 + 20 + to.position.Y + 101
 					X: intersection.X,
 					Y: intersection.Y
 				})
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
+				// arrows.storeNewArrow()
 			}
 			else {
 				// console.log("fail")
@@ -105,6 +104,7 @@ function App() {
 					Y: Y
 				})
 			}
+			// console.log(arrows.newArrow)
 		}
 	}
 
