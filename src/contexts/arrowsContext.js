@@ -1,8 +1,29 @@
 import React, {useState, useEffect} from "react"
+import {utils} from "../utils"
 
 const ArrowsContext = React.createContext()
 
 function ArrowsContextProvider(props) {
+	const {
+		HEADER_HEIGHT, 
+		INPUT_HEIGHT,
+		VAR_HEIGHT,
+		FRAME_MIN_HEIGHT,
+		VAR_VERTICAL_MARGIN,
+		BLOCK_PADDING,
+		REGION_PADDING,
+		BLOCK_HEADER_HEIGHT,
+		VAR_HORIZONTAL_MARGIN,
+		VAR_HORIZONTAL_PADDING,
+		VAR_VERTICAL_PADDING,
+		VAR_ROW_GAP,
+		BLOCK_MARGIN_BOTTOM
+	} = utils.constants
+	const {
+		getStackFrameVariableWidth,
+		getStackFrameInputWidth
+	} = utils.functions
+
 	const [arrows, setArrows] = useState([])
 
 	const arrow = {
@@ -28,6 +49,7 @@ function ArrowsContextProvider(props) {
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
 
+	// USE EFFECT: Populate arrows array when new one is created
 	useEffect(() => {
 		if (!isArrowDragged && newArrow.to !== "") {
 			// console.log("new arrow is released")
@@ -105,6 +127,10 @@ function ArrowsContextProvider(props) {
 		}))
 	}
 
+	// Given 2 points (arrow start and center of target object) and the
+	// size (width and height) of the target object, compute and return 
+	// the intersection of the line created by those 2 points and the 
+	// border of the object
 	function computeIntersection(A, B, width, height) {
 		// console.log(`width: ${width}, height: ${height}`)
 		// console.log(`A: {${A.X}, ${A.Y}}, B: {${B.X}, ${B.Y}}`)
@@ -159,12 +185,74 @@ function ArrowsContextProvider(props) {
 		return intersection
 	}
 
+	// Reset newArrow object
 	function resetNewArrow() {
 		setNewArrow(arrow)
 	}
 
+	// Add newArrow in the arrows array
 	function storeNewArrow() {
 		setArrows(prev => [...prev, newArrow])
+	}
+
+	function getExactStackStartPosition(stack, stackWidth, mouseY) {
+		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
+		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+
+		const virtualY = stackScrollAmount + mouseY - HEADER_HEIGHT
+		let accumulator = REGION_PADDING
+
+		for (const frame of stack) {
+
+			let startY = accumulator
+			let endY = (
+				startY + 
+				FRAME_MIN_HEIGHT + 
+				frame.variables.length * VAR_HEIGHT + 
+				(frame.variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) + 
+				(frame.variables.length > 1 ? VAR_VERTICAL_MARGIN * (frame.variables.length-1) : 0)
+			)
+
+			if (virtualY >= startY && virtualY <= endY) {
+
+				let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+
+				// 1. Find closest variable
+				for (const variable of frame.variables) {
+
+					let varStartY = varAccumulator
+					let varEndY = varStartY + VAR_HEIGHT
+
+					if (virtualY >= varStartY && virtualY <= varEndY) {
+
+						const arrowStart = {
+							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_WIDTH/2,
+							Y: varStartY + VAR_VERTICAL_PADDING + INPUT_HEIGHT + VAR_ROW_GAP + INPUT_HEIGHT/2 - stackScrollAmount + HEADER_HEIGHT
+						}
+
+						// 2. Set start arrow position
+						setStart({
+							X: arrowStart.X, 
+							Y: arrowStart.Y
+						})
+						setEnd({
+							X: arrowStart.X, 
+							Y: arrowStart.Y
+						})
+
+						break
+
+					} else {
+						varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
+					}
+				}
+
+				break
+				
+			} else {
+				accumulator = (endY + BLOCK_MARGIN_BOTTOM)
+			}
+		}
 	}
 
 	const states = {
@@ -178,7 +266,8 @@ function ArrowsContextProvider(props) {
 		isArrowDragged, setIsArrowDragged,
 		computeIntersection,
 		storeNewArrow,
-		resetNewArrow
+		resetNewArrow,
+		getExactStackStartPosition
 	}
 
 	return (
