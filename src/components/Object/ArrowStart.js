@@ -20,127 +20,62 @@ function ArrowStart(props) {
 
 		// SET START COORDINATES
 
-		const inputHeight = 31
-
+		
 		if (props.region === "heap") {
-
+			
 			// HEAP
+			
+			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			arrows.setExactHeapStartPosition(stackWidth, target, event.clientY)
 
-			const inputWidth = 105
 
-			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			const startX = stackWidth + 30 + to.position.X
-			const startY = 55 + 20 + to.position.Y
 
-			// console.log(to)
-			// console.log(`startX: ${startX}, startY: ${startY}`)
+			// const inputHeight = 31
+			// const inputWidth = 105
 
-			let accumulator = 101
+			// const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			// const startX = stackWidth + 30 + target.position.X
+			// const startY = 55 + 20 + target.position.Y
 
-			for (const variable of to.variables) {
+			// // console.log(target)
+			// // console.log(`startX: ${startX}, startY: ${startY}`)
 
-				const varStartY = startY + accumulator
-				const varEndY = varStartY + 103
+			// let accumulator = 101
 
-				// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
+			// for (const variable of target.variables) {
 
-				if (event.clientY >= varStartY && event.clientY <= varEndY) {
-					// console.log("found correct variable")
+			// 	const varStartY = startY + accumulator
+			// 	const varEndY = varStartY + 103
 
-					const arrowStart = {
-						X: startX + 320 - 50 - inputWidth/2,
-						Y: varEndY - 18 - inputHeight/2
-					}
-					arrows.setStart({
-						X: arrowStart.X, 
-						Y: arrowStart.Y
-					})
-					arrows.setEnd({
-						X: arrowStart.X, 
-						Y: arrowStart.Y
-					})
+			// 	// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
 
-					break
+			// 	if (event.clientY >= varStartY && event.clientY <= varEndY) {
+			// 		// console.log("found correct variable")
 
-				} else {
-					accumulator = accumulator + 103 + 15
-				}
-
-			}
-
-		} else {
-
-			// STACK
-
-			arrows.getExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
-
-			// const varWidth = stackWidth - 40 - 40 - 20
-			// const inputWidth = (varWidth - 40 - 10) / 2
-	
-			// const virtualY = arrows.stackScrollAmount + event.clientY - 55
-			// let accumulator = 20
-	
-			// for (const frame of app.diagram.stack) {
-
-	
-			// 	let startY = accumulator
-			// 	let endY = (
-			// 		startY + 
-			// 		126 + 
-			// 		frame.variables.length * 103 + 
-			// 		(frame.variables.length > 0 ? 31 : 0) + 
-			// 		(frame.variables.length > 1 ? 15 * (frame.variables.length-1) : 0)
-			// 	)
-	
-			// 	// console.log(`startY: ${startY}, endY: ${endY}, virtualY: ${virtualY}`)
-	
-			// 	if (virtualY >= startY && virtualY <= endY) {
-	
-			// 		// console.log(frame.id)
-	
-			// 		let varAccumulator = startY + 20 + 39 + 15
-	
-			// 		// 1. Find closest variable
-			// 		for (const variable of frame.variables) {
-	
-			// 			let varStartY = varAccumulator
-			// 			let varEndY = varStartY + 103
-	
-			// 			// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}, virtualY: ${virtualY}`)
-	
-			// 			if (virtualY >= varStartY && virtualY <= varEndY) {
-	
-			// 				// console.log(variable.id)
-	
-			// 				const arrowStart = {
-			// 					X: stackWidth - 70 - inputWidth/2,
-			// 					Y: varStartY + 18 + 31 + 5 + inputHeight/2 - arrows.stackScrollAmount + 55
-			// 				}
-
-			// 				// 2. Set start arrow position
-			// 				arrows.setStart({
-			// 					X: arrowStart.X, 
-			// 					Y: arrowStart.Y
-			// 				})
-			// 				arrows.setEnd({
-			// 					X: arrowStart.X, 
-			// 					Y: arrowStart.Y
-			// 				})
-	
-			// 				break
-	
-			// 			} else {
-			// 				varAccumulator = (varEndY + 15)
-			// 			}
+			// 		const arrowStart = {
+			// 			X: startX + 320 - 50 - inputWidth/2,
+			// 			Y: varEndY - 18 - inputHeight/2
 			// 		}
-	
+			// 		arrows.setStart({
+			// 			X: arrowStart.X, 
+			// 			Y: arrowStart.Y
+			// 		})
+			// 		arrows.setEnd({
+			// 			X: arrowStart.X, 
+			// 			Y: arrowStart.Y
+			// 		})
+
 			// 		break
-					
+
 			// 	} else {
-			// 		accumulator = (endY + 10)
+			// 		accumulator = accumulator + 103 + 15
 			// 	}
+
 			// }
 
+		} else {
+			// STACK
+			arrows.setExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
 		}
 
 	}

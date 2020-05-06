@@ -32,23 +32,23 @@ function App() {
 
 		if (arrows.isArrowDragged) {
 			arrows.setIsArrowDragged(false)
-			const to = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			// console.log(to)
+			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			// console.log(target)
 
 			// HANDLE CASE WHEN START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
-			if (to !== undefined && arrows.newArrow.from.parentId === to.id) {
+			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
 
 				// console.log("arrow caused loop")
 
-				arrows.setTo(to.id)
+				arrows.setTo(target.id)
 
-				const startX = stackWidth + 30 + to.position.X
-				const startY = 55 + 20 + to.position.Y
+				const startX = stackWidth + 30 + target.position.X
+				const startY = 55 + 20 + target.position.Y
 				const inputHeight = 31
 	
 				let accumulator = 101
 	
-				for (const variable of to.variables) {
+				for (const variable of target.variables) {
 	
 					const varStartY = startY + accumulator
 					const varEndY = varStartY + 103
@@ -68,21 +68,21 @@ function App() {
 				}
 
 				const {region, parentId, id} = arrows.newArrow.from
-				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
+				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
 
 			}
 			// ARROW-END WAS RELEASED ON A HEAP OBJECT
-			else if (to !== undefined) {
+			else if (target !== undefined) {
 
-				arrows.setTo(to.id)
+				arrows.setTo(target.id)
 
-				const position = to.position
+				const position = target.position
 				// console.log(`Position X: ${position.X}, Position Y: ${position.Y}`)
 				const height = (
 					153 +
-					to.variables.length * 103 +
-					(to.variables.length > 0 ? 31 : 0) +
-					(to.variables.length > 1 ? 15 * (to.variables.length-1) : 0)
+					target.variables.length * 103 +
+					(target.variables.length > 0 ? 31 : 0) +
+					(target.variables.length > 1 ? 15 * (target.variables.length-1) : 0)
 				)
 				const width = 320
 				const start = arrows.newArrow.coordinates.start
@@ -96,7 +96,7 @@ function App() {
 					Y: intersection.Y
 				})
 				const {region, parentId, id} = arrows.newArrow.from
-				app.setVariableData(region, parentId, id, { name: "value", value: to.id })
+				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
 			}
 			// ARROW-END POSITION WASN'T VALID -> IT SNAPS BACK TO ARROW-START POSITION
 			else {
@@ -115,9 +115,8 @@ function App() {
 	}
 
 	function handleMouseMove(event) {
-		const {clientX,clientY} = event
+		const {clientX, clientY} = event
 		if (arrows.isArrowDragged) {
-			// console.log(`X: ${clientX}, Y: ${clientY}`)
 			arrows.setEnd({X: clientX, Y: clientY})
 		}
 		if (isResizable && clientX >= 360 && clientX <= 500) {

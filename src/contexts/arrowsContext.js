@@ -7,6 +7,7 @@ function ArrowsContextProvider(props) {
 	const {
 		HEADER_HEIGHT, 
 		INPUT_HEIGHT,
+		INPUT_MIN_WIDTH,
 		VAR_HEIGHT,
 		FRAME_MIN_HEIGHT,
 		VAR_VERTICAL_MARGIN,
@@ -17,7 +18,10 @@ function ArrowsContextProvider(props) {
 		VAR_HORIZONTAL_PADDING,
 		VAR_VERTICAL_PADDING,
 		VAR_ROW_GAP,
-		BLOCK_MARGIN_BOTTOM
+		BLOCK_MARGIN_BOTTOM,
+		SEPARATOR,
+		OBJECT_HANDLE_HEIGHT,
+		BLOCK_WIDTH
 	} = utils.constants
 	const {
 		getStackFrameVariableWidth,
@@ -195,7 +199,11 @@ function ArrowsContextProvider(props) {
 		setArrows(prev => [...prev, newArrow])
 	}
 
-	function getExactStackStartPosition(stack, stackWidth, mouseY) {
+	// EXACT FUNCTIONS: They set exact coordinates based on screen computations
+
+	// Given the stack object, the stack width and the mouse Y position,
+	// update the coordinates object of the newArrow
+	function setExactStackStartPosition(stack, stackWidth, mouseY) {
 		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
 		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
 
@@ -255,6 +263,58 @@ function ArrowsContextProvider(props) {
 		}
 	}
 
+	// Given the heap object where the mouse is over, and the mouse Y position,
+	// update the coordinates object of the newArrow
+	function setExactHeapStartPosition(stackWidth, target, mouseY) {
+		console.log(`Stack width: ${stackWidth}`)
+		console.log("Target heap object: ")
+		console.log(target)
+		console.log(`mouseY: ${mouseY}`)
+		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
+		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
+		console.log(`startX: ${startX}, startY: ${startY}`)
+
+		let accumulator = BLOCK_PADDING + OBJECT_HANDLE_HEIGHT + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+
+		for (const variable of target.variables) {
+
+			const varStartY = startY + accumulator
+			const varEndY = varStartY + VAR_HEIGHT
+
+			console.log(`mouseY: ${mouseY}, varStartY: ${varStartY}, varEndY: ${varEndY}`)
+
+			if (mouseY >= varStartY && mouseY <= varEndY) {
+				console.log("found the variable")
+				const arrowStart = {
+					X: startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
+					Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+				}
+				setStart({
+					X: arrowStart.X, 
+					Y: arrowStart.Y
+				})
+				setEnd({
+					X: arrowStart.X, 
+					Y: arrowStart.Y
+				})
+
+				break
+
+			} else {
+				accumulator = accumulator + VAR_HEIGHT + VAR_VERTICAL_MARGIN
+			}
+
+		}
+	}
+
+	// It sets the coordinates of the intersection between the line 
+	// created by connecting the start and end point of the arrow, 
+	// and the target heap object
+	// --> IT HANDLES BOTH THE LOOP AND NON-LOOP CASE
+	function setExactHeapEndPosition() {
+
+	}
+
 	const states = {
 		arrows, setArrows,
 		newArrow,
@@ -267,7 +327,8 @@ function ArrowsContextProvider(props) {
 		computeIntersection,
 		storeNewArrow,
 		resetNewArrow,
-		getExactStackStartPosition
+		setExactStackStartPosition,
+		setExactHeapStartPosition
 	}
 
 	return (
