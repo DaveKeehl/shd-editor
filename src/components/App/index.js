@@ -33,74 +33,26 @@ function App() {
 		if (arrows.isArrowDragged) {
 			arrows.setIsArrowDragged(false)
 			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			// console.log(target)
 
-			// HANDLE CASE WHEN START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
+			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
 
-				// console.log("arrow caused loop")
-
-				arrows.setTo(target.id)
-
-				const startX = stackWidth + 30 + target.position.X
-				const startY = 55 + 20 + target.position.Y
-				const inputHeight = 31
-	
-				let accumulator = 101
-	
-				for (const variable of target.variables) {
-	
-					const varStartY = startY + accumulator
-					const varEndY = varStartY + 103
-	
-					// console.log(`varStartY: ${varStartY}, varEndY: ${varEndY}`)
-	
-					if (event.clientY >= varStartY && event.clientY <= varEndY) {
-						arrows.setEnd({
-							X: startX + 320, 
-							Y: varEndY - 18 - inputHeight/2
-						})
-						break
-					} else {
-						accumulator = accumulator + 103 + 15
-					}
-	
-				}
+				arrows.setExactHeapEndPosition("loop", stackWidth, target, event.clientY)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
 
 			}
-			// ARROW-END WAS RELEASED ON A HEAP OBJECT
+			// CASE 2: ARROW-END WAS RELEASED ON A HEAP OBJECT
 			else if (target !== undefined) {
 
-				arrows.setTo(target.id)
+				arrows.setExactHeapEndPosition("intersection", stackWidth, target)
 
-				const position = target.position
-				// console.log(`Position X: ${position.X}, Position Y: ${position.Y}`)
-				const height = (
-					153 +
-					target.variables.length * 103 +
-					(target.variables.length > 0 ? 31 : 0) +
-					(target.variables.length > 1 ? 15 * (target.variables.length-1) : 0)
-				)
-				const width = 320
-				const start = arrows.newArrow.coordinates.start
-				const center = {
-					X: stackWidth + 10 + 20 + position.X + width/2, 
-					Y: 55 + 20 + position.Y + height/2
-				}
-				const intersection = arrows.computeIntersection(start, center, width, height)
-				arrows.setEnd({
-					X: intersection.X,
-					Y: intersection.Y
-				})
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
 			}
-			// ARROW-END POSITION WASN'T VALID -> IT SNAPS BACK TO ARROW-START POSITION
+			// CASE 3: ARROW-END POSITION IS NOT VALID (IT SNAPS BACK TO ARROW-START POSITION)
 			else {
-				// console.log("fail")
 				const {X,Y} = arrows.newArrow.coordinates.start
 				arrows.setEnd({
 					X: X, 

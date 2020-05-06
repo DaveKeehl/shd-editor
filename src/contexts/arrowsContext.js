@@ -20,8 +20,9 @@ function ArrowsContextProvider(props) {
 		VAR_ROW_GAP,
 		BLOCK_MARGIN_BOTTOM,
 		SEPARATOR,
-		OBJECT_HANDLE_HEIGHT,
-		BLOCK_WIDTH
+		BLOCK_WIDTH,
+		OBJECT_START_FIRST_VAR,
+		OBJECT_MIN_HEIGHT
 	} = utils.constants
 	const {
 		getStackFrameVariableWidth,
@@ -266,25 +267,17 @@ function ArrowsContextProvider(props) {
 	// Given the heap object where the mouse is over, and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactHeapStartPosition(stackWidth, target, mouseY) {
-		console.log(`Stack width: ${stackWidth}`)
-		console.log("Target heap object: ")
-		console.log(target)
-		console.log(`mouseY: ${mouseY}`)
 		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
 		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
-		console.log(`startX: ${startX}, startY: ${startY}`)
 
-		let accumulator = BLOCK_PADDING + OBJECT_HANDLE_HEIGHT + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+		let accumulator = OBJECT_START_FIRST_VAR
 
 		for (const variable of target.variables) {
 
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
 
-			console.log(`mouseY: ${mouseY}, varStartY: ${varStartY}, varEndY: ${varEndY}`)
-
 			if (mouseY >= varStartY && mouseY <= varEndY) {
-				console.log("found the variable")
 				const arrowStart = {
 					X: startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
 					Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
@@ -311,8 +304,52 @@ function ArrowsContextProvider(props) {
 	// created by connecting the start and end point of the arrow, 
 	// and the target heap object
 	// --> IT HANDLES BOTH THE LOOP AND NON-LOOP CASE
-	function setExactHeapEndPosition() {
+	function setExactHeapEndPosition(mode, stackWidth, target, mouseY = undefined) {
 
+		setTo(target.id)
+
+		if (mode === "loop") {
+			const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
+			const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
+			let accumulator = OBJECT_START_FIRST_VAR
+
+			for (const variable of target.variables) {
+				const varStartY = startY + accumulator
+				const varEndY = varStartY + VAR_HEIGHT
+	
+				if (mouseY >= varStartY && mouseY <= varEndY) {
+					setEnd({
+						X: startX + BLOCK_WIDTH, 
+						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+					})
+					break
+				} else {
+					accumulator = accumulator + VAR_HEIGHT + VAR_VERTICAL_MARGIN
+				}
+			}
+		}
+		else if (mode === "intersection") {
+
+			const position = target.position
+			const variables = target.variables
+
+			const height = (
+				OBJECT_MIN_HEIGHT +
+				variables.length * VAR_HEIGHT +
+				(variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) +
+				(variables.length > 1 ? VAR_VERTICAL_MARGIN * (variables.length-1) : 0)
+			)
+			const start = newArrow.coordinates.start
+			const center = {
+				X: stackWidth + SEPARATOR + REGION_PADDING + position.X + BLOCK_WIDTH/2, 
+				Y: HEADER_HEIGHT + REGION_PADDING + position.Y + height/2
+			}
+			const intersection = computeIntersection(start, center, BLOCK_WIDTH, height)
+			setEnd({
+				X: intersection.X,
+				Y: intersection.Y
+			})
+		}
 	}
 
 	const states = {
@@ -328,7 +365,8 @@ function ArrowsContextProvider(props) {
 		storeNewArrow,
 		resetNewArrow,
 		setExactStackStartPosition,
-		setExactHeapStartPosition
+		setExactHeapStartPosition,
+		setExactHeapEndPosition
 	}
 
 	return (
