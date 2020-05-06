@@ -49,6 +49,7 @@ const arrow = {
 		}
 	}
 }
+
 function ArrowsContextProvider(props) {
 
 	const [arrows, setArrows] = useState([])
@@ -185,7 +186,7 @@ function ArrowsContextProvider(props) {
 				intersection.Y = y2 + (height/2)
 			}
 		}
-		
+
 		return intersection
 	}
 
@@ -351,6 +352,20 @@ function ArrowsContextProvider(props) {
 		}
 	}
 
+	// When the user scrolls the stack, the start position of the arrows (if any)
+	// is updated, so that it seems like the arrows are really attached to the
+	// reference variable symbols 
+	function updateStackFramesArrows(oldScrollAmount, newScrollAmount) {
+		const scrollOffset = newScrollAmount - oldScrollAmount
+		const updatedArrows = arrows.map(arrow => {
+			if (arrow.from.region === "stack") {
+				arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
+			}
+			return arrow
+		})
+		setArrows(updatedArrows)
+	}
+
 	const states = {
 		arrows, setArrows,
 		newArrow,
@@ -365,7 +380,8 @@ function ArrowsContextProvider(props) {
 		resetNewArrow,
 		setExactStackStartPosition,
 		setExactHeapStartPosition,
-		setExactHeapEndPosition
+		setExactHeapEndPosition,
+		updateStackFramesArrows
 	}
 
 	return (

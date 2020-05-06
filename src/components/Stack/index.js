@@ -10,7 +10,7 @@ function Stack(props) {
 	const stackFramesRef = useRef(null)
 
 	const app = useContext(StateContext)
-	const {setStackScrollAmount} = useContext(ArrowsContext)
+	const {stackScrollAmount, setStackScrollAmount, updateStackFramesArrows} = useContext(ArrowsContext)
 
 	function addBlock() {
 		const newBlock = (
@@ -30,8 +30,10 @@ function Stack(props) {
 	}
 
 	function handleScroll() {
-		setStackScrollAmount(stackFramesRef.current.scrollTop)
-		// console.log(stackFramesRef.current.scrollTop)
+		const oldScrollAmount = stackScrollAmount
+		const newScrollAmount = stackFramesRef.current.scrollTop
+		setStackScrollAmount(newScrollAmount)
+		updateStackFramesArrows(oldScrollAmount, newScrollAmount)
 	}
 
 	return (
