@@ -5,6 +5,7 @@ import {StateContext} from "../../contexts/stateContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
+import {utils} from "../../utils"
 
 function HeapObject(props) {
 	const app = useContext(StateContext)
@@ -18,13 +19,15 @@ function HeapObject(props) {
 	const [isDragged, setIsDragged] = useState(false)
 	const [localDepthIndex, setLocalDepthIndex] = useState("")
 
+	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
+
 	const obj = useRef(null)
 
 	useEffect(() => {
 		if (isDragged) {
 			const newPosition = {
-				X: mousePosition.X-stackWidth-10-20-160, 
-				Y: mousePosition.Y-20-55-23
+				X: mousePosition.X - stackWidth - SEPARATOR - REGION_PADDING - BLOCK_WIDTH/2, 
+				Y: mousePosition.Y - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
 			}
 			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)

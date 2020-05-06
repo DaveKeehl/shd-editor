@@ -5,6 +5,7 @@ import {StateContext} from "../../contexts/stateContext"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {HeapDepthIndexContextProvider} from "../../contexts/heapDepthIndexContext"
+import {utils} from "../../utils"
 
 function Heap(props) {
 	const [objects, setObjects] = useState([])
@@ -12,6 +13,8 @@ function Heap(props) {
 	const app = useContext(StateContext)
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
 	const {setMousePosition} = useContext(HeapMousePositionContext)
+
+	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -22,8 +25,8 @@ function Heap(props) {
 		if (isAddModeActive) {
 			const {clientX, clientY} = event
 			const initialPosition = {
-				X: clientX-props.stackWidth-20-10-160,
-				Y: clientY-20-55-23
+				X: clientX - props.stackWidth - REGION_PADDING - SEPARATOR - BLOCK_WIDTH/2,
+				Y: clientY - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
 			}
 			const newBlock = (
 				<HeapObject 

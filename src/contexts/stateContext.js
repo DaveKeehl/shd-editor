@@ -1,6 +1,14 @@
 import React, {useState} from "react"
+import {utils} from "../utils"
 
 const StateContext = React.createContext()
+
+const { HEADER_HEIGHT, 
+		REGION_PADDING, 
+		BLOCK_WIDTH, 
+		OBJECT_MIN_HEIGHT, 
+		VAR_HEIGHT, 
+		VAR_VERTICAL_MARGIN } = utils.constants
 
 function StateContextProvider(props) {
 	const [stack, setStack] = useState([])
@@ -282,27 +290,27 @@ function StateContextProvider(props) {
 	}
 
 	// FUNCTIONS RELATED TO ARROWS
-	
+
 	const getHoveredHeapObject = (mouseX, mouseY, stackWidth) => {
 
-		let leftLimit = stackWidth + 20
-		let topLimit = 55 + 20
+		let leftLimit = stackWidth + REGION_PADDING
+		let topLimit = HEADER_HEIGHT + REGION_PADDING
 
 		// Returns the object on which the mouse is over
 		const foundObject = heap.find(object => {
 			const {X,Y} = object.position
+			const variables = object.variables
 			const height = (
-				153 +
-				object.variables.length * 103 +
-				(object.variables.length > 0 ? 31 : 0) +
-				(object.variables.length > 1 ? 15 * (object.variables.length-1) : 0)
+				OBJECT_MIN_HEIGHT +
+				variables.length * VAR_HEIGHT +
+				(variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) +
+				(variables.length > 1 ? VAR_VERTICAL_MARGIN * (variables.length-1) : 0)
 			)
-			const width = 320
 
 			// Check if mouse is inside current analyzed object
 			if (
 				(mouseX >= leftLimit + X) && 
-				(mouseX <= leftLimit + X + width) && 
+				(mouseX <= leftLimit + X + BLOCK_WIDTH) && 
 				(mouseY >= topLimit + Y) && 
 				(mouseY <= topLimit + Y + height)
 			) {

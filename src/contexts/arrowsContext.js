@@ -3,52 +3,55 @@ import {utils} from "../utils"
 
 const ArrowsContext = React.createContext()
 
-function ArrowsContextProvider(props) {
-	const {
-		HEADER_HEIGHT, 
-		INPUT_HEIGHT,
-		INPUT_MIN_WIDTH,
-		VAR_HEIGHT,
-		FRAME_MIN_HEIGHT,
-		VAR_VERTICAL_MARGIN,
-		BLOCK_PADDING,
+const { HEADER_HEIGHT, 
+
+		SEPARATOR,
+	
 		REGION_PADDING,
+
+		BLOCK_WIDTH,
+		BLOCK_PADDING,
 		BLOCK_HEADER_HEIGHT,
+		BLOCK_MARGIN_BOTTOM,
+
+		OBJECT_START_FIRST_VAR,
+		OBJECT_MIN_HEIGHT,
+
+		FRAME_MIN_HEIGHT,
+		
+		VAR_HEIGHT,
+		VAR_VERTICAL_MARGIN,
+		VAR_VERTICAL_PADDING,
 		VAR_HORIZONTAL_MARGIN,
 		VAR_HORIZONTAL_PADDING,
-		VAR_VERTICAL_PADDING,
 		VAR_ROW_GAP,
-		BLOCK_MARGIN_BOTTOM,
-		SEPARATOR,
-		BLOCK_WIDTH,
-		OBJECT_START_FIRST_VAR,
-		OBJECT_MIN_HEIGHT
-	} = utils.constants
-	const {
-		getStackFrameVariableWidth,
-		getStackFrameInputWidth
-	} = utils.functions
 
-	const [arrows, setArrows] = useState([])
+		INPUT_HEIGHT,
+		INPUT_MIN_WIDTH } = utils.constants
 
-	const arrow = {
-		from: {
-			region: "",
-			parentId: "",
-			id: ""
+const {getStackFrameVariableWidth, getStackFrameInputWidth} = utils.functions
+
+const arrow = {
+	from: {
+		region: "",
+		parentId: "",
+		id: ""
+	},
+	to: "",
+	coordinates: {
+		start: {
+			X: "",
+			Y: ""
 		},
-		to: "",
-		coordinates: {
-			start: {
-				X: "",
-				Y: ""
-			},
-			end: {
-				X: "",
-				Y: ""
-			}
+		end: {
+			X: "",
+			Y: ""
 		}
 	}
+}
+function ArrowsContextProvider(props) {
+
+	const [arrows, setArrows] = useState([])
 
 	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
@@ -137,8 +140,6 @@ function ArrowsContextProvider(props) {
 	// the intersection of the line created by those 2 points and the 
 	// border of the object
 	function computeIntersection(A, B, width, height) {
-		// console.log(`width: ${width}, height: ${height}`)
-		// console.log(`A: {${A.X}, ${A.Y}}, B: {${B.X}, ${B.Y}}`)
 		const {X: x1, Y: y1} = A
 		const {X: x2, Y: y2} = B
 		const intersection = {X: "", Y: ""}
@@ -148,9 +149,7 @@ function ArrowsContextProvider(props) {
 		const horLimit = height / 2
 		const verLimit = width / 2
 		let edge = ""
-		// console.log(`slope: ${slope}`)
-		// console.log(`leftLimit: ${-horLimit}, horizontalTest: ${horizontalTest}, rightLimit: ${horLimit}`)
-		// console.log(`topLimit: ${-verLimit}, verticalTest: ${verticalTest}, rightLimit: ${verLimit}`)
+
 		if (horizontalTest >= -horLimit && horizontalTest <= horLimit) {
 			if (x1 < x2) {
 				edge = "left"
@@ -167,7 +166,7 @@ function ArrowsContextProvider(props) {
 				edge = "bottom"
 			}
 		}
-		// console.log(edge)
+
 		if (edge === "left" || edge === "right") {
 			if (edge === "left") {
 				intersection.X = x2 - (width/2)
@@ -186,7 +185,7 @@ function ArrowsContextProvider(props) {
 				intersection.Y = y2 + (height/2)
 			}
 		}
-		// console.log(`Intersection at: {${intersection.X}, ${intersection.Y}}`)
+		
 		return intersection
 	}
 

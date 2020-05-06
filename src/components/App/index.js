@@ -7,15 +7,18 @@ import {ArrowsContext} from "../../contexts/arrowsContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapAddModeContextProvider} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContextProvider} from "../../contexts/heapMousePositionContext"
+import {utils} from "../../utils"
 
 function App() {
 	const [diagram, setDiagram] = useState({})
-
+	
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
 	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
-
+	
 	const separator = useRef(null)
+
+	const {STACK_MIN, STACK_MAX} = utils.constants
 
 	useEffect(() => {
 		setDiagram(app.diagram)
@@ -63,7 +66,7 @@ function App() {
 	}
 
 	function handleDoubleClick() {
-		setStackWidth(360)
+		setStackWidth(STACK_MIN)
 	}
 
 	function handleMouseMove(event) {
@@ -71,7 +74,7 @@ function App() {
 		if (arrows.isArrowDragged) {
 			arrows.setEnd({X: clientX, Y: clientY})
 		}
-		if (isResizable && clientX >= 360 && clientX <= 500) {
+		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
 			setStackWidth(clientX)
 		}
 	}
