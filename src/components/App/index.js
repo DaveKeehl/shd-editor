@@ -72,7 +72,7 @@ function App() {
 		}
 	}
 
-	function handleDoubleClick(event) {
+	function handleDoubleClick() {
 		setStackWidth(STACK_MIN)
 
 		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
@@ -84,8 +84,10 @@ function App() {
 		const updatedArrows = arrows.arrows.map(arrow => {
 			if (arrow.from.region === "stack") {
 				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset + inputOffset/2
-				arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
+			} else {
+				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset
 			}
+			arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
 			return arrow
 		})
 		arrows.setArrows(updatedArrows)
@@ -110,8 +112,10 @@ function App() {
 			const updatedArrows = arrows.arrows.map(arrow => {
 				if (arrow.from.region === "stack") {
 					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset - (inputOffset/2)
-					arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
+				} else {
+					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset
 				}
+				arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
 				return arrow
 			})
 			arrows.setArrows(updatedArrows)
