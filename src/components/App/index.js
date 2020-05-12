@@ -72,8 +72,24 @@ function App() {
 		}
 	}
 
-	function handleDoubleClick() {
+	function handleDoubleClick(event) {
 		setStackWidth(STACK_MIN)
+
+		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
+		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+
+		const resizeOffset = stackWidth - STACK_MIN
+		const inputOffset = INPUT_WIDTH - INPUT_MIN_WIDTH
+		
+		const updatedArrows = arrows.arrows.map(arrow => {
+			if (arrow.from.region === "stack") {
+				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset + inputOffset/2
+				arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
+			}
+			return arrow
+		})
+		arrows.setArrows(updatedArrows)
+		setStackInputWidth(INPUT_MIN_WIDTH)
 	}
 
 	function handleMouseMove(event) {
@@ -90,8 +106,6 @@ function App() {
 
 			const resizeOffset = clientX - stackWidth
 			const inputOffset = INPUT_WIDTH - stackInputWidth
-
-			console.log(`inputOffset: ${inputOffset}, INPUT_WIDTH: ${INPUT_WIDTH}, stackInputWidth: ${stackInputWidth}`)
 
 			const updatedArrows = arrows.arrows.map(arrow => {
 				if (arrow.from.region === "stack") {
