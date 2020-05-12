@@ -3,14 +3,17 @@ import Header from "../Header"
 import StackFrame from "./StackFrame"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {utils} from "../../utils"
 
 function Stack(props) {
 	const [objects, setObjects] = useState([])
 
 	const stackFramesRef = useRef(null)
 
+	const {FRAME_MIN_HEIGHT, BLOCK_MARGIN_BOTTOM} = utils.constants
+
 	const app = useContext(StateContext)
-	const {stackScrollAmount, setStackScrollAmount, updateStackFramesArrows} = useContext(ArrowsContext)
+	const arrows = useContext(ArrowsContext)
 
 	function addBlock() {
 		const newBlock = (
@@ -22,18 +25,65 @@ function Stack(props) {
 		)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
+
+		// POSSIBLE DRYNESS ISSUE DOWN HERE! CODE REPETITION (SEE handleScroll)
+
+		const updatedArrows = arrows.arrows.map(arrow => {
+			if (arrow.from.region === "stack") {
+				arrow.coordinates.start.Y = arrow.coordinates.start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
+			}
+			return arrow
+		})
+		arrows.setArrows(updatedArrows)
 	}
 
 	function removeBlock(id) {
+		// 1. CHECK IF STACK FRAME WITH GIVEN ID HAS ANY ARROWS
+		// const toDelete = app.diagram.stack.find(frame => frame.id === id)
+		// console.log(app.diagram.stack)
+
+
+		// const removableArrows = []
+
+
+		// app.stack.filter(frame => {
+		// 	frame.variables.forEach(variable => {
+		// 		if (variable.nature === "reference" && variable.value !== "") {
+		// 			removableArrows.push({
+		// 				from: variable.id,
+		// 				to: variable.value
+		// 			})
+		// 		} 
+		// 	})
+		// })
+		// // 1.1 REMOVE THOSE ARROWS FROM ARROWS LIST
+		// if (removableArrows.length > 0) {
+			
+		// }
+		// // 2. GET HEIGHT OF STACK FRAME WITH GIVEN ID
+		// // 3. MOVE UPWARDS STACK FRAMES THAT FOLLOW FRAME WITH GIVEN ID
+
+
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 		app.removeStackFrame(id)
 	}
 
 	function handleScroll() {
-		const oldScrollAmount = stackScrollAmount
+		const oldScrollAmount = arrows.stackScrollAmount
 		const newScrollAmount = stackFramesRef.current.scrollTop
-		setStackScrollAmount(newScrollAmount)
-		updateStackFramesArrows(oldScrollAmount, newScrollAmount)
+		const scrollOffset = oldScrollAmount - newScrollAmount
+		arrows.setStackScrollAmount(newScrollAmount)
+		// arrows.updateStackFramesArrows(scrollOffset)
+
+		// POSSIBLE DRYNESS ISSUE DOWN HERE! CODE REPETITION (SEE addBlock)
+
+		const updatedArrows = arrows.arrows.map(arrow => {
+			if (arrow.from.region === "stack") {
+				arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
+			}
+			return arrow
+		})
+		arrows.setArrows(updatedArrows)
 	}
 
 	return (

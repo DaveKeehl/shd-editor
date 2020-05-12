@@ -29,7 +29,7 @@ const { HEADER_HEIGHT,
 		INPUT_HEIGHT,
 		INPUT_MIN_WIDTH } = utils.constants
 
-const {getStackFrameVariableWidth, getStackFrameInputWidth} = utils.functions
+const {getStackFrameVariableWidth, getStackFrameInputWidth, getBlockHeight} = utils.functions
 
 const arrow = {
 	from: {
@@ -214,13 +214,7 @@ function ArrowsContextProvider(props) {
 		for (const frame of stack) {
 
 			let startY = accumulator
-			let endY = (
-				startY + 
-				FRAME_MIN_HEIGHT + 
-				frame.variables.length * VAR_HEIGHT + 
-				(frame.variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) + 
-				(frame.variables.length > 1 ? VAR_VERTICAL_MARGIN * (frame.variables.length-1) : 0)
-			)
+			let endY = startY + getBlockHeight(frame)
 
 			if (virtualY >= startY && virtualY <= endY) {
 
@@ -331,14 +325,8 @@ function ArrowsContextProvider(props) {
 		else if (mode === "intersection") {
 
 			const position = target.position
-			const variables = target.variables
 
-			const height = (
-				OBJECT_MIN_HEIGHT +
-				variables.length * VAR_HEIGHT +
-				(variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) +
-				(variables.length > 1 ? VAR_VERTICAL_MARGIN * (variables.length-1) : 0)
-			)
+			const height = getBlockHeight(target)
 			const start = newArrow.coordinates.start
 			const center = {
 				X: stackWidth + SEPARATOR + REGION_PADDING + position.X + BLOCK_WIDTH/2, 
@@ -355,8 +343,7 @@ function ArrowsContextProvider(props) {
 	// When the user scrolls the stack, the start position of the arrows (if any)
 	// is updated, so that it seems like the arrows are really attached to the
 	// reference variable symbols 
-	function updateStackFramesArrows(oldScrollAmount, newScrollAmount) {
-		const scrollOffset = newScrollAmount - oldScrollAmount
+	function updateStackFramesArrows(scrollOffset) {
 		const updatedArrows = arrows.map(arrow => {
 			if (arrow.from.region === "stack") {
 				arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset

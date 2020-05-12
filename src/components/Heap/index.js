@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {StateContext} from "../../contexts/stateContext"
@@ -12,7 +12,7 @@ function Heap(props) {
 
 	const app = useContext(StateContext)
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
-	const {setMousePosition} = useContext(HeapMousePositionContext)
+	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
 
 	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
 

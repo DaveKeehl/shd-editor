@@ -6,9 +6,15 @@ const StateContext = React.createContext()
 const { HEADER_HEIGHT, 
 		REGION_PADDING, 
 		BLOCK_WIDTH, 
+		BLOCK_PADDING,
+		BLOCK_HEADER_HEIGHT,
+		BLOCK_MARGIN_BOTTOM,
+		FRAME_MIN_HEIGHT,
 		OBJECT_MIN_HEIGHT, 
 		VAR_HEIGHT, 
 		VAR_VERTICAL_MARGIN } = utils.constants
+
+const {getBlockHeight} = utils.functions
 
 function StateContextProvider(props) {
 	const [stack, setStack] = useState([])
@@ -291,6 +297,48 @@ function StateContextProvider(props) {
 
 	// FUNCTIONS RELATED TO ARROWS
 
+	function getHoveredStackData(stackScrollAmount, mouseY) {
+		const virtualY = stackScrollAmount + mouseY - HEADER_HEIGHT
+		let accumulator = REGION_PADDING
+
+		for (const frame of stack) {
+
+			let startY = accumulator
+			let endY = startY + getBlockHeight(frame)
+
+			if (virtualY >= startY && virtualY <= endY) {
+
+				let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+
+				for (const variable of frame.variables) {
+
+					let varStartY = varAccumulator
+					let varEndY = varStartY + VAR_HEIGHT
+
+					if (virtualY >= varStartY && virtualY <= varEndY) {
+
+						const result = {
+							variable: variable,
+							parent: frame
+						}
+						console.log(result)
+						return result
+
+						break
+
+					} else {
+						varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
+					}
+				}
+
+				break
+				
+			} else {
+				accumulator = (endY + BLOCK_MARGIN_BOTTOM)
+			}
+		}
+	}
+
 	const getHoveredHeapObject = (mouseX, mouseY, stackWidth) => {
 
 		let leftLimit = stackWidth + REGION_PADDING
@@ -299,13 +347,7 @@ function StateContextProvider(props) {
 		// Returns the object on which the mouse is over
 		const foundObject = heap.find(object => {
 			const {X,Y} = object.position
-			const variables = object.variables
-			const height = (
-				OBJECT_MIN_HEIGHT +
-				variables.length * VAR_HEIGHT +
-				(variables.length > 0 ? VAR_VERTICAL_MARGIN*2 + 1 : 0) +
-				(variables.length > 1 ? VAR_VERTICAL_MARGIN * (variables.length-1) : 0)
-			)
+			const height = getBlockHeight(object)
 
 			// Check if mouse is inside current analyzed object
 			if (
@@ -365,7 +407,8 @@ function StateContextProvider(props) {
 		uploadJSON,
 		downloadJSON,
 
-		getHoveredHeapObject,
+		getHoveredStackData,
+		getHoveredHeapObject
 	}
 
 	return (

@@ -1,17 +1,21 @@
-import React, {useState, useEffect, useRef} from "react"
+import React, {useState, useEffect, useRef, useContext} from "react"
+import {ArrowsContext} from "../../contexts/arrowsContext"
 
-function Arrow() {
-	const [width, setWidth] = useState(0)
-	const [height, setHeight] = useState(0)
+function Arrow(props) {
+	const [width, setWidth] = useState(window.innerWidth)
+	const [height, setHeight] = useState(window.innerHeight)
+
+	const arrows = useContext(ArrowsContext)
 
 	const arrowRef = useRef(null)
 
 	useEffect(() => {
-		// console.log(arrowRef)
-		// console.log(arrowRef.current.clientWidth)
-		setWidth(arrowRef.current.clientWidth)
-		setHeight(arrowRef.current.clientHeight)
-	})
+		// const {start, from} = props.data.coordinates
+		// setWidth(end.X - start.X)
+		// setHeight(end.Y)
+		// setWidth(window.clientWidth)
+		// setHeight(arrowRef.current.clientHeight)
+	}, [arrows.arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)])
 
 	function handleMouseOver() {
 		console.log("Mouseover")
@@ -28,12 +32,12 @@ function Arrow() {
 			onMouseOver={handleMouseOver}
 		>
 			<path 
-				d="
-					M 1.5 142
-					L 623.5 5
-				" 
-				stroke="blue" 
-				strokeWidth="5" 
+				d={`
+					M ${props.data.coordinates.start.X} ${props.data.coordinates.start.Y}
+					L ${props.data.coordinates.end.X} ${props.data.coordinates.end.Y}
+				`} 
+				stroke="black" 
+				strokeWidth="2" 
 				pointerEvents="visible"
 			/>
 		</svg>

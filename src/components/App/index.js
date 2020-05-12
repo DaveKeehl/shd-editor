@@ -14,11 +14,17 @@ function App() {
 	
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
-	const {stackWidth, setStackWidth, isResizable, setIsResizable} = useContext(ResizableStackContext)
+	const { stackWidth, 
+			setStackWidth, 
+			stackInputWidth, 
+			setStackInputWidth, 
+			isResizable, 
+			setIsResizable} = useContext(ResizableStackContext)
 	
 	const separator = useRef(null)
 
-	const {STACK_MIN, STACK_MAX} = utils.constants
+	const {STACK_MIN, STACK_MAX, INPUT_MIN_WIDTH} = utils.constants
+	const {getStackFrameVariableWidth, getStackFrameInputWidth} = utils.functions
 
 	useEffect(() => {
 		setDiagram(app.diagram)
@@ -34,6 +40,7 @@ function App() {
 		separator.current.style.background = "#F3F3F3"
 
 		if (arrows.isArrowDragged) {
+			
 			arrows.setIsArrowDragged(false)
 			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
 
@@ -71,11 +78,32 @@ function App() {
 
 	function handleMouseMove(event) {
 		const {clientX, clientY} = event
+
 		if (arrows.isArrowDragged) {
 			arrows.setEnd({X: clientX, Y: clientY})
 		}
+
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
+
+			const VAR_WIDTH = getStackFrameVariableWidth(clientX)
+			const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+
+			const resizeOffset = clientX - stackWidth
+			const inputOffset = INPUT_WIDTH - stackInputWidth
+
+			console.log(`inputOffset: ${inputOffset}, INPUT_WIDTH: ${INPUT_WIDTH}, stackInputWidth: ${stackInputWidth}`)
+
+			const updatedArrows = arrows.arrows.map(arrow => {
+				if (arrow.from.region === "stack") {
+					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset - (inputOffset/2)
+					arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
+				}
+				return arrow
+			})
+			arrows.setArrows(updatedArrows)
+			
 			setStackWidth(clientX)
+			setStackInputWidth(INPUT_WIDTH)
 		}
 	}
 

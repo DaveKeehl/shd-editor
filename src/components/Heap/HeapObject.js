@@ -2,13 +2,16 @@ import React, {useState, useEffect, useContext, useRef} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {StateContext} from "../../contexts/stateContext"
+import {ArrowsContext} from "../../contexts/arrowsContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
+import Arrows from "../Arrows"
 
 function HeapObject(props) {
 	const app = useContext(StateContext)
+	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
 	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
