@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useContext} from "react"
+import NewArrow from "./newArrow"
 import Arrow from "./Arrow"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
@@ -22,6 +23,7 @@ function Arrows() {
 
 	return (
 		<div className="arrows">
+			<NewArrow />
 			{arrows}
 		</div>
 	)

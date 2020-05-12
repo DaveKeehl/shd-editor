@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useContext} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function Arrow(props) {
@@ -7,15 +7,14 @@ function Arrow(props) {
 
 	const arrows = useContext(ArrowsContext)
 
-	const arrowRef = useRef(null)
+	useEffect(
+		() => {}, 
+		[getDrawableArrows(arrows.arrows)]
+	)
 
-	useEffect(() => {
-		// const {start, from} = props.data.coordinates
-		// setWidth(end.X - start.X)
-		// setHeight(end.Y)
-		// setWidth(window.clientWidth)
-		// setHeight(arrowRef.current.clientHeight)
-	}, [arrows.arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)])
+	function getDrawableArrows(arrows) {
+		arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+	}
 
 	function handleMouseOver() {
 		console.log("Mouseover")
@@ -23,7 +22,6 @@ function Arrow(props) {
 
 	return (
 		<svg 
-			ref={arrowRef}
 			width={width} 
 			height={height}
 			viewBox={`0 0 ${width} ${height}`}
