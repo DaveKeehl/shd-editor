@@ -5,6 +5,8 @@ const ArrowsContext = React.createContext()
 
 const { HEADER_HEIGHT, 
 
+		STACK_MIN,
+
 		SEPARATOR,
 	
 		REGION_PADDING,
@@ -343,14 +345,96 @@ function ArrowsContextProvider(props) {
 	// When the user scrolls the stack, the start position of the arrows (if any)
 	// is updated, so that it seems like the arrows are really attached to the
 	// reference variable symbols 
-	function updateStackFramesArrows(scrollOffset) {
-		const updatedArrows = arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
-			}
-			return arrow
-		})
-		setArrows(updatedArrows)
+	function updateStackFramesArrows(mode, configuration = undefined) {
+		if (mode === "scroll") {
+			const oldScrollAmount = stackScrollAmount
+			const newScrollAmount = configuration.newScrollAmount
+			const scrollOffset = oldScrollAmount - newScrollAmount
+			setStackScrollAmount(newScrollAmount)
+	
+			const updatedArrows = arrows.map(arrow => {
+				if (arrow.from.region === "stack") {
+					arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
+				}
+				return arrow
+			})
+			setArrows(updatedArrows)
+		}
+		else if (mode === "resizeStackWidth") {
+			const {clientX, stackWidth, stackInputWidth, INPUT_WIDTH} = configuration
+			const resizeOffset = clientX - stackWidth
+			const inputOffset = INPUT_WIDTH - stackInputWidth
+
+			const updatedArrows = arrows.map(arrow => {
+				if (arrow.from.region === "stack") {
+					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset - (inputOffset/2)
+				} else {
+					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset
+				}
+				arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
+				return arrow
+			})
+			setArrows(updatedArrows)
+			
+		}
+		else if (mode === "resetStackWidth") {	
+			const {stackWidth, INPUT_WIDTH} = configuration
+
+			const resizeOffset = stackWidth - STACK_MIN
+			const inputOffset = INPUT_WIDTH - INPUT_MIN_WIDTH
+			
+			const updatedArrows = arrows.map(arrow => {
+				if (arrow.from.region === "stack") {
+					arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset + inputOffset/2
+				} else {
+					arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset
+				}
+				arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
+				return arrow
+			})
+			setArrows(updatedArrows)
+		}
+		else if (mode === "addFrame") {
+			const updatedArrows = arrows.map(arrow => {
+				if (arrow.from.region === "stack") {
+					arrow.coordinates.start.Y = arrow.coordinates.start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
+				}
+				return arrow
+			})
+			setArrows(updatedArrows)
+		}
+		else if (mode === "addVariable") {
+			const {stack, frameID} = configuration
+			const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
+
+			let lowestArrowStartY = 0
+			const frameArrows = arrows.filter(arrow => arrow.from.parentId === frameID)
+			frameArrows.forEach(arrow => {
+				if (arrow.coordinates.start.Y > lowestArrowStartY) {
+					lowestArrowStartY = arrow.coordinates.start.Y
+				}
+				return arrow
+			})
+	
+			const updatedArrows = arrows.map(arrow => {
+				if (arrow.from.region === "stack" && arrow.coordinates.start.Y > lowestArrowStartY) {
+					if (currentFrameVariablesCount === 0) {
+						arrow.coordinates.start.Y = arrow.coordinates.start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2
+					}
+					else if (currentFrameVariablesCount > 0) {
+						arrow.coordinates.start.Y = arrow.coordinates.start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
+					}
+				}
+				return arrow
+			})
+			setArrows(updatedArrows)
+		}
+		// else if (mode === "removeFrame") {
+
+		// }
+		// else if (mode === "removeVariable") {
+
+		// }
 	}
 
 	const states = {

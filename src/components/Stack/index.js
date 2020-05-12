@@ -5,7 +5,7 @@ import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 import {utils} from "../../utils"
 
-function Stack(props) {
+function Stack() {
 	const [objects, setObjects] = useState([])
 
 	const stackFramesRef = useRef(null)
@@ -26,15 +26,7 @@ function Stack(props) {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		// POSSIBLE DRYNESS ISSUE DOWN HERE! CODE REPETITION (SEE handleScroll)
-
-		const updatedArrows = arrows.arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.Y = arrow.coordinates.start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
-			}
-			return arrow
-		})
-		arrows.setArrows(updatedArrows)
+		arrows.updateStackFramesArrows("addFrame")
 	}
 
 	function removeBlock(id) {
@@ -69,21 +61,9 @@ function Stack(props) {
 	}
 
 	function handleScroll() {
-		const oldScrollAmount = arrows.stackScrollAmount
-		const newScrollAmount = stackFramesRef.current.scrollTop
-		const scrollOffset = oldScrollAmount - newScrollAmount
-		arrows.setStackScrollAmount(newScrollAmount)
-		// arrows.updateStackFramesArrows(scrollOffset)
-
-		// POSSIBLE DRYNESS ISSUE DOWN HERE! CODE REPETITION (SEE addBlock)
-
-		const updatedArrows = arrows.arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
-			}
-			return arrow
+		arrows.updateStackFramesArrows("scroll", {
+			newScrollAmount: stackFramesRef.current.scrollTop
 		})
-		arrows.setArrows(updatedArrows)
 	}
 
 	return (

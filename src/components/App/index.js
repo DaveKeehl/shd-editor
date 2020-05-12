@@ -77,20 +77,11 @@ function App() {
 
 		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
 		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
-
-		const resizeOffset = stackWidth - STACK_MIN
-		const inputOffset = INPUT_WIDTH - INPUT_MIN_WIDTH
-		
-		const updatedArrows = arrows.arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset + inputOffset/2
-			} else {
-				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset
-			}
-			arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
-			return arrow
+		arrows.updateStackFramesArrows("resetStackWidth", {
+			stackWidth, 
+			INPUT_WIDTH
 		})
-		arrows.setArrows(updatedArrows)
+		
 		setStackInputWidth(INPUT_MIN_WIDTH)
 	}
 
@@ -102,24 +93,14 @@ function App() {
 		}
 
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
-
 			const VAR_WIDTH = getStackFrameVariableWidth(clientX)
 			const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
-
-			const resizeOffset = clientX - stackWidth
-			const inputOffset = INPUT_WIDTH - stackInputWidth
-
-			const updatedArrows = arrows.arrows.map(arrow => {
-				if (arrow.from.region === "stack") {
-					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset - (inputOffset/2)
-				} else {
-					arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset
-				}
-				arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
-				return arrow
+			arrows.updateStackFramesArrows("resizeStackWidth", {
+				clientX,
+				stackWidth,
+				stackInputWidth,
+				INPUT_WIDTH
 			})
-			arrows.setArrows(updatedArrows)
-			
 			setStackWidth(clientX)
 			setStackInputWidth(INPUT_WIDTH)
 		}
