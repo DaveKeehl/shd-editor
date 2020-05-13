@@ -31,7 +31,10 @@ const { HEADER_HEIGHT,
 		INPUT_HEIGHT,
 		INPUT_MIN_WIDTH } = utils.constants
 
-const {getStackFrameVariableWidth, getStackFrameInputWidth, getBlockHeight} = utils.functions
+const { getStackFrameVariableWidth, 
+		getStackFrameInputWidth, 
+		getBlockHeight, 
+		getHeapObjectCenter } = utils.functions
 
 const arrow = {
 	from: {
@@ -202,7 +205,7 @@ function ArrowsContextProvider(props) {
 		setArrows(prev => [...prev, newArrow])
 	}
 
-	// EXACT FUNCTIONS: They set exact coordinates based on screen computations
+	// NEW ARROW EXACT FUNCTIONS: They set exact coordinates of the new arrow based on screen computations
 
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
@@ -325,16 +328,11 @@ function ArrowsContextProvider(props) {
 			}
 		}
 		else if (mode === "intersection") {
-
-			const position = target.position
-
-			const height = getBlockHeight(target)
 			const start = newArrow.coordinates.start
-			const center = {
-				X: stackWidth + SEPARATOR + REGION_PADDING + position.X + BLOCK_WIDTH/2, 
-				Y: HEADER_HEIGHT + REGION_PADDING + position.Y + height/2
-			}
+			const center = getHeapObjectCenter(stackWidth, target)
+			const height = getBlockHeight(target)
 			const intersection = computeIntersection(start, center, BLOCK_WIDTH, height)
+
 			setEnd({
 				X: intersection.X,
 				Y: intersection.Y
@@ -342,19 +340,30 @@ function ArrowsContextProvider(props) {
 		}
 	}
 
-	// When the user scrolls the stack, the start position of the arrows (if any)
-	// is updated, so that it seems like the arrows are really attached to the
-	// reference variable symbols 
+	function recomputeIntersection(start, to, heap, stackWidth) {
+		const heapObject = heap.find(object => object.id === to)
+		const center = getHeapObjectCenter(stackWidth, heapObject)
+		const height = getBlockHeight(heapObject)
+		return computeIntersection(start, center, BLOCK_WIDTH, height)
+	}
+
 	function updateStackFramesArrows(mode, configuration = undefined) {
 		if (mode === "scroll") {
 			const oldScrollAmount = stackScrollAmount
 			const newScrollAmount = configuration.newScrollAmount
 			const scrollOffset = oldScrollAmount - newScrollAmount
 			setStackScrollAmount(newScrollAmount)
-	
+
 			const updatedArrows = arrows.map(arrow => {
 				if (arrow.from.region === "stack") {
-					arrow.coordinates.start.Y = arrow.coordinates.start.Y + scrollOffset
+					let start = arrow.coordinates.start
+					let end = arrow.coordinates.end
+					
+					const {heap, stackWidth} = configuration
+					start.Y = start.Y + scrollOffset
+					const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+					end.X = intersection.X
+					end.Y = intersection.Y
 				}
 				return arrow
 			})
@@ -397,14 +406,21 @@ function ArrowsContextProvider(props) {
 		else if (mode === "addFrame") {
 			const updatedArrows = arrows.map(arrow => {
 				if (arrow.from.region === "stack") {
-					arrow.coordinates.start.Y = arrow.coordinates.start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
+					let start = arrow.coordinates.start
+					let end = arrow.coordinates.end
+
+					const {heap, stackWidth} = configuration
+					start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
+					const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+					end.X = intersection.X
+					end.Y = intersection.Y
 				}
 				return arrow
 			})
 			setArrows(updatedArrows)
 		}
 		else if (mode === "addVariable") {
-			const {stack, frameID} = configuration
+			const {stack, heap, stackWidth, frameID} = configuration
 			const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
 
 			let lowestArrowStartY = 0
@@ -417,13 +433,20 @@ function ArrowsContextProvider(props) {
 			})
 	
 			const updatedArrows = arrows.map(arrow => {
-				if (arrow.from.region === "stack" && arrow.coordinates.start.Y > lowestArrowStartY) {
+				let region = arrow.from.region
+				let start = arrow.coordinates.start
+				let end = arrow.coordinates.end
+
+				if (region === "stack" && start.Y > lowestArrowStartY) {
 					if (currentFrameVariablesCount === 0) {
-						arrow.coordinates.start.Y = arrow.coordinates.start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2
+						start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2
 					}
 					else if (currentFrameVariablesCount > 0) {
-						arrow.coordinates.start.Y = arrow.coordinates.start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
+						start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
 					}
+					const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+					end.X = intersection.X
+					end.Y = intersection.Y
 				}
 				return arrow
 			})

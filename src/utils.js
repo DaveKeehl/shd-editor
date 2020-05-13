@@ -65,12 +65,26 @@ function getBlockHeight(blockObject) {
 	return result
 }
 
+function getHeapObjectCenter(stackWidth, heapObject) {
+	const {SEPARATOR, REGION_PADDING, BLOCK_WIDTH, HEADER_HEIGHT} = constants
+	const position = heapObject.position
+
+	const height = getBlockHeight(heapObject)
+	const center = {
+		X: stackWidth + SEPARATOR + REGION_PADDING + position.X + BLOCK_WIDTH/2, 
+		Y: HEADER_HEIGHT + REGION_PADDING + position.Y + height/2
+	}
+
+	return center
+}
+
 const utils = {
 	constants,
 	functions: {
 		getStackFrameVariableWidth,
 		getStackFrameInputWidth,
-		getBlockHeight
+		getBlockHeight,
+		getHeapObjectCenter
 	}
 }
 

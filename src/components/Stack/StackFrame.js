@@ -3,6 +3,7 @@ import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {utils} from "../../utils"
 
 function StackFrame(props) {
@@ -11,6 +12,7 @@ function StackFrame(props) {
 
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
+	const {stackWidth} = useContext(ResizableStackContext)
 
 	const {VAR_HEIGHT, VAR_VERTICAL_MARGIN, INPUT_HEIGHT} = utils.constants
 
@@ -35,7 +37,9 @@ function StackFrame(props) {
 
 		arrows.updateStackFramesArrows("addVariable", {
 			frameID: props.id,
-			stack: app.diagram.stack
+			stack: app.diagram.stack,
+			heap: app.diagram.heap, 
+			stackWidth
 		})
 	}
 

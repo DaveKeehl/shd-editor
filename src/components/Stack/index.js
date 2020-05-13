@@ -3,6 +3,7 @@ import Header from "../Header"
 import StackFrame from "./StackFrame"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {utils} from "../../utils"
 
 function Stack() {
@@ -14,6 +15,7 @@ function Stack() {
 
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
+	const {stackWidth} = useContext(ResizableStackContext)
 
 	function addBlock() {
 		const newBlock = (
@@ -26,7 +28,10 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		arrows.updateStackFramesArrows("addFrame")
+		arrows.updateStackFramesArrows("addFrame", {
+			heap: app.diagram.heap,
+			stackWidth
+		})
 	}
 
 	function removeBlock(id) {
@@ -62,7 +67,9 @@ function Stack() {
 
 	function handleScroll() {
 		arrows.updateStackFramesArrows("scroll", {
-			newScrollAmount: stackFramesRef.current.scrollTop
+			newScrollAmount: stackFramesRef.current.scrollTop,
+			heap: app.diagram.heap,
+			stackWidth
 		})
 	}
 
