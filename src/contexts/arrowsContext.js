@@ -439,7 +439,7 @@ function ArrowsContextProvider(props) {
 
 				if (region === "stack" && start.Y > lowestArrowStartY) {
 					if (currentFrameVariablesCount === 0) {
-						start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2
+						start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2 + 1
 					}
 					else if (currentFrameVariablesCount > 0) {
 						start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
