@@ -28,7 +28,7 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		arrows.updateStackFramesArrows("addFrame", {
+		arrows.updateArrows("addStackFrame", {
 			heap: app.diagram.heap,
 			stackWidth
 		})
@@ -66,7 +66,7 @@ function Stack() {
 	}
 
 	function handleScroll() {
-		arrows.updateStackFramesArrows("scroll", {
+		arrows.updateArrows("stackScroll", {
 			newScrollAmount: stackFramesRef.current.scrollTop,
 			heap: app.diagram.heap,
 			stackWidth

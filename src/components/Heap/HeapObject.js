@@ -7,7 +7,6 @@ import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
-import Arrows from "../Arrows"
 
 function HeapObject(props) {
 	const app = useContext(StateContext)
@@ -22,16 +21,14 @@ function HeapObject(props) {
 	const [isDragged, setIsDragged] = useState(false)
 	const [localDepthIndex, setLocalDepthIndex] = useState("")
 
-	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
-
 	const obj = useRef(null)
 
 	useEffect(() => {
 		if (isDragged) {
-			const newPosition = {
-				X: mousePosition.X - stackWidth - SEPARATOR - REGION_PADDING - BLOCK_WIDTH/2, 
-				Y: mousePosition.Y - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
-			}
+			const newPosition = utils.functions.convertFromAbsoluteToRelative(
+				stackWidth, 
+				{X: mousePosition.X, Y: mousePosition.Y}
+			)
 			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
@@ -77,6 +74,14 @@ function HeapObject(props) {
 		setVariables(prevVariables => [...prevVariables, newVariable])
 		app.addHeapObjectVariable(props.id, nature)
 	}
+
+	useEffect(() => {
+		arrows.updateArrows("addHeapObjectVariable", {
+			objectID: props.id,
+			heap: app.diagram.heap,
+			stackWidth
+		})
+	}, [app.diagram.heap.find(object => object.id === props.id).variables.length])
 
 	function removeVariable(id) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))

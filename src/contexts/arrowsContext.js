@@ -347,8 +347,8 @@ function ArrowsContextProvider(props) {
 		return computeIntersection(start, center, BLOCK_WIDTH, height)
 	}
 
-	function updateStackFramesArrows(mode, configuration = undefined) {
-		if (mode === "scroll") {
+	function updateArrows(mode, configuration = undefined) {
+		if (mode === "stackScroll") {
 			const oldScrollAmount = stackScrollAmount
 			const newScrollAmount = configuration.newScrollAmount
 			const scrollOffset = oldScrollAmount - newScrollAmount
@@ -403,7 +403,7 @@ function ArrowsContextProvider(props) {
 			})
 			setArrows(updatedArrows)
 		}
-		else if (mode === "addFrame") {
+		else if (mode === "addStackFrame") {
 			const updatedArrows = arrows.map(arrow => {
 				if (arrow.from.region === "stack") {
 					let start = arrow.coordinates.start
@@ -419,7 +419,7 @@ function ArrowsContextProvider(props) {
 			})
 			setArrows(updatedArrows)
 		}
-		else if (mode === "addVariable") {
+		else if (mode === "addStackFrameVariable") {
 			const {stack, heap, stackWidth, frameID} = configuration
 			const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
 
@@ -452,6 +452,20 @@ function ArrowsContextProvider(props) {
 			})
 			setArrows(updatedArrows)
 		}
+		else if (mode === "addHeapObjectVariable") {
+			const {objectID, heap, stackWidth} = configuration
+			const updatedArrows = arrows.map(arrow => {
+				const start = arrow.coordinates.start
+				const end = arrow.coordinates.end
+				if (arrow.to === objectID) {
+					const intersection = recomputeIntersection(start, objectID, heap, stackWidth)
+					end.X = intersection.X
+					end.Y = intersection.Y
+				}
+				return arrow
+			})
+			setArrows(updatedArrows)
+		}
 		// else if (mode === "removeFrame") {
 
 		// }
@@ -475,7 +489,8 @@ function ArrowsContextProvider(props) {
 		setExactStackStartPosition,
 		setExactHeapStartPosition,
 		setExactHeapEndPosition,
-		updateStackFramesArrows
+		updateArrows,
+		recomputeIntersection
 	}
 
 	return (

@@ -77,7 +77,7 @@ function App() {
 
 		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
 		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
-		arrows.updateStackFramesArrows("resetStackWidth", {
+		arrows.updateArrows("resetStackWidth", {
 			stackWidth, 
 			INPUT_WIDTH
 		})
@@ -95,7 +95,7 @@ function App() {
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
 			const VAR_WIDTH = getStackFrameVariableWidth(clientX)
 			const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
-			arrows.updateStackFramesArrows("resizeStackWidth", {
+			arrows.updateArrows("resizeStackWidth", {
 				clientX,
 				stackWidth,
 				stackInputWidth,

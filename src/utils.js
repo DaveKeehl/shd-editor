@@ -78,13 +78,24 @@ function getHeapObjectCenter(stackWidth, heapObject) {
 	return center
 }
 
+function convertFromAbsoluteToRelative(stackWidth, absoluteCoordinates) {
+	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = constants
+	const {X,Y} = absoluteCoordinates
+	const newPosition = {
+		X: X - stackWidth - SEPARATOR - REGION_PADDING - BLOCK_WIDTH/2, 
+		Y: Y - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
+	}
+	return newPosition
+}
+
 const utils = {
 	constants,
 	functions: {
 		getStackFrameVariableWidth,
 		getStackFrameInputWidth,
 		getBlockHeight,
-		getHeapObjectCenter
+		getHeapObjectCenter,
+		convertFromAbsoluteToRelative
 	}
 }
 
