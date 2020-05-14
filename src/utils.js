@@ -88,6 +88,23 @@ function convertFromAbsoluteToRelative(stackWidth, absoluteCoordinates) {
 	return newPosition
 }
 
+function convertFromRelativeToAbsolute(stackWidth, relativeCoordinates) {
+	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = constants
+	const {X,Y} = relativeCoordinates
+	const newPosition = {
+		X: stackWidth + SEPARATOR + REGION_PADDING + X + BLOCK_WIDTH/2,
+		Y: HEADER_HEIGHT + REGION_PADDING + Y + BLOCK_PADDING + OBJECT_HANDLE_HEIGHT/2
+	}
+	return newPosition
+}
+
+function getStackFrameVirtualPosition() {
+	const virtualPosition = {
+		startY: "",
+		endY: ""
+	}
+}
+
 const utils = {
 	constants,
 	functions: {
@@ -95,7 +112,9 @@ const utils = {
 		getStackFrameInputWidth,
 		getBlockHeight,
 		getHeapObjectCenter,
-		convertFromAbsoluteToRelative
+		convertFromAbsoluteToRelative,
+		convertFromRelativeToAbsolute,
+		getStackFrameVirtualPosition
 	}
 }
 

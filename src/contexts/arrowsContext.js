@@ -466,10 +466,10 @@ function ArrowsContextProvider(props) {
 			})
 			setArrows(updatedArrows)
 		}
-		// else if (mode === "removeFrame") {
+		// else if (mode === "removeStackFrame") {
 
 		// }
-		// else if (mode === "removeVariable") {
+		// else if (mode === "removeStackFrameVariable") {
 
 		// }
 	}
