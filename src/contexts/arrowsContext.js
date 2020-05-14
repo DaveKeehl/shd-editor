@@ -457,7 +457,7 @@ function ArrowsContextProvider(props) {
 			const updatedArrows = arrows.map(arrow => {
 				const start = arrow.coordinates.start
 				const end = arrow.coordinates.end
-				if (arrow.to === objectID) {
+				if (arrow.to === objectID && arrow.from.parentId !== arrow.to) {
 					const intersection = recomputeIntersection(start, objectID, heap, stackWidth)
 					end.X = intersection.X
 					end.Y = intersection.Y
