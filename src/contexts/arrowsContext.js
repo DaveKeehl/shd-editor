@@ -457,7 +457,7 @@ function ArrowsContextProvider(props) {
 		
 		setArrows([])
 
-		console.log("started rebuilding arrows...")
+		// console.log("started rebuilding arrows...")
 
 		stack.forEach(frame => {
 			// console.log(frame)
@@ -474,7 +474,7 @@ function ArrowsContextProvider(props) {
 						coordinates: {
 							start: {
 								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-								Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.absolute + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+								Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 							},
 							end: {
 								get X() {

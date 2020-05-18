@@ -152,6 +152,7 @@ function getHoveredStackData(stack, stackWidth, stackScrollAmount, mouseY) {
 }
 
 function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
+
 	let accumulator = constants.HEADER_HEIGHT + constants.REGION_PADDING
 
 	for (const frame of stack) {
@@ -164,7 +165,7 @@ function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
 			const stackFramePosition = {
 				X: constants.REGION_PADDING,
 				Y: {
-					virtual: startY + stackScrollAmount,
+					virtual: startY - stackScrollAmount,
 					absolute: startY
 				}
 			}

@@ -28,7 +28,7 @@ function App() {
 
 	useEffect(() => {
 		setDiagram(app.diagram)
-		arrows.rebuildArrows(app.diagram, stackWidth)
+		// arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
 
 	function handleMouseDown() {

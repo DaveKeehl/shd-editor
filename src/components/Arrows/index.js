@@ -33,7 +33,7 @@ function Arrows() {
 		// 	setArrows(prev => ([...prev, arrow]))
 		// }
 
-	}, [arrowsData])
+	}, [arrowsData.length])
 
 	return (
 		<div className="arrows">
