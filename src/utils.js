@@ -50,11 +50,6 @@ function getStackFrameVariableWidth(STACK_WIDTH) {
 	return STACK_WIDTH - REGION_PADDING*2 - BLOCK_PADDING*2 - VAR_HORIZONTAL_MARGIN*2
 }
 
-// function getStackFrameInputWidth(VAR_WIDTH) {
-// 	const {VAR_HORIZONTAL_PADDING, VAR_COLUMN_GAP} = constants
-// 	return (VAR_WIDTH - VAR_HORIZONTAL_PADDING*2 - VAR_COLUMN_GAP) / 2
-// }
-
 function getStackFrameInputWidth(STACK_WIDTH) {
 	const {VAR_HORIZONTAL_PADDING, VAR_COLUMN_GAP} = constants
 	const VAR_WIDTH = getStackFrameVariableWidth(STACK_WIDTH)
@@ -234,12 +229,8 @@ const utils = {
 		getStackFrameInputWidth,
 		getBlockHeight,
 		getHeapObjectCenter,
-		getStackFrameVirtualData,
-		getHoveredHeapObject,
-		getHoveredStackData,
-		getStackFramePosition,
 		convertFromAbsoluteToRelative,
-		convertFromRelativeToAbsolute
+		convertFromRelativeToAbsolute,
 	}
 }
 

@@ -1,38 +1,24 @@
 import React, {useState, useEffect, useContext} from "react"
 import NewArrow from "./newArrow"
 import Arrow from "./Arrow"
-import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function Arrows() {
 	const [arrows, setArrows] = useState([])
 
-	const app = useContext(StateContext)
 	const {arrows: arrowsData} = useContext(ArrowsContext)
-
+	
 	useEffect(() => {
-		// console.log("change in the arrows array")
-		// console.log(arrowsData)
-		const newArrows = arrowsData.map(arrow => {
-			return (
+		const idx = arrowsData.length-1
+		if (idx >= 0) {
+			const arrow = (
 				<Arrow 
-					key={[arrow.from.id, arrow.to]}
-					data={arrow}
+					key={[arrowsData[idx].from.id, arrowsData[idx].to]} 
+					data={arrowsData[idx]} 
 				/>
 			)
-		})
-		setArrows(newArrows)
-		// const idx = arrowsData.length-1
-		// if (idx >= 0) {
-		// 	const arrow = (
-		// 		<Arrow 
-		// 			key={[arrowsData[idx].from.id, arrowsData[idx].to]} 
-		// 			data={arrowsData[idx]} 
-		// 		/>
-		// 	)
-		// 	setArrows(prev => ([...prev, arrow]))
-		// }
-
+			setArrows(prev => ([...prev, arrow]))
+		}
 	}, [arrowsData.length])
 
 	return (

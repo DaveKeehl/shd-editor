@@ -75,15 +75,9 @@ function HeapObject(props) {
 		app.addHeapObjectVariable(props.id, nature)
 	}
 
-	// useEffect(() => {
-	// 	// arrows.updateArrows("addHeapObjectVariable", {
-	// 	// 	objectID: props.id,
-	// 	// 	heap: app.diagram.heap,
-	// 	// 	stackWidth
-	// 	// })
-	// 	// arrows.rebuildArrows(app.diagram, stackWidth)
-
-	// }, [app.diagram.heap.find(object => object.id === props.id).variables.length])
+	useEffect(() => {
+		arrows.updateArrowsOnNewHeapVariable(props.id, app.diagram.heap, stackWidth)
+	}, [app.diagram.heap.find(object => object.id === props.id).variables.length])
 
 	function removeVariable(id) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))

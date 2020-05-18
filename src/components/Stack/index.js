@@ -17,10 +17,6 @@ function Stack() {
 	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 
-	useEffect(() => {
-		arrows.rebuildArrows(app.diagram, stackWidth)
-	}, [app.diagram])
-
 	function addBlock() {
 		const newBlock = (
 			<StackFrame 
@@ -32,12 +28,7 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		// arrows.updateArrows("addStackFrame", {
-		// 	heap: app.diagram.heap,
-		// 	stackWidth
-		// })
-		// arrows.rebuildArrows(app.diagram, stackWidth)
-
+		arrows.updateArrowsOnNewStackFrame(app.diagram.heap, stackWidth)
 	}
 
 	function removeBlock(id) {
@@ -46,15 +37,7 @@ function Stack() {
 	}
 
 	function handleScroll() {
-		// arrows.updateArrows("stackScroll", {
-		// 	newScrollAmount: stackFramesRef.current.scrollTop,
-		// 	heap: app.diagram.heap,
-		// 	stackWidth
-		// })
-
-		arrows.setStackScrollAmount(stackFramesRef.current.scrollTop)
-
-		arrows.rebuildArrows(app.diagram, stackWidth)
+		arrows.updateArrowsOnStackScroll(stackFramesRef.current.scrollTop, app.diagram.heap, stackWidth)
 	}
 
 	return (

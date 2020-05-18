@@ -28,7 +28,6 @@ function App() {
 
 	useEffect(() => {
 		setDiagram(app.diagram)
-		// arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
 
 	function handleMouseDown() {
@@ -43,13 +42,12 @@ function App() {
 		if (arrows.isArrowDragged) {
 			
 			arrows.setIsArrowDragged(false)
-			// const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
+			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
 
 			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
 
-				arrows.setExactHeapEndPosition("loop", stackWidth, target, event.clientX, event.clientY)
+				arrows.setExactHeapEndPositionOnLoop(stackWidth, target, event.clientX, event.clientY)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
@@ -58,7 +56,7 @@ function App() {
 			// CASE 2: ARROW-END WAS RELEASED ON A HEAP OBJECT
 			else if (target !== undefined) {
 
-				arrows.setExactHeapEndPosition("intersection", stackWidth, target)
+				arrows.setExactHeapEndPositionOnIntersection(stackWidth, target)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
@@ -78,10 +76,7 @@ function App() {
 		setStackWidth(STACK_MIN)
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
-		arrows.updateArrows("resetStackWidth", {
-			stackWidth, 
-			INPUT_WIDTH
-		})
+		arrows.updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH)
 		
 		setStackInputWidth(INPUT_MIN_WIDTH)
 	}
@@ -95,12 +90,7 @@ function App() {
 
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
 			const INPUT_WIDTH = getStackFrameInputWidth(clientX)
-			arrows.updateArrows("resizeStackWidth", {
-				clientX,
-				stackWidth,
-				stackInputWidth,
-				INPUT_WIDTH
-			})
+			arrows.updateArrowsOnStackResize(clientX, stackWidth, stackInputWidth, INPUT_WIDTH)
 			setStackWidth(clientX)
 			setStackInputWidth(INPUT_WIDTH)
 		}
