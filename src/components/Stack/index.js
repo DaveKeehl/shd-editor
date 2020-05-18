@@ -28,10 +28,12 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		arrows.updateArrows("addStackFrame", {
-			heap: app.diagram.heap,
-			stackWidth
-		})
+		// arrows.updateArrows("addStackFrame", {
+		// 	heap: app.diagram.heap,
+		// 	stackWidth
+		// })
+		// arrows.rebuildArrows(app.diagram, stackWidth)
+
 	}
 
 	function removeBlock(id) {
@@ -40,11 +42,12 @@ function Stack() {
 	}
 
 	function handleScroll() {
-		arrows.updateArrows("stackScroll", {
-			newScrollAmount: stackFramesRef.current.scrollTop,
-			heap: app.diagram.heap,
-			stackWidth
-		})
+		// arrows.updateArrows("stackScroll", {
+		// 	newScrollAmount: stackFramesRef.current.scrollTop,
+		// 	heap: app.diagram.heap,
+		// 	stackWidth
+		// })
+		arrows.rebuildArrows(app.diagram, stackWidth)
 	}
 
 	return (

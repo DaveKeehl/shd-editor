@@ -28,6 +28,7 @@ function App() {
 
 	useEffect(() => {
 		setDiagram(app.diagram)
+		arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
 
 	function handleMouseDown() {
@@ -42,12 +43,13 @@ function App() {
 		if (arrows.isArrowDragged) {
 			
 			arrows.setIsArrowDragged(false)
-			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			// const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
 
 			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
 
-				arrows.setExactHeapEndPosition("loop", stackWidth, target, event.clientY)
+				arrows.setExactHeapEndPosition("loop", stackWidth, target, event.clientX, event.clientY)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
@@ -75,8 +77,7 @@ function App() {
 	function handleDoubleClick() {
 		setStackWidth(STACK_MIN)
 
-		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
-		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
 		arrows.updateArrows("resetStackWidth", {
 			stackWidth, 
 			INPUT_WIDTH
@@ -93,8 +94,7 @@ function App() {
 		}
 
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
-			const VAR_WIDTH = getStackFrameVariableWidth(clientX)
-			const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+			const INPUT_WIDTH = getStackFrameInputWidth(clientX)
 			arrows.updateArrows("resizeStackWidth", {
 				clientX,
 				stackWidth,

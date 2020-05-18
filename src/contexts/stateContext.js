@@ -1,20 +1,6 @@
 import React, {useState} from "react"
-import {utils} from "../utils"
 
 const StateContext = React.createContext()
-
-const { HEADER_HEIGHT, 
-		REGION_PADDING, 
-		BLOCK_WIDTH, 
-		BLOCK_PADDING,
-		BLOCK_HEADER_HEIGHT,
-		BLOCK_MARGIN_BOTTOM,
-		FRAME_MIN_HEIGHT,
-		OBJECT_MIN_HEIGHT, 
-		VAR_HEIGHT, 
-		VAR_VERTICAL_MARGIN } = utils.constants
-
-const {getBlockHeight} = utils.functions
 
 function StateContextProvider(props) {
 	const [stack, setStack] = useState([])
@@ -295,75 +281,6 @@ function StateContextProvider(props) {
 		downloadable.remove()
 	}
 
-	// FUNCTIONS RELATED TO ARROWS
-
-	function getHoveredStackData(stackScrollAmount, mouseY) {
-		const virtualY = stackScrollAmount + mouseY - HEADER_HEIGHT
-		let accumulator = REGION_PADDING
-
-		for (const frame of stack) {
-
-			let startY = accumulator
-			let endY = startY + getBlockHeight(frame)
-
-			if (virtualY >= startY && virtualY <= endY) {
-
-				let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
-
-				for (const variable of frame.variables) {
-
-					let varStartY = varAccumulator
-					let varEndY = varStartY + VAR_HEIGHT
-
-					if (virtualY >= varStartY && virtualY <= varEndY) {
-
-						const result = {
-							variable: variable,
-							parent: frame
-						}
-						console.log(result)
-						return result
-
-						break
-
-					} else {
-						varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
-					}
-				}
-
-				break
-				
-			} else {
-				accumulator = (endY + BLOCK_MARGIN_BOTTOM)
-			}
-		}
-	}
-
-	const getHoveredHeapObject = (mouseX, mouseY, stackWidth) => {
-
-		let leftLimit = stackWidth + REGION_PADDING
-		let topLimit = HEADER_HEIGHT + REGION_PADDING
-
-		// Returns the object on which the mouse is over
-		const foundObject = heap.find(object => {
-			const {X,Y} = object.position
-			const height = getBlockHeight(object)
-
-			// Check if mouse is inside current analyzed object
-			if (
-				(mouseX >= leftLimit + X) && 
-				(mouseX <= leftLimit + X + BLOCK_WIDTH) && 
-				(mouseY >= topLimit + Y) && 
-				(mouseY <= topLimit + Y + height)
-			) {
-				return true
-			}
-			return false
-		})
-
-		return foundObject
-	}
-
 	// APPLICATION STATE OBJECT
 	
 	const data = {
@@ -406,9 +323,6 @@ function StateContextProvider(props) {
 
 		uploadJSON,
 		downloadJSON,
-
-		getHoveredStackData,
-		getHoveredHeapObject
 	}
 
 	return (

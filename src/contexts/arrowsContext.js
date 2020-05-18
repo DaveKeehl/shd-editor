@@ -34,7 +34,8 @@ const { HEADER_HEIGHT,
 const { getStackFrameVariableWidth, 
 		getStackFrameInputWidth, 
 		getBlockHeight, 
-		getHeapObjectCenter } = utils.functions
+		getHeapObjectCenter,
+		getStackFramePosition } = utils.functions
 
 const arrow = {
 	from: {
@@ -62,36 +63,6 @@ function ArrowsContextProvider(props) {
 	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
-
-	// USE EFFECT: Populate arrows array when new one is created
-	useEffect(() => {
-		if (!isArrowDragged && newArrow.to !== "") {
-			// console.log("new arrow is released")
-			if (arrows.length === 0) {
-				// console.log("first arrow")
-				storeNewArrow()
-				resetNewArrow()
-			} 
-			else {
-				const updated = [...arrows, newArrow]
-				// console.log(updated)
-				let found = false
-				for (const arrow of arrows) {
-					const last = updated.length-1
-					if (arrow.from.id === updated[last].from.id && arrow.to === updated[last].to) {
-						found = true
-						// console.log(`there's already an arrow starting from key=${newArrow.from.id} and ending in key=${newArrow.to}`)
-						break
-					}
-				}
-				if (!found) {
-					// console.log("new arrow here")
-					storeNewArrow()
-					resetNewArrow()
-				}
-			}
-		}
-	}, [newArrow])
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
@@ -210,8 +181,7 @@ function ArrowsContextProvider(props) {
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactStackStartPosition(stack, stackWidth, mouseY) {
-		const VAR_WIDTH = getStackFrameVariableWidth(stackWidth)
-		const INPUT_WIDTH = getStackFrameInputWidth(VAR_WIDTH)
+		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
 
 		const virtualY = stackScrollAmount + mouseY - HEADER_HEIGHT
 		let accumulator = REGION_PADDING
@@ -303,9 +273,7 @@ function ArrowsContextProvider(props) {
 	// created by connecting the start and end point of the arrow, 
 	// and the target heap object
 	// --> IT HANDLES BOTH THE LOOP AND NON-LOOP CASE
-	function setExactHeapEndPosition(mode, stackWidth, target, mouseY = undefined) {
-
-		setTo(target.id)
+	function setExactHeapEndPosition(mode, stackWidth, target, mouseX = undefined, mouseY = undefined) {
 
 		if (mode === "loop") {
 			const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
@@ -316,12 +284,17 @@ function ArrowsContextProvider(props) {
 				const varStartY = startY + accumulator
 				const varEndY = varStartY + VAR_HEIGHT
 	
+				// Find correct variable
 				if (mouseY >= varStartY && mouseY <= varEndY) {
-					setEnd({
-						X: startX + BLOCK_WIDTH, 
-						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
-					})
-					break
+					// Check if mouse is outside input field
+					if (mouseX >= startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING) {
+						setEnd({
+							X: startX + BLOCK_WIDTH, 
+							Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+						})
+						setTo(target.id)
+						break
+					}
 				} else {
 					accumulator = accumulator + VAR_HEIGHT + VAR_VERTICAL_MARGIN
 				}
@@ -337,6 +310,7 @@ function ArrowsContextProvider(props) {
 				X: intersection.X,
 				Y: intersection.Y
 			})
+			setTo(target.id)
 		}
 	}
 
@@ -474,7 +448,74 @@ function ArrowsContextProvider(props) {
 		// }
 	}
 
-	const states = {
+	// WIP: GLOBAL ARROW REBUILD
+	// Usage: This function can be used to recreate the array of arrows
+	//        based on the state of the diagram and the reference variables values
+	// Target: Any event that modifies the arrows positions
+	function rebuildArrows(diagram, stackWidth) {
+		const {stack, heap} = diagram
+		
+		setArrows([])
+
+		console.log("started rebuilding arrows...")
+
+		stack.forEach(frame => {
+			// console.log(frame)
+			frame.variables.forEach((variable,idx) => {
+				// console.log(variable)
+				if (variable.nature === "reference" && variable.value !== "") {
+					const newArrow = {
+						from: {
+							id: variable.id,
+							parentId: frame.id,
+							region: "stack"
+						},
+						to: variable.value,
+						coordinates: {
+							start: {
+								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.absolute + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+							},
+							end: {
+								get X() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.X
+								},
+								get Y() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.Y
+								}
+							}
+						}
+					}
+					setArrows(prev => ([...prev, newArrow]))
+
+					// if (arrows.length === 0) {
+					// 	setArrows([newArrow])
+					// 	// console.log("ok add this arrow to the array")
+					// }
+					// else {
+					// 	let found = false
+					// 	for (const arrow of arrows) {
+					// 		if (variable.id === arrow.from.id && variable.value === arrow.to) {
+					// 			// console.log("arrow already exists")
+					// 			found = true
+					// 			break
+					// 		}
+					// 	}
+					// 	if (!found) {
+					// 		// Add new arrow
+					// 		setArrows(prev => ([...prev, newArrow]))
+					// 	}
+					// }
+				}
+			})
+		})
+
+	} 
+
+
+	const values = {
 		arrows, setArrows,
 		newArrow,
 		setFrom,
@@ -490,11 +531,12 @@ function ArrowsContextProvider(props) {
 		setExactHeapStartPosition,
 		setExactHeapEndPosition,
 		updateArrows,
-		recomputeIntersection
+		recomputeIntersection,
+		rebuildArrows
 	}
 
 	return (
-		<ArrowsContext.Provider value={states}>
+		<ArrowsContext.Provider value={values}>
 			{props.children}
 		</ArrowsContext.Provider>
 	)

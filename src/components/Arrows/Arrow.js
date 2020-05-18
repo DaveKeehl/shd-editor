@@ -1,23 +1,31 @@
 import React, {useState, useEffect, useContext} from "react"
+import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function Arrow(props) {
 	const [width, setWidth] = useState(window.innerWidth)
 	const [height, setHeight] = useState(window.innerHeight)
 
+	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
+	const {stackWidth} = useContext(ResizableStackContext)
 
 	useEffect(
-		() => {}, 
-		[getDrawableArrows(arrows.arrows)]
+		() => {
+			return (
+				arrows.rebuildArrows(app.diagram, stackWidth)
+			)
+		}, 
+		[]
 	)
 
-	function getDrawableArrows(arrows) {
-		arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
-	}
+	// function getDrawableArrows(arrows) {
+	// 	arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+	// }
 
 	function handleMouseOver() {
-		console.log("Mouseover")
+		// console.log("Mouseover")
 	}
 
 	return (

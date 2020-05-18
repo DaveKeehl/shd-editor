@@ -35,12 +35,15 @@ function StackFrame(props) {
 		setVariables(prevVariables => [...prevVariables, newVariable])
 		app.addStackFrameVariable(props.id, nature)
 
-		arrows.updateArrows("addStackFrameVariable", {
-			frameID: props.id,
-			stack: app.diagram.stack,
-			heap: app.diagram.heap, 
-			stackWidth
-		})
+		// arrows.updateArrows("addStackFrameVariable", {
+		// 	frameID: props.id,
+		// 	stack: app.diagram.stack,
+		// 	heap: app.diagram.heap, 
+		// 	stackWidth
+		// })
+
+		// arrows.rebuildArrows(app.diagram, stackWidth)
+
 	}
 
 	function removeVariable(id) {

@@ -41,13 +41,23 @@ const constants = {
 	INPUT_MIN_WIDTH: 105,
 }
 
+function getStackFrameWidth(stackWidth) {
+	return stackWidth - constants.REGION_PADDING * 2
+}
+
 function getStackFrameVariableWidth(STACK_WIDTH) {
 	const {REGION_PADDING, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN} = constants
 	return STACK_WIDTH - REGION_PADDING*2 - BLOCK_PADDING*2 - VAR_HORIZONTAL_MARGIN*2
 }
 
-function getStackFrameInputWidth(VAR_WIDTH) {
+// function getStackFrameInputWidth(VAR_WIDTH) {
+// 	const {VAR_HORIZONTAL_PADDING, VAR_COLUMN_GAP} = constants
+// 	return (VAR_WIDTH - VAR_HORIZONTAL_PADDING*2 - VAR_COLUMN_GAP) / 2
+// }
+
+function getStackFrameInputWidth(STACK_WIDTH) {
 	const {VAR_HORIZONTAL_PADDING, VAR_COLUMN_GAP} = constants
+	const VAR_WIDTH = getStackFrameVariableWidth(STACK_WIDTH)
 	return (VAR_WIDTH - VAR_HORIZONTAL_PADDING*2 - VAR_COLUMN_GAP) / 2
 }
 
@@ -78,6 +88,124 @@ function getHeapObjectCenter(stackWidth, heapObject) {
 	return center
 }
 
+function getStackFrameVirtualData(stack, stackWidth, stackScrollAmount, mouseY) {
+
+	const virtualMouseY = stackScrollAmount + mouseY - constants.HEADER_HEIGHT
+	let accumulator = constants.REGION_PADDING
+
+	for (const frame of stack) {
+
+		let startY = accumulator
+		let endY = startY + getBlockHeight(frame)
+
+		if (virtualMouseY >= startY && virtualMouseY <= endY) {
+
+			const stackFrameVirtualData = {
+				stackFrame: frame,
+				coordinates: {
+					startX: constants.REGION_PADDING,
+					startY: startY,
+					get endX() { return this.startX + getStackFrameWidth(stackWidth) },
+					endY: endY
+				}
+			}
+
+			return stackFrameVirtualData
+			
+		} else {
+			accumulator = (endY + constants.BLOCK_MARGIN_BOTTOM)
+		}
+	}
+
+}
+
+function getHoveredStackData(stack, stackWidth, stackScrollAmount, mouseY) {
+
+	const {HEADER_HEIGHT, BLOCK_PADDING, BLOCK_HEADER_HEIGHT, VAR_VERTICAL_MARGIN, VAR_HEIGHT} = constants
+
+	const virtualMouseY = stackScrollAmount + mouseY - HEADER_HEIGHT
+
+	const stackFrameVirtualData = getStackFrameVirtualData(stack, stackWidth, stackScrollAmount, mouseY)
+	const startY = stackFrameVirtualData.coordinates.startY
+
+	let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+
+	for (const variable of stackFrameVirtualData.stackFrame.variables) {
+
+		let varStartY = varAccumulator
+		let varEndY = varStartY + VAR_HEIGHT
+
+		if (virtualMouseY >= varStartY && virtualMouseY <= varEndY) {
+
+			const result = {
+				variable: variable,
+				parent: stackFrameVirtualData.stackFrame,
+			}
+			// console.log(result)
+			return result
+
+		} else {
+			varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
+		}
+	}
+
+}
+
+function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
+	let accumulator = constants.HEADER_HEIGHT + constants.REGION_PADDING
+
+	for (const frame of stack) {
+
+		let startY = accumulator
+		let endY = startY + getBlockHeight(frame)
+
+		if (frame.id === stackFrame.id) {
+
+			const stackFramePosition = {
+				X: constants.REGION_PADDING,
+				Y: {
+					virtual: startY + stackScrollAmount,
+					absolute: startY
+				}
+			}
+
+			// console.log(stackFramePosition)
+
+			return stackFramePosition
+			
+		} else {
+			accumulator = (endY + constants.BLOCK_MARGIN_BOTTOM)
+		}
+	}
+}
+
+function getHoveredHeapObject(heap, mouseX, mouseY, stackWidth) {
+
+	const {REGION_PADDING, HEADER_HEIGHT, BLOCK_WIDTH} = constants
+
+	let leftLimit = stackWidth + REGION_PADDING
+	let topLimit = HEADER_HEIGHT + REGION_PADDING
+
+	// Returns the object on which the mouse is over
+	const foundObject = heap.find(object => {
+		const {X,Y} = object.position
+		const height = getBlockHeight(object)
+
+		// Check if mouse is inside current analyzed object
+		if (
+			(mouseX >= leftLimit + X) && 
+			(mouseX <= leftLimit + X + BLOCK_WIDTH) && 
+			(mouseY >= topLimit + Y) && 
+			(mouseY <= topLimit + Y + height)
+		) {
+			return true
+		}
+		return false
+	})
+	// console.log(foundObject)
+	return foundObject
+}
+
 function convertFromAbsoluteToRelative(stackWidth, absoluteCoordinates) {
 	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = constants
 	const {X,Y} = absoluteCoordinates
@@ -98,13 +226,6 @@ function convertFromRelativeToAbsolute(stackWidth, relativeCoordinates) {
 	return newPosition
 }
 
-function getStackFrameVirtualPosition() {
-	const virtualPosition = {
-		startY: "",
-		endY: ""
-	}
-}
-
 const utils = {
 	constants,
 	functions: {
@@ -112,9 +233,12 @@ const utils = {
 		getStackFrameInputWidth,
 		getBlockHeight,
 		getHeapObjectCenter,
+		getStackFrameVirtualData,
+		getHoveredHeapObject,
+		getHoveredStackData,
+		getStackFramePosition,
 		convertFromAbsoluteToRelative,
-		convertFromRelativeToAbsolute,
-		getStackFrameVirtualPosition
+		convertFromRelativeToAbsolute
 	}
 }
 
