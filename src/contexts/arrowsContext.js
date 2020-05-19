@@ -314,7 +314,13 @@ function ArrowsContextProvider(props) {
 	}
 
 	function recomputeIntersection(start, to, heap, stackWidth) {
+		// console.log(`recomputing intersection to ${to}`)
 		const heapObject = heap.find(object => object.id === to)
+		if (!heapObject) {
+			return
+		}
+		// console.log("Heap object:")
+		// console.log(heapObject)
 		const center = getHeapObjectCenter(stackWidth, heapObject)
 		const height = getBlockHeight(heapObject)
 		return computeIntersection(start, center, BLOCK_WIDTH, height)
@@ -449,37 +455,76 @@ function ArrowsContextProvider(props) {
 		stack.forEach(frame => {
 			// console.log(frame)
 			frame.variables.forEach((variable,idx) => {
-				console.log(variable)
-				if (variable.nature === "reference" && variable.value !== "" && heap.find(obj => obj.id === variable.value) !== undefined) {
-					const newArrow = {
-						from: {
-							id: variable.id,
-							parentId: frame.id,
-							region: "stack"
-						},
-						to: variable.value,
-						coordinates: {
-							start: {
-								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-								Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+				// console.log(variable)
+				// console.log("reading variable")
+				// console.log(heap.find(obj => obj.id === variable.value))
+				if (heap.find(obj => obj.id === variable.value) !== undefined) {
+					// console.log("target exist")
+					if (variable.nature === "reference" && variable.value !== "") {
+						// console.log("INNNNN")
+						const newArrow = {
+							from: {
+								id: variable.id,
+								parentId: frame.id,
+								region: "stack"
 							},
-							end: {
-								X: "",
-								Y: "",
-								get X() {
-									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									return intersection.X
+							to: variable.value,
+							coordinates: {
+								start: {
+									X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+									Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 								},
-								get Y() {
-									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									return intersection.Y
+								end: {
+									X: "",
+									Y: "",
+									get X() {
+										console.log(heap)
+										const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+										return intersection.X
+									},
+									get Y() {
+										const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+										return intersection.Y
+									}
 								}
-							}
-						},
-						zIndex: heap.find(object => object.id === variable.value).depthIndex
+							},
+							zIndex: heap.find(object => object.id === variable.value).depthIndex
+						}
+						setArrows(prev => ([...prev, newArrow]))
 					}
-					setArrows(prev => ([...prev, newArrow]))
 				}
+				// if (variable.nature === "reference" && variable.value !== "" && heap.find(obj => obj.id === variable.value) !== undefined) {
+				// 	console.log("INNNNN")
+				// 	const newArrow = {
+				// 		from: {
+				// 			id: variable.id,
+				// 			parentId: frame.id,
+				// 			region: "stack"
+				// 		},
+				// 		to: variable.value,
+				// 		coordinates: {
+				// 			start: {
+				// 				X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+				// 				Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+				// 			},
+				// 			end: {
+				// 				X: "",
+				// 				Y: "",
+				// 				get X() {
+				// 					// console.log(heap)
+				// 					const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+				// 					return intersection.X
+				// 				},
+				// 				get Y() {
+				// 					const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+				// 					return intersection.Y
+				// 				}
+				// 			}
+				// 		},
+				// 		zIndex: heap.find(object => object.id === variable.value).depthIndex
+				// 	}
+				// 	setArrows(prev => ([...prev, newArrow]))
+				// }
 			})
 		})
 
@@ -550,6 +595,7 @@ function ArrowsContextProvider(props) {
 			})
 		})
 
+		console.log("end rebuild")
 	}
 
 	const states = {

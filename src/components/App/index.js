@@ -28,6 +28,7 @@ function App() {
 
 	useEffect(() => {
 		setDiagram(app.diagram)
+		console.log(app.diagram)
 		arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
 

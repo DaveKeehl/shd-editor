@@ -321,7 +321,7 @@ function StateContextProvider(props) {
 							variable: variable,
 							parent: frame
 						}
-						console.log(result)
+						// console.log(result)
 						return result
 
 						break

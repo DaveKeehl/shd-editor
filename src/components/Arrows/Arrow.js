@@ -7,8 +7,17 @@ function Arrow(props) {
 
 	const arrows = useContext(ArrowsContext)
 
+	// console.log("rendering arrow")
+
+
+	useEffect(() => {
+		console.log("rendering arrow")
+	})
+
 	useEffect(
-		() => {}, 
+		() => {
+			console.log(props.data.coordinates.end.X)
+		}, 
 		[getDrawableArrows(arrows.arrows)]
 	)
 
