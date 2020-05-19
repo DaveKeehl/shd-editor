@@ -13,7 +13,7 @@ function Arrow(props) {
 	)
 
 	function getDrawableArrows(arrows) {
-		arrows.filter(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
 	}
 
 	function handleMouseOver() {

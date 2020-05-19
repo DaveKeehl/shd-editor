@@ -34,7 +34,8 @@ const { HEADER_HEIGHT,
 const { getStackFrameVariableWidth, 
 		getStackFrameInputWidth, 
 		getBlockHeight, 
-		getHeapObjectCenter } = utils.functions
+		getHeapObjectCenter,
+		getStackFramePosition } = utils.functions
 
 const arrow = {
 	from: {
@@ -329,9 +330,9 @@ function ArrowsContextProvider(props) {
 				let end = arrow.coordinates.end
 				
 				start.Y = start.Y + scrollOffset
-				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				end.X = intersection.X
-				end.Y = intersection.Y
+				// const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+				// end.X = intersection.X
+				// end.Y = intersection.Y
 			}
 			return arrow
 		})
@@ -377,9 +378,9 @@ function ArrowsContextProvider(props) {
 				let end = arrow.coordinates.end
 
 				start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
-				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				end.X = intersection.X
-				end.Y = intersection.Y
+				// const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+				// end.X = intersection.X
+				// end.Y = intersection.Y
 			}
 			return arrow
 		})
@@ -433,6 +434,59 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
+	function updateArrowsOnRemoveStackFrame() {
+
+	}
+
+	// WIP: GLOBAL ARROW REBUILD
+	// Usage: This function can be used to recreate the array of arrows
+	//        based on the state of the diagram and the reference variables values
+	// Target: Any event that modifies the arrows positions
+	function rebuildArrows(diagram, stackWidth) {
+		const {stack, heap} = diagram
+		
+		setArrows([])
+
+		console.log("started rebuilding arrows...")
+
+		stack.forEach(frame => {
+			// console.log(frame)
+			frame.variables.forEach((variable,idx) => {
+				// console.log(variable)
+				if (variable.nature === "reference" && variable.value !== "") {
+					const newArrow = {
+						from: {
+							id: variable.id,
+							parentId: frame.id,
+							region: "stack"
+						},
+						to: variable.value,
+						coordinates: {
+							start: {
+								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+							},
+							end: {
+								X: "",
+								Y: "",
+								get X() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.X
+								},
+								get Y() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.Y
+								}
+							}
+						}
+					}
+					setArrows(prev => ([...prev, newArrow]))
+				}
+			})
+		})
+
+	}
+
 	const states = {
 		arrows, setArrows,
 		newArrow,
@@ -455,7 +509,8 @@ function ArrowsContextProvider(props) {
 		updateArrowsOnNewStackFrame,
 		updateArrowsOnNewStackVariable,
 		updateArrowsOnNewHeapVariable,
-		recomputeIntersection
+		recomputeIntersection,
+		rebuildArrows
 	}
 
 	return (

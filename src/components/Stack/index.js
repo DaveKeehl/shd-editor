@@ -28,7 +28,7 @@ function Stack() {
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
 
-		arrows.updateArrowsOnNewStackFrame(app.diagram.heap, stackWidth)
+		// arrows.updateArrowsOnNewStackFrame(app.diagram.heap, stackWidth)
 	}
 
 	function removeBlock(id) {
