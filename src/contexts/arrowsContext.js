@@ -18,6 +18,7 @@ const { HEADER_HEIGHT,
 
 		OBJECT_START_FIRST_VAR,
 		OBJECT_MIN_HEIGHT,
+		OBJECT_HANDLE_FULL_HEIGHT,
 
 		FRAME_MIN_HEIGHT,
 		
@@ -434,10 +435,6 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
-	function updateArrowsOnRemoveStackFrame() {
-
-	}
-
 	// WIP: GLOBAL ARROW REBUILD
 	// Usage: This function can be used to recreate the array of arrows
 	//        based on the state of the diagram and the reference variables values
@@ -490,6 +487,36 @@ function ArrowsContextProvider(props) {
 			object.variables.forEach((variable,idx) => {
 				if (variable.nature === "reference" && variable.value !== "") {
 					console.log("bingo")
+					const newArrow = {
+						from: {
+							id: variable.id,
+							parentId: object.id,
+							region: "heap"
+						},
+						to: variable.value,
+						coordinates: {
+							start: {
+								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2,
+							},
+							end: {
+								// X: 500,
+								// Y: 500,
+								X: "",
+								Y: "",
+								get X() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.X
+								},
+								get Y() {
+									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									return intersection.Y
+								}
+							}
+						},
+						zIndex: object.depthIndex+1
+					}
+					setArrows(prev => ([...prev, newArrow]))
 				}
 			})
 		})
