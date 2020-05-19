@@ -449,8 +449,8 @@ function ArrowsContextProvider(props) {
 		stack.forEach(frame => {
 			// console.log(frame)
 			frame.variables.forEach((variable,idx) => {
-				// console.log(variable)
-				if (variable.nature === "reference" && variable.value !== "") {
+				console.log(variable)
+				if (variable.nature === "reference" && variable.value !== "" && heap.find(obj => obj.id === variable.value) !== undefined) {
 					const newArrow = {
 						from: {
 							id: variable.id,
@@ -485,7 +485,7 @@ function ArrowsContextProvider(props) {
 
 		heap.forEach(object => {
 			object.variables.forEach((variable,idx) => {
-				if (variable.nature === "reference" && variable.value !== "") {
+				if (variable.nature === "reference" && variable.value !== "" && heap.find(obj => obj.id === variable.value) !== undefined) {
 					if (variable.value === object.id) {
 						//LOOP
 						const newArrow = {
@@ -509,14 +509,6 @@ function ArrowsContextProvider(props) {
 									get Y() {
 										return newArrow.coordinates.start.Y 
 									}
-									// get X() {
-									// 	const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									// 	return intersection.X
-									// },
-									// get Y() {
-									// 	const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									// 	return intersection.Y
-									// }
 								}
 							},
 							zIndex: object.depthIndex+1
