@@ -486,37 +486,74 @@ function ArrowsContextProvider(props) {
 		heap.forEach(object => {
 			object.variables.forEach((variable,idx) => {
 				if (variable.nature === "reference" && variable.value !== "") {
-					console.log("bingo")
-					const newArrow = {
-						from: {
-							id: variable.id,
-							parentId: object.id,
-							region: "heap"
-						},
-						to: variable.value,
-						coordinates: {
-							start: {
-								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2,
+					if (variable.value === object.id) {
+						//LOOP
+						const newArrow = {
+							from: {
+								id: variable.id,
+								parentId: object.id,
+								region: "heap"
 							},
-							end: {
-								// X: 500,
-								// Y: 500,
-								X: "",
-								Y: "",
-								get X() {
-									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									return intersection.X
+							to: variable.value,
+							coordinates: {
+								start: {
+									X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+									Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2,
 								},
-								get Y() {
-									const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
-									return intersection.Y
+								end: {
+									X: "",
+									Y: "",
+									get X() {
+										return newArrow.coordinates.start.X + getStackFrameInputWidth(stackWidth)/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING 
+									},
+									get Y() {
+										return newArrow.coordinates.start.Y 
+									}
+									// get X() {
+									// 	const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									// 	return intersection.X
+									// },
+									// get Y() {
+									// 	const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+									// 	return intersection.Y
+									// }
 								}
-							}
-						},
-						zIndex: object.depthIndex+1
+							},
+							zIndex: object.depthIndex+1
+						}
+						setArrows(prev => ([...prev, newArrow]))
 					}
-					setArrows(prev => ([...prev, newArrow]))
+					else {
+						// INTERSECTION
+						const newArrow = {
+							from: {
+								id: variable.id,
+								parentId: object.id,
+								region: "heap"
+							},
+							to: variable.value,
+							coordinates: {
+								start: {
+									X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+									Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2,
+								},
+								end: {
+									X: "",
+									Y: "",
+									get X() {
+										const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+										return intersection.X
+									},
+									get Y() {
+										const intersection = recomputeIntersection(newArrow.coordinates.start, variable.value, heap, stackWidth)
+										return intersection.Y
+									}
+								}
+							},
+							zIndex: object.depthIndex+1
+						}
+						setArrows(prev => ([...prev, newArrow]))
+					}
 				}
 			})
 		})
