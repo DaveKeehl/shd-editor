@@ -31,6 +31,10 @@ function App() {
 		arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
 
+	useEffect(() => {
+		arrows.rebuildArrows(app.diagram, stackWidth)
+	}, [stackWidth])
+
 	function handleMouseDown() {
 		setIsResizable(true)
 		separator.current.style.background = "#c3c3c3"
@@ -124,4 +128,4 @@ function App() {
 	)
 }
 
-export default App
+export default React.memo(App)

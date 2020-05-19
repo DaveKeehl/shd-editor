@@ -447,7 +447,7 @@ function ArrowsContextProvider(props) {
 		
 		setArrows([])
 
-		console.log("started rebuilding arrows...")
+		// console.log("started rebuilding arrows...")
 
 		stack.forEach(frame => {
 			// console.log(frame)
@@ -478,7 +478,8 @@ function ArrowsContextProvider(props) {
 									return intersection.Y
 								}
 							}
-						}
+						},
+						zIndex: heap.find(object => object.id === variable.value).depthIndex
 					}
 					setArrows(prev => ([...prev, newArrow]))
 				}

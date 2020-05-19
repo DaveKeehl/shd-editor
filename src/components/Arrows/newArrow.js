@@ -2,8 +2,8 @@ import React, {useState, useEffect, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function NewArrow() {
-	const [width, setWidth] = useState(window.innerWidth)
-	const [height, setHeight] = useState(window.innerHeight)
+	const [width, setWidth] = useState(window.screen.width)
+	const [height, setHeight] = useState(window.screen.height)
 
 	const {isArrowDragged, newArrow, arrows, storeNewArrow, resetNewArrow} = useContext(ArrowsContext)
 

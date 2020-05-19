@@ -45,4 +45,4 @@ function Arrows() {
 	)
 }
 
-export default Arrows
+export default React.memo(Arrows)

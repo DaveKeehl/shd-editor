@@ -2,8 +2,8 @@ import React, {useState, useEffect, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function Arrow(props) {
-	const [width, setWidth] = useState(window.innerWidth)
-	const [height, setHeight] = useState(window.innerHeight)
+	const [width, setWidth] = useState(window.screen.width)
+	const [height, setHeight] = useState(window.screen.height)
 
 	const arrows = useContext(ArrowsContext)
 
@@ -28,6 +28,7 @@ function Arrow(props) {
 			fill="none" 
 			xmlns="http://www.w3.org/2000/svg"
 			onMouseOver={handleMouseOver}
+			style={{zIndex: `${props.data.zIndex}`}}
 		>
 			<path 
 				d={`
