@@ -12,7 +12,7 @@ function Arrows() {
 	const {arrows: arrowsData, rebuildArrows} = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 	
-	console.log(arrowsData.length)
+	// console.log(arrowsData.length)
 
 
 	useEffect(() => {

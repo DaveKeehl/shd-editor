@@ -17,17 +17,6 @@ function ObjectHeader(props) {
 			updateVariableValues(app.diagram, props.id)
 		}
 
-		// console.log(app.diagram.stack.find(frame => frame.id === props.id))
-		
-		// console.log(props.id)
-		// console.log(arrows.arrows)
-
-		// ARROWS TO BE DELETED
-		// const updatedArrows = arrows.arrows.filter(arrow => arrow.from.parentId === props.id)
-		
-		// console.log(updatedArrows)
-		// arrows.setArrows(updatedArrows)
-
 	}
 
 	function updateVariableValues(diagram, objectID) {
