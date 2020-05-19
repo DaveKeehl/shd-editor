@@ -486,6 +486,14 @@ function ArrowsContextProvider(props) {
 			})
 		})
 
+		heap.forEach(object => {
+			object.variables.forEach((variable,idx) => {
+				if (variable.nature === "reference" && variable.value !== "") {
+					console.log("bingo")
+				}
+			})
+		})
+
 	}
 
 	const states = {

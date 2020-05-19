@@ -52,7 +52,7 @@ function App() {
 			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
 
-				arrows.setExactHeapEndPositionOnLoop(stackWidth, target, event.clientX, event.clientY)
+				// arrows.setExactHeapEndPositionOnLoop(stackWidth, target, event.clientX, event.clientY)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
@@ -61,7 +61,7 @@ function App() {
 			// CASE 2: ARROW-END WAS RELEASED ON A HEAP OBJECT
 			else if (target !== undefined) {
 
-				arrows.setExactHeapEndPositionOnIntersection(stackWidth, target)
+				// arrows.setExactHeapEndPositionOnIntersection(stackWidth, target)
 
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
