@@ -314,10 +314,7 @@ function ArrowsContextProvider(props) {
 	}
 
 	function recomputeIntersection(start, to, heap, stackWidth) {
-		// console.log(`recomputing intersection to ${to}`)
 		const heapObject = heap.find(object => object.id === to)
-		// console.log("Heap object:")
-		// console.log(heapObject)
 		const center = getHeapObjectCenter(stackWidth, heapObject)
 		const height = getBlockHeight(heapObject)
 		return computeIntersection(start, center, BLOCK_WIDTH, height)
@@ -445,22 +442,13 @@ function ArrowsContextProvider(props) {
 	function rebuildArrows(diagram, stackWidth) {
 		const {stack, heap} = diagram
 		
-		// console.log(heap)
-
 		setArrows([])
 
-		// console.log("started rebuilding arrows...")
-
 		stack.forEach(frame => {
-			// console.log(frame)
 			frame.variables.forEach((variable,idx) => {
-				// console.log(variable)
-				// console.log("reading variable")
-				// console.log(heap.find(obj => obj.id === variable.value))
-				if (heap.find(obj => obj.id === variable.value) !== undefined) {
-					// console.log("target exist")
-					if (variable.nature === "reference" && variable.value !== "") {
-						console.log(heap)
+
+				if (variable.nature === "reference" && variable.value !== "") {
+					if (heap.find(obj => obj.id === variable.value) !== undefined) {
 
 						const start = {
 							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
@@ -472,7 +460,6 @@ function ArrowsContextProvider(props) {
 							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
 						}
 
-						// console.log("INNNNN")
 						const newArrow = {
 							from: {
 								id: variable.id,
@@ -494,68 +481,72 @@ function ArrowsContextProvider(props) {
 
 		heap.forEach(object => {
 			object.variables.forEach((variable,idx) => {
-				if (variable.nature === "reference" && variable.value !== "" && heap.find(obj => obj.id === variable.value) !== undefined) {
-					if (variable.value === object.id) {
-						//LOOP
+				
+				if (variable.nature === "reference" && variable.value !== "") {
+					if (heap.find(obj => obj.id === variable.value) !== undefined) {
 
-						const start = {
-							X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-							Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
-						}
+						if (variable.value === object.id) {
 
-						const end = {
-							X: start.X + getStackFrameInputWidth(stackWidth)/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING,
-							Y: start.Y
-						}
+							//LOOP
 
-						const newArrow = {
-							from: {
-								id: variable.id,
-								parentId: object.id,
-								region: "heap"
-							},
-							to: variable.value,
-							coordinates: {
-								start,
-								end
-							},
-							zIndex: object.depthIndex+1
+							const start = {
+								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+							}
+	
+							const end = {
+								X: start.X + getStackFrameInputWidth(stackWidth)/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING,
+								Y: start.Y
+							}
+	
+							const newArrow = {
+								from: {
+									id: variable.id,
+									parentId: object.id,
+									region: "heap"
+								},
+								to: variable.value,
+								coordinates: {
+									start,
+									end
+								},
+								zIndex: object.depthIndex+1
+							}
+							setArrows(prev => ([...prev, newArrow]))
 						}
-						setArrows(prev => ([...prev, newArrow]))
-					}
-					else {
-						// INTERSECTION
-
-						const start = {
-							X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-							Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+						else {
+							
+							// INTERSECTION
+	
+							const start = {
+								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+							}
+	
+							const end = {
+								X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
+								Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
+							}
+	
+							const newArrow = {
+								from: {
+									id: variable.id,
+									parentId: object.id,
+									region: "heap"
+								},
+								to: variable.value,
+								coordinates: {
+									start,
+									end
+								},
+								zIndex: object.depthIndex+1
+							}
+							setArrows(prev => ([...prev, newArrow]))
 						}
-
-						const end = {
-							X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
-							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
-						}
-
-						const newArrow = {
-							from: {
-								id: variable.id,
-								parentId: object.id,
-								region: "heap"
-							},
-							to: variable.value,
-							coordinates: {
-								start,
-								end
-							},
-							zIndex: object.depthIndex+1
-						}
-						setArrows(prev => ([...prev, newArrow]))
 					}
 				}
 			})
 		})
-
-		console.log("end rebuild")
 	}
 
 	const states = {
