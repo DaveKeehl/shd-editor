@@ -334,9 +334,9 @@ function ArrowsContextProvider(props) {
 				let end = arrow.coordinates.end
 				
 				start.Y = start.Y + scrollOffset
-				// const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				// end.X = intersection.X
-				// end.Y = intersection.Y
+				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+				end.X = intersection.X
+				end.Y = intersection.Y
 			}
 			return arrow
 		})
@@ -382,9 +382,9 @@ function ArrowsContextProvider(props) {
 				let end = arrow.coordinates.end
 
 				start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
-				// const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				// end.X = intersection.X
-				// end.Y = intersection.Y
+				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+				end.X = intersection.X
+				end.Y = intersection.Y
 			}
 			return arrow
 		})
