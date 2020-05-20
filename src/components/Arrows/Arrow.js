@@ -17,6 +17,16 @@ function Arrow(props) {
 		// console.log("Mouseover")
 	}
 
+	const start = {
+		X: props.data.coordinates.start.X,
+		Y: props.data.coordinates.start.Y
+	}
+
+	const end = {
+		X: props.data.coordinates.end.X,
+		Y: props.data.coordinates.end.Y
+	}
+
 	return (
 		<svg 
 			width={width} 
@@ -26,14 +36,13 @@ function Arrow(props) {
 			xmlns="http://www.w3.org/2000/svg"
 			onMouseOver={handleMouseOver}
 			style={{zIndex: `${props.data.zIndex}`}}
+			className={props.data.from.region === "stack" ? "arrows__stack" : "arrows__heap"}
 		>
 			<path 
 				d={`
-					M ${props.data.coordinates.start.X} ${props.data.coordinates.start.Y}
-					L ${props.data.coordinates.end.X} ${props.data.coordinates.end.Y}
+					M ${start.X} ${start.Y}
+					L ${end.X} ${end.Y}
 				`} 
-				stroke="black" 
-				strokeWidth="2" 
 				pointerEvents="visible"
 			/>
 		</svg>
