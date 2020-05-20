@@ -24,7 +24,6 @@ function App() {
 	const separator = useRef(null)
 
 	const {STACK_MIN, STACK_MAX, INPUT_MIN_WIDTH} = utils.constants
-	const {getStackFrameVariableWidth, getStackFrameInputWidth} = utils.functions
 
 	useEffect(() => {
 		setDiagram(app.diagram)
@@ -43,22 +42,15 @@ function App() {
 		if (arrows.isArrowDragged) {
 			
 			arrows.setIsArrowDragged(false)
-			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
+			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
 
 			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
 			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
-
-				// arrows.setExactHeapEndPositionOnLoop(stackWidth, target, event.clientX, event.clientY)
-
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
-
 			}
 			// CASE 2: ARROW-END WAS RELEASED ON A HEAP OBJECT
 			else if (target !== undefined) {
-
-				// arrows.setExactHeapEndPositionOnIntersection(stackWidth, target)
-
 				const {region, parentId, id} = arrows.newArrow.from
 				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
 			}
@@ -75,22 +67,18 @@ function App() {
 
 	function handleDoubleClick() {
 		setStackWidth(STACK_MIN)
-
-		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
+		const INPUT_WIDTH = utils.functions.getStackFrameInputWidth(stackWidth)
 		arrows.updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH)
-		
 		setStackInputWidth(INPUT_MIN_WIDTH)
 	}
 
 	function handleMouseMove(event) {
 		const {clientX, clientY} = event
-
 		if (arrows.isArrowDragged) {
 			arrows.setEnd({X: clientX, Y: clientY})
 		}
-
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
-			const INPUT_WIDTH = getStackFrameInputWidth(clientX)
+			const INPUT_WIDTH = utils.functions.getStackFrameInputWidth(clientX)
 			arrows.updateArrowsOnStackResize(clientX, stackWidth, stackInputWidth, INPUT_WIDTH)
 			setStackWidth(clientX)
 			setStackInputWidth(INPUT_WIDTH)
@@ -124,4 +112,4 @@ function App() {
 	)
 }
 
-export default App
+export default React.memo(App)

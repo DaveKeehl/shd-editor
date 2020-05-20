@@ -20,13 +20,11 @@ function ArrowStart(props) {
 		// SET START+END COORDINATES AT THE BEGINNING
 		if (props.region === "heap") {
 			// HEAP
-			const target = app.getHoveredHeapObject(event.clientX, event.clientY, stackWidth)
-			// const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
+			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
 			arrows.setExactHeapStartPosition(stackWidth, target, event.clientY)
 		} else {
 			// STACK
 			arrows.setExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
-			// app.getHoveredStackData(arrows.stackScrollAmount, event.clientY)
 			utils.functions.getHoveredStackData(app.diagram.stack, stackWidth, arrows.stackScrollAmount, event.clientY)
 		}
 	}
