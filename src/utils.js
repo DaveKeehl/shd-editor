@@ -90,7 +90,7 @@ function getStackFrameVirtualData(stack, stackWidth, stackScrollAmount, mouseY) 
 
 	for (const frame of stack) {
 
-		console.log(frame)
+		// console.log(frame)
 
 		let startY = accumulator
 		let endY = startY + getBlockHeight(frame)
@@ -233,6 +233,8 @@ const utils = {
 		getHeapObjectCenter,
 		getStackFramePosition,
 		getStackFrameVirtualData,
+		getHoveredStackData,
+		getHoveredHeapObject,
 		convertFromAbsoluteToRelative,
 		convertFromRelativeToAbsolute,
 	}

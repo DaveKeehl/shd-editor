@@ -3,20 +3,13 @@ import NewArrow from "./newArrow"
 import Arrow from "./Arrow"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
-import {ResizableStackContext} from "../../contexts/resizableStackContext"
 
 function Arrows() {
 	const [arrows, setArrows] = useState([])
 
-	const app = useContext(StateContext)
-	const {arrows: arrowsData, rebuildArrows} = useContext(ArrowsContext)
-	const {stackWidth} = useContext(ResizableStackContext)
+	const {arrows: arrowsData} = useContext(ArrowsContext)
 	
-	// console.log(arrowsData.length)
-
-
 	useEffect(() => {
-		console.log(arrowsData.length)
 		const newArrows = arrowsData.map(arrow => {
 			return (
 				<Arrow 
@@ -49,4 +42,4 @@ function Arrows() {
 	)
 }
 
-export default React.memo(Arrows)
+export default Arrows

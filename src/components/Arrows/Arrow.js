@@ -7,19 +7,7 @@ function Arrow(props) {
 
 	const arrows = useContext(ArrowsContext)
 
-	// console.log("rendering arrow")
-
-
-	useEffect(() => {
-		console.log("rendering arrow")
-	})
-
-	useEffect(
-		() => {
-			console.log(props.data.coordinates.end.X)
-		}, 
-		[getDrawableArrows(arrows.arrows)]
-	)
+	useEffect(() => {}, [getDrawableArrows(arrows.arrows)])
 
 	function getDrawableArrows(arrows) {
 		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)

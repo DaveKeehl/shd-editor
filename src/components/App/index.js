@@ -28,13 +28,8 @@ function App() {
 
 	useEffect(() => {
 		setDiagram(app.diagram)
-		console.log(app.diagram)
 		arrows.rebuildArrows(app.diagram, stackWidth)
 	}, [app.diagram])
-
-	useEffect(() => {
-		arrows.rebuildArrows(app.diagram, stackWidth)
-	}, [stackWidth])
 
 	function handleMouseDown() {
 		setIsResizable(true)
@@ -82,7 +77,7 @@ function App() {
 		setStackWidth(STACK_MIN)
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
-		// arrows.updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH)
+		arrows.updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH)
 		
 		setStackInputWidth(INPUT_MIN_WIDTH)
 	}
@@ -96,7 +91,7 @@ function App() {
 
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
 			const INPUT_WIDTH = getStackFrameInputWidth(clientX)
-			// arrows.updateArrowsOnStackResize(clientX, stackWidth, stackInputWidth, INPUT_WIDTH)
+			arrows.updateArrowsOnStackResize(clientX, stackWidth, stackInputWidth, INPUT_WIDTH)
 			setStackWidth(clientX)
 			setStackInputWidth(INPUT_WIDTH)
 		}
@@ -129,4 +124,4 @@ function App() {
 	)
 }
 
-export default React.memo(App)
+export default App
