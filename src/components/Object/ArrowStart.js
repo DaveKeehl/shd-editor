@@ -25,7 +25,7 @@ function ArrowStart(props) {
 		} else {
 			// STACK
 			arrows.setExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
-			utils.functions.getHoveredStackData(app.diagram.stack, stackWidth, arrows.stackScrollAmount, event.clientY)
+			// utils.functions.getHoveredStackData(app.diagram.stack, stackWidth, arrows.stackScrollAmount, event.clientY)
 		}
 	}
 

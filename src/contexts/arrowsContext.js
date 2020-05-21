@@ -182,6 +182,8 @@ function ArrowsContextProvider(props) {
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactStackStartPosition(stack, stackWidth, mouseY) {
+		const {HEADER_HEIGHT, REGION_PADDING, BLOCK_MARGIN_BOTTOM} = utils.constants
+
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
 
 		const virtualY = stackScrollAmount + mouseY - HEADER_HEIGHT
@@ -194,10 +196,14 @@ function ArrowsContextProvider(props) {
 
 			if (virtualY >= startY && virtualY <= endY) {
 
+				const {BLOCK_PADDING, BLOCK_HEADER_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
+
 				let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
 
 				// 1. Find closest variable
 				for (const variable of frame.variables) {
+
+					const {VAR_HEIGHT, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_ROW_GAP} = utils.constants
 
 					let varStartY = varAccumulator
 					let varEndY = varStartY + VAR_HEIGHT
@@ -237,12 +243,16 @@ function ArrowsContextProvider(props) {
 	// Given the heap object where the mouse is over, and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactHeapStartPosition(stackWidth, target, mouseY) {
+		const {SEPARATOR, REGION_PADDING, HEADER_HEIGHT, OBJECT_START_FIRST_VAR} = utils.constants
+
 		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
 		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
 
 		let accumulator = OBJECT_START_FIRST_VAR
 
 		for (const variable of target.variables) {
+
+			const {VAR_HEIGHT, BLOCK_WIDTH, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, INPUT_MIN_WIDTH, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
 
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
@@ -273,11 +283,15 @@ function ArrowsContextProvider(props) {
 	// It sets the coordinates of the end point of the new arrow when a loop occurs
 	// (an object on the heap points to itself)
 	function setExactHeapEndPositionOnLoop(stackWidth, target, mouseX, mouseY) {
+		const {SEPARATOR, REGION_PADDING, HEADER_HEIGHT, OBJECT_START_FIRST_VAR} = utils.constants
+
 		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
 		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
 		let accumulator = OBJECT_START_FIRST_VAR
 
 		for (const variable of target.variables) {
+			const {VAR_HEIGHT, BLOCK_WIDTH, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
+
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
 
@@ -305,7 +319,7 @@ function ArrowsContextProvider(props) {
 		const start = newArrow.coordinates.start
 		const center = getHeapObjectCenter(stackWidth, target)
 		const height = getBlockHeight(target)
-		const intersection = computeIntersection(start, center, BLOCK_WIDTH, height)
+		const intersection = computeIntersection(start, center, utils.constants.BLOCK_WIDTH, height)
 		setEnd({
 			X: intersection.X,
 			Y: intersection.Y
@@ -317,7 +331,7 @@ function ArrowsContextProvider(props) {
 		const heapObject = heap.find(object => object.id === to)
 		const center = getHeapObjectCenter(stackWidth, heapObject)
 		const height = getBlockHeight(heapObject)
-		return computeIntersection(start, center, BLOCK_WIDTH, height)
+		return computeIntersection(start, center, utils.constants.BLOCK_WIDTH, height)
 	}
 
 	function updateArrowsOnStackScroll(newScrollAmount, heap, stackWidth) {
@@ -357,8 +371,8 @@ function ArrowsContextProvider(props) {
 	}
 
 	function updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH) {
-		const resizeOffset = stackWidth - STACK_MIN
-		const inputOffset = INPUT_WIDTH - INPUT_MIN_WIDTH
+		const resizeOffset = stackWidth - utils.constants.STACK_MIN
+		const inputOffset = INPUT_WIDTH - utils.constants.INPUT_MIN_WIDTH
 		
 		const updatedArrows = arrows.map(arrow => {
 			if (arrow.from.region === "stack") {
@@ -372,74 +386,91 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
-	function updateArrowsOnNewStackFrame(heap, stackWidth) {
-		const updatedArrows = arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				let start = arrow.coordinates.start
-				let end = arrow.coordinates.end
+	// function updateArrowsOnNewStackFrame(heap, stackWidth) {
+	// 	const updatedArrows = arrows.map(arrow => {
+	// 		if (arrow.from.region === "stack") {
+	// 			let start = arrow.coordinates.start
+	// 			let end = arrow.coordinates.end
 
-				start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
-				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				end.X = intersection.X
-				end.Y = intersection.Y
-			}
-			return arrow
-		})
-		setArrows(updatedArrows)
-	}
+	// 			start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
+	// 			const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+	// 			end.X = intersection.X
+	// 			end.Y = intersection.Y
+	// 		}
+	// 		return arrow
+	// 	})
+	// 	setArrows(updatedArrows)
+	// }
 
-	function updateArrowsOnNewStackVariable(stack, heap, stackWidth, frameID) {
-		const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
+	// function updateArrowsOnNewStackVariable(stack, heap, stackWidth, frameID) {
+	// 	const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
 
-		let lowestArrowStartY = 0
-		const frameArrows = arrows.filter(arrow => arrow.from.parentId === frameID)
-		frameArrows.forEach(arrow => {
-			if (arrow.coordinates.start.Y > lowestArrowStartY) {
-				lowestArrowStartY = arrow.coordinates.start.Y
-			}
-			return arrow
-		})
+	// 	let lowestArrowStartY = 0
+	// 	const frameArrows = arrows.filter(arrow => arrow.from.parentId === frameID)
+	// 	frameArrows.forEach(arrow => {
+	// 		if (arrow.coordinates.start.Y > lowestArrowStartY) {
+	// 			lowestArrowStartY = arrow.coordinates.start.Y
+	// 		}
+	// 		return arrow
+	// 	})
 
-		const updatedArrows = arrows.map(arrow => {
-			let region = arrow.from.region
-			let start = arrow.coordinates.start
-			let end = arrow.coordinates.end
+	// 	const updatedArrows = arrows.map(arrow => {
+	// 		let region = arrow.from.region
+	// 		let start = arrow.coordinates.start
+	// 		let end = arrow.coordinates.end
 
-			if (region === "stack" && start.Y > lowestArrowStartY) {
-				if (currentFrameVariablesCount === 0) {
-					start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2 + 1
-				}
-				else if (currentFrameVariablesCount > 0) {
-					start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
-				}
-				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-				end.X = intersection.X
-				end.Y = intersection.Y
-			}
-			return arrow
-		})
-		setArrows(updatedArrows)
-	}
+	// 		if (region === "stack" && start.Y > lowestArrowStartY) {
+	// 			if (currentFrameVariablesCount === 0) {
+	// 				start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2 + 1
+	// 			}
+	// 			else if (currentFrameVariablesCount > 0) {
+	// 				start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
+	// 			}
+	// 			const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+	// 			end.X = intersection.X
+	// 			end.Y = intersection.Y
+	// 		}
+	// 		return arrow
+	// 	})
+	// 	setArrows(updatedArrows)
+	// }
 
-	function updateArrowsOnNewHeapVariable(objectID, heap, stackWidth) {
-		const updatedArrows = arrows.map(arrow => {
-			const start = arrow.coordinates.start
-			const end = arrow.coordinates.end
-			if (arrow.to === objectID && arrow.from.parentId !== arrow.to) {
-				const intersection = recomputeIntersection(start, objectID, heap, stackWidth)
-				end.X = intersection.X
-				end.Y = intersection.Y
-			}
-			return arrow
-		})
-		setArrows(updatedArrows)
-	}
+	// function updateArrowsOnNewHeapVariable(objectID, heap, stackWidth) {
+	// 	const updatedArrows = arrows.map(arrow => {
+	// 		const start = arrow.coordinates.start
+	// 		const end = arrow.coordinates.end
+	// 		if (arrow.to === objectID && arrow.from.parentId !== arrow.to) {
+	// 			const intersection = recomputeIntersection(start, objectID, heap, stackWidth)
+	// 			end.X = intersection.X
+	// 			end.Y = intersection.Y
+	// 		}
+	// 		return arrow
+	// 	})
+	// 	setArrows(updatedArrows)
+	// }
 
 	// WIP: GLOBAL ARROW REBUILD
 	// Usage: This function can be used to recreate the array of arrows
 	//        based on the state of the diagram and the reference variables values
 	// Target: Any event that modifies the arrows positions
 	function rebuildArrows(diagram, stackWidth) {
+
+		const {
+			REGION_PADDING, 
+			BLOCK_PADDING, 
+			VAR_HORIZONTAL_MARGIN, 
+			VAR_HORIZONTAL_PADDING, 
+			BLOCK_HEADER_HEIGHT, 
+			VAR_VERTICAL_MARGIN, 
+			VAR_HEIGHT, 
+			VAR_VERTICAL_PADDING, 
+			INPUT_HEIGHT,
+			SEPARATOR,
+			BLOCK_WIDTH,
+			HEADER_HEIGHT,
+			OBJECT_HANDLE_FULL_HEIGHT
+		} = utils.constants
+
 		const {stack, heap} = diagram
 		
 		setArrows([])
@@ -449,6 +480,7 @@ function ArrowsContextProvider(props) {
 
 				if (variable.nature === "reference" && variable.value !== "") {
 					if (heap.find(obj => obj.id === variable.value) !== undefined) {
+
 
 						const start = {
 							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
@@ -568,9 +600,9 @@ function ArrowsContextProvider(props) {
 		updateArrowsOnStackScroll,
 		updateArrowsOnStackResize,
 		updateArrowsOnStackWidthReset,
-		updateArrowsOnNewStackFrame,
-		updateArrowsOnNewStackVariable,
-		updateArrowsOnNewHeapVariable,
+		// updateArrowsOnNewStackFrame,
+		// updateArrowsOnNewStackVariable,
+		// updateArrowsOnNewHeapVariable,
 		recomputeIntersection,
 		rebuildArrows
 	}

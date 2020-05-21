@@ -22,6 +22,8 @@ function Heap(props) {
 	}
 
 	function handleClick(event) {
+		const {REGION_PADDING, SEPARATOR, BLOCK_WIDTH, HEADER_HEIGHT, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
+
 		if (isAddModeActive) {
 			const {clientX, clientY} = event
 			const initialPosition = {

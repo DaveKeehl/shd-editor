@@ -66,6 +66,7 @@ function App() {
 	}
 
 	function handleDoubleClick() {
+		const {STACK_MIN, INPUT_MIN_WIDTH} = utils.constants
 		setStackWidth(STACK_MIN)
 		const INPUT_WIDTH = utils.functions.getStackFrameInputWidth(stackWidth)
 		arrows.updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH)
@@ -73,6 +74,7 @@ function App() {
 	}
 
 	function handleMouseMove(event) {
+		const {STACK_MIN, STACK_MAX} = utils.constants
 		const {clientX, clientY} = event
 		if (arrows.isArrowDragged) {
 			arrows.setEnd({X: clientX, Y: clientY})

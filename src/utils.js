@@ -1,4 +1,6 @@
-const constants = {
+const base = 16
+
+let constants = {
 	HEADER_HEIGHT: 55,
 
 	STACK_MIN: 360,
