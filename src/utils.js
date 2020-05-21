@@ -43,6 +43,17 @@ let constants = {
 	INPUT_MIN_WIDTH: 105,
 }
 
+function updateConstantValue(constant, newValue) {
+	for (let property in constants) {
+		if (constant === property) {
+			constants[property] = newValue
+			console.log(constants)
+			return
+		}
+	}
+
+}
+
 function getStackFrameWidth(stackWidth) {
 	return stackWidth - constants.REGION_PADDING * 2
 }
@@ -239,6 +250,7 @@ const utils = {
 		getHoveredHeapObject,
 		convertFromAbsoluteToRelative,
 		convertFromRelativeToAbsolute,
+		updateConstantValue
 	}
 }
 

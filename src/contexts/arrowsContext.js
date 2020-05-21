@@ -468,7 +468,8 @@ function ArrowsContextProvider(props) {
 			SEPARATOR,
 			BLOCK_WIDTH,
 			HEADER_HEIGHT,
-			OBJECT_HANDLE_FULL_HEIGHT
+			OBJECT_HANDLE_FULL_HEIGHT,
+			INPUT_MIN_WIDTH
 		} = utils.constants
 
 		const {stack, heap} = diagram
@@ -522,12 +523,12 @@ function ArrowsContextProvider(props) {
 							//LOOP
 
 							const start = {
-								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
 								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 							}
 	
 							const end = {
-								X: start.X + getStackFrameInputWidth(stackWidth)/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING,
+								X: start.X + INPUT_MIN_WIDTH/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING,
 								Y: start.Y
 							}
 	
@@ -551,7 +552,7 @@ function ArrowsContextProvider(props) {
 							// INTERSECTION
 	
 							const start = {
-								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
+								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
 								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 							}
 	

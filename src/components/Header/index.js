@@ -9,7 +9,8 @@ function Header(props) {
 	const headerRef = useRef(null)
 
 	useEffect(() => {
-		utils.constants.HEADER_HEIGHT = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
+		const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
+		utils.functions.updateConstantValue("HEADER_HEIGHT", height)
 	}, [])
 
 	return (

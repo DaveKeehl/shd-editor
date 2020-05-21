@@ -23,7 +23,10 @@ function App() {
 	
 	const separator = useRef(null)
 
-	const {STACK_MIN, STACK_MAX, INPUT_MIN_WIDTH} = utils.constants
+	useEffect(() => {
+		const width = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
+		utils.functions.updateConstantValue("SEPARATOR", width)
+	}, [])
 
 	useEffect(() => {
 		setDiagram(app.diagram)
