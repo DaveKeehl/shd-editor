@@ -40,6 +40,11 @@ function HeapObject(props) {
 			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
+		// else if (props.initialPosition.X > window.innerWidth && props.initialPosition.Y > window.innerHeight) {
+		// 	const newPosition = {X: "to be defined", Y: "to be defined"}
+		// 	setPosition(newPosition)
+		// 	app.setHeapObjectPosition(props.id, newPosition)
+		// }
 		else if (props.initialPosition.X < 0) {
 			const newPosition = {X: 0, Y: props.initialPosition.Y}
 			setPosition(newPosition)
@@ -74,10 +79,6 @@ function HeapObject(props) {
 		setVariables(prevVariables => [...prevVariables, newVariable])
 		app.addHeapObjectVariable(props.id, nature)
 	}
-
-	// useEffect(() => {
-	// 	arrows.updateArrowsOnNewHeapVariable(props.id, app.diagram.heap, stackWidth)
-	// }, [app.diagram.heap.find(object => object.id === props.id).variables.length])
 
 	function removeVariable(id) {
 		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
@@ -114,7 +115,7 @@ function HeapObject(props) {
 
 	return (
 		<div 
-			className="object" 
+			className={`object ${isDragged ? "object--selected" : ""}`} 
 			draggable={false}
 			ref={obj}
 			style={{transform: `translate(${position.X}px, ${position.Y}px)`, zIndex: localDepthIndex}}

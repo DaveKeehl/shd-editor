@@ -15,6 +15,10 @@
 		box-shadow: 0 4px 8px transparentize($black, .7)
 		width: 320px
 		position: absolute
+		transition: .3s box-shadow
+
+		&--selected
+			box-shadow: 0 4px 16px $red-start;
 
 		&__drag-handle
 			height: 7px
