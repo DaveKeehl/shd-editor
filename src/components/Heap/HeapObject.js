@@ -2,24 +2,22 @@ import React, {useState, useEffect, useContext, useRef} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {StateContext} from "../../contexts/stateContext"
-import {ArrowsContext} from "../../contexts/arrowsContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
 
 function HeapObject(props) {
-	const app = useContext(StateContext)
-	const arrows = useContext(ArrowsContext)
-	const {stackWidth} = useContext(ResizableStackContext)
-	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
-	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
-	
 	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
 	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
 	const [isDragged, setIsDragged] = useState(false)
 	const [localDepthIndex, setLocalDepthIndex] = useState("")
+
+	const app = useContext(StateContext)
+	const {stackWidth} = useContext(ResizableStackContext)
+	const {depthIndex, setDepthIndex} = useContext(HeapDepthIndexContext)
+	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
 
 	const obj = useRef(null)
 

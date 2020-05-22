@@ -1,39 +1,9 @@
-import React, {useState, useEffect} from "react"
+import React, {useState} from "react"
 import {utils} from "../utils"
 
 const ArrowsContext = React.createContext()
 
-const { HEADER_HEIGHT, 
-
-		STACK_MIN,
-
-		SEPARATOR,
-	
-		REGION_PADDING,
-
-		BLOCK_WIDTH,
-		BLOCK_PADDING,
-		BLOCK_HEADER_HEIGHT,
-		BLOCK_MARGIN_BOTTOM,
-
-		OBJECT_START_FIRST_VAR,
-		OBJECT_MIN_HEIGHT,
-		OBJECT_HANDLE_FULL_HEIGHT,
-
-		FRAME_MIN_HEIGHT,
-		
-		VAR_HEIGHT,
-		VAR_VERTICAL_MARGIN,
-		VAR_VERTICAL_PADDING,
-		VAR_HORIZONTAL_MARGIN,
-		VAR_HORIZONTAL_PADDING,
-		VAR_ROW_GAP,
-
-		INPUT_HEIGHT,
-		INPUT_MIN_WIDTH } = utils.constants
-
-const { getStackFrameVariableWidth, 
-		getStackFrameInputWidth, 
+const { getStackFrameInputWidth, 
 		getBlockHeight, 
 		getHeapObjectCenter,
 		getStackFramePosition } = utils.functions
@@ -386,70 +356,7 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
-	// function updateArrowsOnNewStackFrame(heap, stackWidth) {
-	// 	const updatedArrows = arrows.map(arrow => {
-	// 		if (arrow.from.region === "stack") {
-	// 			let start = arrow.coordinates.start
-	// 			let end = arrow.coordinates.end
-
-	// 			start.Y = start.Y + FRAME_MIN_HEIGHT + BLOCK_MARGIN_BOTTOM
-	// 			const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-	// 			end.X = intersection.X
-	// 			end.Y = intersection.Y
-	// 		}
-	// 		return arrow
-	// 	})
-	// 	setArrows(updatedArrows)
-	// }
-
-	// function updateArrowsOnNewStackVariable(stack, heap, stackWidth, frameID) {
-	// 	const currentFrameVariablesCount = stack.find(frame => frame.id === frameID).variables.length
-
-	// 	let lowestArrowStartY = 0
-	// 	const frameArrows = arrows.filter(arrow => arrow.from.parentId === frameID)
-	// 	frameArrows.forEach(arrow => {
-	// 		if (arrow.coordinates.start.Y > lowestArrowStartY) {
-	// 			lowestArrowStartY = arrow.coordinates.start.Y
-	// 		}
-	// 		return arrow
-	// 	})
-
-	// 	const updatedArrows = arrows.map(arrow => {
-	// 		let region = arrow.from.region
-	// 		let start = arrow.coordinates.start
-	// 		let end = arrow.coordinates.end
-
-	// 		if (region === "stack" && start.Y > lowestArrowStartY) {
-	// 			if (currentFrameVariablesCount === 0) {
-	// 				start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN*2 + 1
-	// 			}
-	// 			else if (currentFrameVariablesCount > 0) {
-	// 				start.Y = start.Y + VAR_HEIGHT + VAR_VERTICAL_MARGIN
-	// 			}
-	// 			const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
-	// 			end.X = intersection.X
-	// 			end.Y = intersection.Y
-	// 		}
-	// 		return arrow
-	// 	})
-	// 	setArrows(updatedArrows)
-	// }
-
-	// function updateArrowsOnNewHeapVariable(objectID, heap, stackWidth) {
-	// 	const updatedArrows = arrows.map(arrow => {
-	// 		const start = arrow.coordinates.start
-	// 		const end = arrow.coordinates.end
-	// 		if (arrow.to === objectID && arrow.from.parentId !== arrow.to) {
-	// 			const intersection = recomputeIntersection(start, objectID, heap, stackWidth)
-	// 			end.X = intersection.X
-	// 			end.Y = intersection.Y
-	// 		}
-	// 		return arrow
-	// 	})
-	// 	setArrows(updatedArrows)
-	// }
-
-	// WIP: GLOBAL ARROW REBUILD
+	// GLOBAL ARROW REBUILD
 	// Usage: This function can be used to recreate the array of arrows
 	//        based on the state of the diagram and the reference variables values
 	// Target: Any event that modifies the arrows positions

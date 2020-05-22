@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function NewArrow() {
@@ -33,6 +33,7 @@ function NewArrow() {
 					L ${end.X} ${end.Y}
 				`} 
 				pointerEvents="visible"
+				style={isArrowDragged ? {cursor: "pointer"} : null}
 			/>
 		</svg>
 	)

@@ -2,19 +2,12 @@ import React, {useState, useContext} from "react"
 import ObjectHeader from "../Object/ObjectHeader"
 import Variable from "../Object/Variable"
 import {StateContext} from "../../contexts/stateContext"
-import {ArrowsContext} from "../../contexts/arrowsContext"
-import {ResizableStackContext} from "../../contexts/resizableStackContext"
-import {utils} from "../../utils"
 
 function StackFrame(props) {
 	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
 
 	const app = useContext(StateContext)
-	const arrows = useContext(ArrowsContext)
-	const {stackWidth} = useContext(ResizableStackContext)
-
-	const {VAR_HEIGHT, VAR_VERTICAL_MARGIN, INPUT_HEIGHT} = utils.constants
 
 	function updateName(newName) {
 		setName(newName)
@@ -34,8 +27,6 @@ function StackFrame(props) {
 		)
 		setVariables(prevVariables => [...prevVariables, newVariable])
 		app.addStackFrameVariable(props.id, nature)
-
-		// arrows.updateArrowsOnNewStackVariable(app.diagram.stack, app.diagram.heap, stackWidth, props.id)
 	}
 
 	function removeVariable(id) {

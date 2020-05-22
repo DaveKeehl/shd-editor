@@ -1,17 +1,14 @@
-import React, {useState, useContext, useRef, useEffect} from "react"
+import React, {useState, useContext, useRef} from "react"
 import Header from "../Header"
 import StackFrame from "./StackFrame"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
-import {utils} from "../../utils"
 
 function Stack() {
 	const [objects, setObjects] = useState([])
 
 	const stackFramesRef = useRef(null)
-
-	const {FRAME_MIN_HEIGHT, BLOCK_MARGIN_BOTTOM} = utils.constants
 
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
@@ -27,8 +24,6 @@ function Stack() {
 		)
 		setObjects(prevObjects => [newBlock, ...prevObjects])
 		app.addStackFrame()
-
-		// arrows.updateArrowsOnNewStackFrame(app.diagram.heap, stackWidth)
 	}
 
 	function removeBlock(id) {

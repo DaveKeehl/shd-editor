@@ -1,19 +1,15 @@
 import React, {useState, useContext} from "react"
 import {StateContext} from "../../contexts/stateContext"
-import {ArrowsContext} from "../../contexts/arrowsContext"
 import removeBlock from "../../images/delete-icon.svg"
 
 function ObjectHeader(props) {
 	const [className, setClassName] = useState("")
 
 	const app = useContext(StateContext)
-	const arrows = useContext(ArrowsContext)
 
 	function handleClick() {
 		props.removeBlock(props.id)
-
 		if (props.region === "heap") {
-			// console.log(`object with id ${props.id} is now being deleted`)
 			updateVariableValues(app.diagram, props.id)
 		}
 

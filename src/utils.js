@@ -1,5 +1,3 @@
-const base = 16
-
 let constants = {
 	HEADER_HEIGHT: 55,
 
@@ -47,11 +45,9 @@ function updateConstantValue(constant, newValue) {
 	for (let property in constants) {
 		if (constant === property) {
 			constants[property] = newValue
-			console.log(constants)
 			return
 		}
 	}
-
 }
 
 function getStackFrameWidth(stackWidth) {

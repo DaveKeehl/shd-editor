@@ -95,6 +95,7 @@ function App() {
 			className="App"
 			onMouseUp={handleMouseUp}
 			onMouseMove={handleMouseMove}
+			style={isResizable ? {cursor: "col-resize"} : null}
 		>
 			<Arrows />
 			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>

@@ -2,6 +2,7 @@ import React, {useState, useContext} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {StateContext} from "../../contexts/stateContext"
+import {ArrowsContext} from "../../contexts/arrowsContext"
 import {HeapAddModeContext} from "../../contexts/heapAddModeContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {HeapDepthIndexContextProvider} from "../../contexts/heapDepthIndexContext"
@@ -11,10 +12,9 @@ function Heap(props) {
 	const [objects, setObjects] = useState([])
 
 	const app = useContext(StateContext)
+	const arrows = useContext(ArrowsContext)
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
 	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
-
-	const {HEADER_HEIGHT, SEPARATOR, REGION_PADDING, BLOCK_WIDTH, BLOCK_PADDING, OBJECT_HANDLE_HEIGHT} = utils.constants
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -50,7 +50,7 @@ function Heap(props) {
 	}
 	
 	return (
-		<div className="heap">
+		<div className="heap" style={arrows.isArrowDragged ? {cursor: "pointer"} : null}>
 			<Header region="heap" objectsCount={objects.length}/>
 			<HeapDepthIndexContextProvider>
 				<div 
