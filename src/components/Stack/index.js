@@ -1,9 +1,10 @@
-import React, {useState, useContext, useRef} from "react"
+import React, {useState, useContext, useEffect, useRef} from "react"
 import Header from "../Header"
 import StackFrame from "./StackFrame"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 import {ResizableStackContext} from "../../contexts/resizableStackContext"
+import {utils} from "../../utils"
 
 function Stack() {
 	const [objects, setObjects] = useState([])
@@ -13,6 +14,11 @@ function Stack() {
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
+
+	useEffect(() => {
+		const padding = parseInt(window.getComputedStyle(stackFramesRef.current).getPropertyValue("padding"))
+		utils.functions.updateConstantValue("REGION_PADDING", padding)
+	}, [])
 
 	function addBlock() {
 		const newBlock = (
@@ -42,7 +48,11 @@ function Stack() {
 				objectsCount={objects.length} 
 				addBlock={addBlock}
 			/>
-			<div className="stack__objects objects" onScroll={handleScroll} ref={stackFramesRef}>
+			<div 
+				className="stack__objects objects" 
+				onScroll={handleScroll} 
+				ref={stackFramesRef}
+			>
 				{objects.length === 0 ? <p>Click on the "+" button to create a Stack Frame.</p> : objects}
 			</div>
 		</div>

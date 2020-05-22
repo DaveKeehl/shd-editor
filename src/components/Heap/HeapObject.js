@@ -20,6 +20,28 @@ function HeapObject(props) {
 	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
 
 	const obj = useRef(null)
+	const dragHandleRef = useRef(null)
+
+	useEffect(() => {
+		// BLOCK_WIDTH
+		const blockWidth = parseInt(window.getComputedStyle(obj.current).getPropertyValue("width"))
+		utils.functions.updateConstantValue("BLOCK_WIDTH", blockWidth)
+		// BLOCK_PADDING
+		const blockPadding = parseInt(window.getComputedStyle(obj.current).getPropertyValue("padding"))
+		utils.functions.updateConstantValue("BLOCK_PADDING", blockPadding)
+		// OBJECT_MIN_HEIGHT
+		const objectMinHeight = parseInt(window.getComputedStyle(obj.current).getPropertyValue("height"))
+		utils.functions.updateConstantValue("OBJECT_MIN_HEIGHT", objectMinHeight)
+		// OBJECT_HANDLE_WIDTH
+		const handleWidth = parseInt(window.getComputedStyle(dragHandleRef.current).getPropertyValue("width"))
+		utils.functions.updateConstantValue("OBJECT_HANDLE_WIDTH", handleWidth)
+		// OBJECT_HANDLE_HEIGHT
+		const handleHeight = parseInt(window.getComputedStyle(dragHandleRef.current).getPropertyValue("height"))
+		utils.functions.updateConstantValue("OBJECT_HANDLE_HEIGHT", handleHeight)
+		// OBJECT_HANDLE_BOTTOM_MARGIN
+		const handleMarginBottom = parseInt(window.getComputedStyle(dragHandleRef.current).getPropertyValue("margin-bottom"))
+		utils.functions.updateConstantValue("OBJECT_HANDLE_BOTTOM_MARGIN", handleMarginBottom)
+	}, [])
 
 	useEffect(() => {
 		if (isDragged) {
@@ -116,12 +138,17 @@ function HeapObject(props) {
 			className={`object ${isDragged ? "object--selected" : ""}`} 
 			draggable={false}
 			ref={obj}
-			style={{transform: `translate(${position.X}px, ${position.Y}px)`, zIndex: localDepthIndex}}
+			style={{
+				transform: `translate(${position.X}px, ${position.Y}px)`, 
+				zIndex: localDepthIndex,
+				cursor: `${isDragged ? "pointer" : "default"}`
+			}}
 		>
 			<div 
 				className="object__drag-handle"
 				onMouseDown={handleMouseDown}
 				onMouseUp={handleMouseUp}
+				ref={dragHandleRef}
 			>
 			</div>
 			<ObjectHeader 

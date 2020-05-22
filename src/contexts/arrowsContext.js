@@ -152,7 +152,7 @@ function ArrowsContextProvider(props) {
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactStackStartPosition(stack, stackWidth, mouseY) {
-		const {HEADER_HEIGHT, REGION_PADDING, BLOCK_MARGIN_BOTTOM} = utils.constants
+		const {HEADER_HEIGHT, REGION_PADDING, FRAME_MARGIN_BOTTOM} = utils.constants
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
 
@@ -205,7 +205,7 @@ function ArrowsContextProvider(props) {
 				break
 				
 			} else {
-				accumulator = (endY + BLOCK_MARGIN_BOTTOM)
+				accumulator = (endY + FRAME_MARGIN_BOTTOM)
 			}
 		}
 	}
@@ -389,16 +389,19 @@ function ArrowsContextProvider(props) {
 				if (variable.nature === "reference" && variable.value !== "") {
 					if (heap.find(obj => obj.id === variable.value) !== undefined) {
 
-
 						const start = {
 							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
 							Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 						}
+						console.log(utils.constants)
+						console.log(`frameYVirtualPosition: ${getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual}, BLOCK_PADDING: ${BLOCK_PADDING}, BLOCK_HEADER_HEIGHT: ${BLOCK_HEADER_HEIGHT}, VAR_VERTICAL_MARGIN: ${VAR_VERTICAL_MARGIN}, VAR_HEIGHT: ${VAR_HEIGHT}, VAR_VERTICAL_PADDING: ${VAR_VERTICAL_PADDING}, INPUT_HEIGHT: ${INPUT_HEIGHT}`)
 
 						const end = {
 							X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
 							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
 						}
+
+						console.log(`start: (${start.X}, ${start.Y}), end: (${end.X}, ${end.Y})`)
 
 						const newArrow = {
 							from: {

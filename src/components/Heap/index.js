@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useContext, useEffect, useRef} from "react"
 import Header from "../Header"
 import HeapObject from "./HeapObject"
 import {StateContext} from "../../contexts/stateContext"
@@ -15,6 +15,13 @@ function Heap(props) {
 	const arrows = useContext(ArrowsContext)
 	const {isAddModeActive, toggleAddMode} = useContext(HeapAddModeContext)
 	const {mousePosition, setMousePosition} = useContext(HeapMousePositionContext)
+
+	const heapRef = useRef(null)
+
+	useEffect(() => {
+		const padding = parseInt(window.getComputedStyle(heapRef.current).getPropertyValue("padding"))
+		utils.functions.updateConstantValue("REGION_PADDING", padding)
+	}, [])
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -50,7 +57,10 @@ function Heap(props) {
 	}
 	
 	return (
-		<div className="heap" style={arrows.isArrowDragged ? {cursor: "pointer"} : null}>
+		<div 
+			className="heap" 
+			style={arrows.isArrowDragged ? {cursor: "pointer"} : null}
+		>
 			<Header region="heap" objectsCount={objects.length}/>
 			<HeapDepthIndexContextProvider>
 				<div 
@@ -58,6 +68,7 @@ function Heap(props) {
 					style={isAddModeActive ? {cursor: "crosshair"} : null}
 					onClick={handleClick}
 					onMouseMove={handleMouseMove}
+					ref={heapRef}
 				>
 					{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
 				</div>

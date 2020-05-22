@@ -1,18 +1,26 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useContext, useEffect, useRef} from "react"
 import {StateContext} from "../../contexts/stateContext"
 import removeBlock from "../../images/delete-icon.svg"
+import {utils} from "../../utils"
 
 function ObjectHeader(props) {
 	const [className, setClassName] = useState("")
 
 	const app = useContext(StateContext)
 
+	const headerRef = useRef(null)
+
+	useEffect(() => {
+		// BLOCK_HEADER_HEIGHT
+		const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
+		utils.functions.updateConstantValue("BLOCK_HEADER_HEIGHT", height)
+	}, [])
+
 	function handleClick() {
 		props.removeBlock(props.id)
 		if (props.region === "heap") {
 			updateVariableValues(app.diagram, props.id)
 		}
-
 	}
 
 	function updateVariableValues(diagram, objectID) {
@@ -49,7 +57,10 @@ function ObjectHeader(props) {
 	}
 
 	return (
-		<div className="object__header">
+		<div 
+			className="object__header"
+			ref={headerRef}
+		>
 			<input 
 				type="text"
 				name="className"

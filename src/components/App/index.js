@@ -24,8 +24,9 @@ function App() {
 	const separator = useRef(null)
 
 	useEffect(() => {
-		const width = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
-		utils.functions.updateConstantValue("SEPARATOR", width)
+		// SEPARATOR
+		const separatorWidth = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
+		utils.functions.updateConstantValue("SEPARATOR", separatorWidth)
 	}, [])
 
 	useEffect(() => {

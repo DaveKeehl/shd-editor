@@ -17,7 +17,7 @@ function ArrowStart(props) {
 			parentId: props.parentID, 
 			id: props.variableID
 		})
-		// SET START+END COORDINATES AT THE BEGINNING
+		// SET START COORDINATES OF NEW ARROW
 		if (props.region === "heap") {
 			// HEAP
 			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)

@@ -11,20 +11,20 @@ let constants = {
 	BLOCK_WIDTH: 320,
 	BLOCK_PADDING: 20,
 	BLOCK_HEADER_HEIGHT: 39,
-	BLOCK_MARGIN_BOTTOM: 10,
 	get BLOCK_VERTICAL_VAR_MARGIN() {
 		return this.VAR_VERTICAL_MARGIN * 2 + 1
 	}, // 31
-
+	
 	FRAME_MIN_HEIGHT: 126,
-
+	FRAME_MARGIN_BOTTOM: 10,
+	
+	OBJECT_MIN_HEIGHT: 153,
 	OBJECT_HANDLE_WIDTH: 40,
 	OBJECT_HANDLE_HEIGHT: 7,
-	OBJECT_HANDLE_BOTTOM_PADDING: 20,
+	OBJECT_HANDLE_BOTTOM_MARGIN: 20,
 	get OBJECT_HANDLE_FULL_HEIGHT() {
-		return this.OBJECT_HANDLE_HEIGHT + this.OBJECT_HANDLE_BOTTOM_PADDING
+		return this.OBJECT_HANDLE_HEIGHT + this.OBJECT_HANDLE_BOTTOM_MARGIN
 	}, // 27
-	OBJECT_MIN_HEIGHT: 153,
 	get OBJECT_START_FIRST_VAR() {
 		return this.BLOCK_PADDING + this.OBJECT_HANDLE_FULL_HEIGHT + this.BLOCK_HEADER_HEIGHT + this.VAR_VERTICAL_MARGIN
 	} , // 101
@@ -42,12 +42,15 @@ let constants = {
 }
 
 function updateConstantValue(constant, newValue) {
+	console.log(`PROPERTY: ${constant}, NEW VALUE: ${newValue}`)
 	for (let property in constants) {
 		if (constant === property) {
 			constants[property] = newValue
+			console.log(constants)
 			return
 		}
 	}
+	console.log(`ouch... PROPERTY: ${constant}, NEW VALUE: ${newValue}`)
 }
 
 function getStackFrameWidth(stackWidth) {
@@ -119,7 +122,7 @@ function getStackFrameVirtualData(stack, stackWidth, stackScrollAmount, mouseY) 
 			return stackFrameVirtualData
 			
 		} else {
-			accumulator = (endY + constants.BLOCK_MARGIN_BOTTOM)
+			accumulator = (endY + constants.FRAME_MARGIN_BOTTOM)
 		}
 	}
 
@@ -176,12 +179,12 @@ function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
 				}
 			}
 
-			// console.log(stackFramePosition)
+			console.log(stackFramePosition)
 
 			return stackFramePosition
 			
 		} else {
-			accumulator = (endY + constants.BLOCK_MARGIN_BOTTOM)
+			accumulator = (endY + constants.FRAME_MARGIN_BOTTOM)
 		}
 	}
 }
