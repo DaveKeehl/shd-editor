@@ -46,7 +46,14 @@ function ArrowStart(props) {
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 		>
-			<circle className="outer" cx="9.5" cy="9" r="8" strokeWidth="2"/>
+			<circle 
+				className="outer" 
+				style={{opacity: `1`}}
+				cx="9.5" 
+				cy="9" 
+				r="8" 
+				strokeWidth="2"
+			/>
 			<circle className="inner" cx="9.5" cy="9" r="4"/>
 		</svg>
 	)

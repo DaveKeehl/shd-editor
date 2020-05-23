@@ -19,7 +19,7 @@ function NewArrow() {
 
 	return (
 		<svg 
-			className={`arrows__new ${newArrow.from.region === "stack" ? "arrows__stack" : "arrows__heap"}`}
+			className={`arrows__new ${newArrow.from.region === "stack" ? "arrow__stack" : "arrow__heap"}`}
 			style={{display: `${!isArrowDragged ? "none" : ""}`}}
 			width={width} 
 			height={height}

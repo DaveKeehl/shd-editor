@@ -4,6 +4,7 @@ import {ArrowsContext} from "../../contexts/arrowsContext"
 function Arrow(props) {
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
+	const [isSelected, setIsSelected] = useState(false)
 
 	const arrows = useContext(ArrowsContext)
 
@@ -11,6 +12,11 @@ function Arrow(props) {
 
 	function getDrawableArrows(arrows) {
 		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+	}
+
+	function handleClick() {
+		console.log("arrow is clicked")
+		setIsSelected(prevState => !prevState)
 	}
 
 	function handleMouseOver() {
@@ -34,15 +40,17 @@ function Arrow(props) {
 			viewBox={`0 0 ${width} ${height}`}
 			fill="none" 
 			xmlns="http://www.w3.org/2000/svg"
+			onClick={handleClick}
 			onMouseOver={handleMouseOver}
 			style={{zIndex: `${props.data.zIndex+1}`}}
-			className={props.data.from.region === "stack" ? "arrows__stack" : "arrows__heap"}
+			className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
 		>
 			<path 
 				d={`
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
 				`} 
+				className={`${isSelected ? "arrow--selected" : ""}`}
 				pointerEvents="visible"
 			/>
 			<circle cx={start.X} cy={start.Y} r="4" />
