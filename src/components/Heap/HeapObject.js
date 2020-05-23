@@ -7,6 +7,8 @@ import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
 
+import {prefix} from "inline-style-prefixer"
+
 function HeapObject(props) {
 	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
@@ -133,16 +135,18 @@ function HeapObject(props) {
 		}
 	}
 
+	const styles = {
+		transform: `translate(${position.X}px, ${position.Y}px)`, 
+		zIndex: localDepthIndex,
+		cursor: `${isDragged ? "pointer" : "default"}`
+	}
+
 	return (
 		<div 
 			className={`object ${isDragged ? "object--selected" : ""}`} 
 			draggable={false}
 			ref={obj}
-			style={{
-				transform: `translate(${position.X}px, ${position.Y}px)`, 
-				zIndex: localDepthIndex,
-				cursor: `${isDragged ? "pointer" : "default"}`
-			}}
+			style={prefix(styles)}
 		>
 			<div 
 				className="object__drag-handle"

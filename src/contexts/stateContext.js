@@ -255,6 +255,23 @@ function StateContextProvider(props) {
 		clearHeap()
 	}
 
+	const resetVariablesValueAfterArrowDeletion = (blockID) => {
+		stack.forEach(frame => {
+			frame.variables.forEach(variable => {
+				if (variable.nature === "reference" && variable.value === blockID) {
+					setVariableData("stack", frame.id, variable.id, {name: "value", value: ""})
+				}
+			})
+		})
+		heap.forEach(object => {
+			object.variables.forEach(variable => {
+				if (variable.nature === "reference" && variable.value === blockID) {
+					setVariableData("heap", object.id, variable.id, {name: "value", value: ""})
+				}
+			})
+		})
+	}
+
 	// UPLOAD, DOWNLOAD
 
 	const uploadJSON = (file) => {
@@ -320,6 +337,7 @@ function StateContextProvider(props) {
 		clearStack,
 		clearHeap,
 		clearAll,
+		resetVariablesValueAfterArrowDeletion,
 
 		uploadJSON,
 		downloadJSON

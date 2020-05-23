@@ -35,7 +35,7 @@ function Arrow(props) {
 			fill="none" 
 			xmlns="http://www.w3.org/2000/svg"
 			onMouseOver={handleMouseOver}
-			style={{zIndex: `${props.data.zIndex}`}}
+			style={{zIndex: `${props.data.zIndex+1}`}}
 			className={props.data.from.region === "stack" ? "arrows__stack" : "arrows__heap"}
 		>
 			<path 
@@ -46,7 +46,7 @@ function Arrow(props) {
 				pointerEvents="visible"
 			/>
 			<circle cx={start.X} cy={start.Y} r="4" />
-			<circle cx={start.X} cy={start.Y} r="4" />
+			<circle cx={end.X} cy={end.Y} r="4" />
 		</svg>
 	)
 }

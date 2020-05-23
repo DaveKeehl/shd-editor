@@ -19,29 +19,8 @@ function ObjectHeader(props) {
 	function handleClick() {
 		props.removeBlock(props.id)
 		if (props.region === "heap") {
-			updateVariableValues(app.diagram, props.id)
+			app.resetVariablesValueAfterArrowDeletion(props.id)
 		}
-	}
-
-	function updateVariableValues(diagram, objectID) {
-		const {stack, heap} = diagram
-
-		stack.forEach(frame => {
-			frame.variables.forEach(variable => {
-				// console.log(variable)
-				if (variable.nature === "reference" && variable.value === objectID) {
-					app.setVariableData("stack", frame.id, variable.id, {name: "value", value: ""})
-				}
-			})
-		})
-		heap.forEach(object => {
-			object.variables.forEach(variable => {
-				if (variable.nature === "reference" && variable.value === objectID) {
-					app.setVariableData("heap", object.id, variable.id, {name: "value", value: ""})
-				}
-			})
-		})
-		// console.log("end update value")
 	}
 
 	function handleChange(event) {
