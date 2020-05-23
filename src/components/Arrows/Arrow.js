@@ -45,6 +45,8 @@ function Arrow(props) {
 				`} 
 				pointerEvents="visible"
 			/>
+			<circle cx={start.X} cy={start.Y} r="4" />
+			<circle cx={start.X} cy={start.Y} r="4" />
 		</svg>
 	)
 }

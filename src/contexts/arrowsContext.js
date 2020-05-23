@@ -393,15 +393,11 @@ function ArrowsContextProvider(props) {
 							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
 							Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
 						}
-						console.log(utils.constants)
-						console.log(`frameYVirtualPosition: ${getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual}, BLOCK_PADDING: ${BLOCK_PADDING}, BLOCK_HEADER_HEIGHT: ${BLOCK_HEADER_HEIGHT}, VAR_VERTICAL_MARGIN: ${VAR_VERTICAL_MARGIN}, VAR_HEIGHT: ${VAR_HEIGHT}, VAR_VERTICAL_PADDING: ${VAR_VERTICAL_PADDING}, INPUT_HEIGHT: ${INPUT_HEIGHT}`)
 
 						const end = {
 							X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
 							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
 						}
-
-						console.log(`start: (${start.X}, ${start.Y}), end: (${end.X}, ${end.Y})`)
 
 						const newArrow = {
 							from: {
@@ -431,6 +427,8 @@ function ArrowsContextProvider(props) {
 						if (variable.value === object.id) {
 
 							//LOOP
+
+							console.log(utils.constants)
 
 							const start = {
 								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,

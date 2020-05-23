@@ -42,15 +42,14 @@ let constants = {
 }
 
 function updateConstantValue(constant, newValue) {
-	console.log(`PROPERTY: ${constant}, NEW VALUE: ${newValue}`)
 	for (let property in constants) {
 		if (constant === property) {
 			constants[property] = newValue
-			console.log(constants)
+			// console.log(constants)
 			return
 		}
 	}
-	console.log(`ouch... PROPERTY: ${constant}, NEW VALUE: ${newValue}`)
+	// console.log(`ouch... PROPERTY: ${constant}, NEW VALUE: ${newValue}`)
 }
 
 function getStackFrameWidth(stackWidth) {

@@ -10,6 +10,8 @@ function Variable(props) {
 	const app = useContext(StateContext)
 
 	const varRef = useRef(null)
+	const formRef = useRef(null)
+	const inputRef = useRef(null)
 
 	const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
 	const thisVar = parent.variables.find(variable => variable.id === props.id)
@@ -30,6 +32,20 @@ function Variable(props) {
 		// VAR_HORIZONTAL_MARGIN
 		const horizontalMargin = parseInt(window.getComputedStyle(varRef.current).getPropertyValue("margin-left"))
 		utils.functions.updateConstantValue("VAR_HORIZONTAL_MARGIN", horizontalMargin)
+		// VAR_ROW_GAP
+		const varRowGap = parseInt(window.getComputedStyle(formRef.current).getPropertyValue("row-gap"))
+		utils.functions.updateConstantValue("VAR_ROW_GAP", varRowGap)
+		// VAR_COLUMN_GAP
+		const varColumnGap = parseInt(window.getComputedStyle(formRef.current).getPropertyValue("column-gap"))
+		utils.functions.updateConstantValue("VAR_COLUMN_GAP", varColumnGap)
+		// INPUT_HEIGHT
+		const inputHeight = parseInt(window.getComputedStyle(inputRef.current).getPropertyValue("height"))
+		utils.functions.updateConstantValue("INPUT_HEIGHT", inputHeight)
+		// INPUT_MIN_WIDTH
+		if (props.region === "heap") {
+			const inputMinWidth = parseInt(window.getComputedStyle(inputRef.current).getPropertyValue("width"))
+			utils.functions.updateConstantValue("INPUT_MIN_WIDTH", inputMinWidth)
+		}
 	},[])
 
 	useEffect(() => {
@@ -83,7 +99,7 @@ function Variable(props) {
 			<button onClick={removeVariable}>
 				<img src={removeVariableImg} alt="Remove variable"/>
 			</button>
-			<form>
+			<form ref={formRef}>
 				<input 
 					className="object__variable__name"
 					name="name"
@@ -93,6 +109,7 @@ function Variable(props) {
 					onChange={handleChange}
 					onKeyUp={handleKeyUp}
 					spellCheck={false}
+					ref={inputRef}
 				/>
 				<input 
 					className="object__variable__type"

@@ -15,11 +15,17 @@
 	path
 		stroke-width: 2
 
+	circle
+		fill: #00FF00
+		stroke-width: 2px
+
 	&__new
 		z-index: 1000
 
-	&__stack path
-		stroke: $dark-blue
+	&__stack 
+		path, circle
+			stroke: $dark-blue
 
-	&__heap	path
-		stroke: $dark-red
+	&__heap	
+		path, circle
+			stroke: $dark-red
