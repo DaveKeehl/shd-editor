@@ -21,35 +21,21 @@ function ArrowStart(props) {
 	}, [arrows.arrows])
 
 	function handleMouseDown(event) {
-		if (arrow === null) {
-			arrows.resetNewArrow()
-			arrows.setIsArrowDragged(true)
-			arrows.setFrom({
-				region: props.region, 
-				parentId: props.parentID, 
-				id: props.variableID
-			})
-			// SET START COORDINATES OF NEW ARROW
-			if (props.region === "heap") {
-				// HEAP
-				const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
-				arrows.setExactHeapStartPosition(stackWidth, target, event.clientY)
-			} else {
-				// STACK
-				arrows.setExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
-				// utils.functions.getHoveredStackData(app.diagram.stack, stackWidth, arrows.stackScrollAmount, event.clientY)
-			}
-		}
+		arrows.startDraggingArrow(app.diagram, stackWidth, event, {
+			region: props.region,
+			id: props.variableID,
+			parentId: props.parentID
+		})
 	}
 
 	function handleMouseUp() {
+		arrows.setIsArrowDragged(false)
+		const {X,Y} = arrows.newArrow.coordinates.start
+		arrows.setEnd({
+			X: X, 
+			Y: Y
+		})
 		if (arrow === null) {
-			arrows.setIsArrowDragged(false)
-			const {X,Y} = arrows.newArrow.coordinates.start
-			arrows.setEnd({
-				X: X, 
-				Y: Y
-			})
 		}
 	}
 

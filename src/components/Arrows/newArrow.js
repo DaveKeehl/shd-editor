@@ -35,6 +35,18 @@ function NewArrow() {
 				pointerEvents="visible"
 				style={isArrowDragged ? {cursor: "pointer"} : null}
 			/>
+			<circle 
+				cx={start.X} 
+				cy={start.Y} 
+				// pointerEvents="visible" 
+				// onClick={handleClickOnStartHandle}
+			/>
+			<circle 
+				cx={end.X} 
+				cy={end.Y} 
+				// pointerEvents="visible" 
+				// onClick={handleClickOnEndHandle} 
+			/>
 		</svg>
 	)
 }

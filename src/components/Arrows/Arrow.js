@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useContext} from "react"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {utils} from "../../utils"
 
 function Arrow(props) {
@@ -10,6 +11,7 @@ function Arrow(props) {
 
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
+	const {stackWidth} = useContext(ResizableStackContext)
 
 	useEffect(() => {}, [getDrawableArrows(arrows.arrows)])
 
@@ -31,8 +33,9 @@ function Arrow(props) {
 		setIsSelected(prevState => !prevState)
 	}
 
-	function handleMouseOver() {
-		// console.log("Mouseover")
+	function handleMouseDown(event) {
+		console.log("mouse down")
+		arrows.startDraggingArrow(app.diagram, stackWidth, event, props.data.from)
 	}
 
 	function handleClickOnStartHandle() {
@@ -81,6 +84,7 @@ function Arrow(props) {
 					cy={start.Y} 
 					pointerEvents="visible" 
 					onClick={handleClickOnStartHandle}
+					onMouseDown={handleMouseDown}
 				/>
 				<circle 
 					cx={end.X} 

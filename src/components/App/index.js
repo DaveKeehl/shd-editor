@@ -23,6 +23,7 @@ function App() {
 	
 	const separator = useRef(null)
 
+	// LOAD COMPUTED CSS VALUE WHEN APP MOUNTS
 	useEffect(() => {
 		// SEPARATOR
 		const separatorWidth = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
@@ -43,30 +44,8 @@ function App() {
 	function handleMouseUp(event) {
 		setIsResizable(false)
 		separator.current.style.background = "#F3F3F3"
-
 		if (arrows.isArrowDragged) {
-			
-			arrows.setIsArrowDragged(false)
-			const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
-
-			// CASE 1: START POINT IS IN THE HEAP, AND THE END POINT IS THE SAME OBJECT
-			if (target !== undefined && arrows.newArrow.from.parentId === target.id) {
-				const {region, parentId, id} = arrows.newArrow.from
-				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
-			}
-			// CASE 2: ARROW-END WAS RELEASED ON A HEAP OBJECT
-			else if (target !== undefined) {
-				const {region, parentId, id} = arrows.newArrow.from
-				app.setVariableData(region, parentId, id, { name: "value", value: target.id })
-			}
-			// CASE 3: ARROW-END POSITION IS NOT VALID (IT SNAPS BACK TO ARROW-START POSITION)
-			else {
-				const {X,Y} = arrows.newArrow.coordinates.start
-				arrows.setEnd({
-					X: X, 
-					Y: Y
-				})
-			}
+			arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
 		}
 	}
 

@@ -356,6 +356,45 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
+	function startDraggingArrow(diagram, stackWidth, event, from) {
+		resetNewArrow()
+		setIsArrowDragged(true)
+		setFrom({
+			region: from.region, 
+			parentId: from.parentId, 
+			id: from.id
+		})
+		// SET START COORDINATES OF NEW ARROW
+		const {clientX, clientY} = event
+		if (from.region === "heap") {
+			// HEAP
+			const target = utils.functions.getHoveredHeapObject(diagram.heap, clientX, clientY, stackWidth)
+			setExactHeapStartPosition(stackWidth, target, clientY)
+		} else {
+			// STACK
+			setExactStackStartPosition(diagram.stack, stackWidth, clientY)
+		}
+	}
+
+	function stopDraggingArrow(heap, stackWidth, event, setVariableData) {
+		setIsArrowDragged(false)
+		const target = utils.functions.getHoveredHeapObject(heap, event.clientX, event.clientY, stackWidth)
+		if (target !== undefined) {
+			// CASE 1: HANDLES BOTH TARGET IS SAME OBJECT (LOOP) AND A DIFFERENT ONE
+			const {region, parentId, id} = newArrow.from
+			setVariableData(region, parentId, id, { name: "value", value: target.id })
+			setTo(target.id)
+		}
+		// CASE 2: ARROW-END POSITION IS NOT VALID (IT SNAPS BACK TO ARROW-START POSITION)
+		else {
+			const {X,Y} = newArrow.coordinates.start
+			setEnd({
+				X: X, 
+				Y: Y
+			})
+		}
+	}
+
 	// GLOBAL ARROW REBUILD
 	// Usage: This function can be used to recreate the array of arrows
 	//        based on the state of the diagram and the reference variables values
@@ -513,6 +552,8 @@ function ArrowsContextProvider(props) {
 		// updateArrowsOnNewStackVariable,
 		// updateArrowsOnNewHeapVariable,
 		recomputeIntersection,
+		startDraggingArrow,
+		stopDraggingArrow,
 		rebuildArrows
 	}
 
