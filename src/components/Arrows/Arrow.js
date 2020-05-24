@@ -18,7 +18,7 @@ function Arrow(props) {
 	}
 
 	function handleKeyDown(event) {
-		if (isSelected && event.keyCode === 8) {
+		if (isSelected && (event.keyCode === 8 || event.keyCode === 46)) {
 			arrows.setArrows(prevArrows => prevArrows.filter(arrow => {
 				return arrow.from.id !== props.data.from.id || arrow.to !== props.data.to
 			}))
