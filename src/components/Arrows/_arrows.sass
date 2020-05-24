@@ -16,19 +16,25 @@
 
 	path
 		stroke-width: 2
+		&:hover
+			cursor: pointer
 
 	circle
 		fill: $green
 		stroke-width: 2px
 		r: 4px
-		&:hover
-			cursor: pointer
+		// z-index: 1000
+		// &:hover
+		// 	cursor: pointer
 
 	&__new
 		z-index: 1000
 
 	.arrow
 		&__stack, &__heap
+			&:hover
+				circle
+					cursor: pointer
 			.arrow--selected
 				stroke: $green
 
@@ -39,5 +45,9 @@
 		&__heap	
 			path, circle
 				stroke: $dark-red
+
+		// &:hover
+		// 	circle
+		// 		cursor: pointer
 
 

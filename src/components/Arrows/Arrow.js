@@ -37,10 +37,14 @@ function Arrow(props) {
 
 	function handleClickOnStartHandle() {
 		console.log("Start")
+		setIsSelected(prevState => !prevState)
+
 	}
 
 	function handleClickOnEndHandle() {
 		console.log("End")
+		setIsSelected(prevState => !prevState)
+
 	}
 
 	const start = {
@@ -61,8 +65,6 @@ function Arrow(props) {
 				style={{zIndex: `${props.data.zIndex+1}`}}
 				width={width} 
 				height={height}
-				onClick={handleClick}
-				onMouseOver={handleMouseOver}
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				<path 
@@ -72,9 +74,20 @@ function Arrow(props) {
 					`} 
 					className={`${isSelected ? "arrow--selected" : ""}`}
 					pointerEvents="visible"
+					onClick={handleClick}
 				/>
-				<circle cx={start.X} cy={start.Y} onClick={handleClickOnStartHandle} />
-				<circle cx={end.X} cy={end.Y} onClick={handleClickOnEndHandle} />
+				<circle 
+					cx={start.X} 
+					cy={start.Y} 
+					pointerEvents="visible" 
+					onClick={handleClickOnStartHandle}
+				/>
+				<circle 
+					cx={end.X} 
+					cy={end.Y} 
+					pointerEvents="visible" 
+					onClick={handleClickOnEndHandle} 
+				/>
 			</svg>
 		</div>
 	)

@@ -60,10 +60,11 @@ function ArrowStart(props) {
 			xmlns="http://www.w3.org/2000/svg"
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
+			style={{cursor: `${arrow === null ? "pointer" : "default"}`}}
 		>
 			<circle 
 				className="outer" 
-				style={{opacity: `${arrow === null ? "1" : "0.2"}`}}
+				style={{opacity: `${arrow === null ? "1" : "0.1"}`}}
 				cx="9.5" 
 				cy="9" 
 				r="8" 
