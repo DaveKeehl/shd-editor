@@ -46,6 +46,7 @@ function App() {
 		separator.current.style.background = "#F3F3F3"
 		if (arrows.isArrowDragged) {
 			arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
+			arrows.setActiveDragHandle("")
 		}
 	}
 
@@ -61,7 +62,11 @@ function App() {
 		const {STACK_MIN, STACK_MAX} = utils.constants
 		const {clientX, clientY} = event
 		if (arrows.isArrowDragged) {
-			arrows.setEnd({X: clientX, Y: clientY})
+			if (arrows.activeDragHandle === "start") {
+				arrows.setStart({X: clientX, Y: clientY})
+			} else {
+				arrows.setEnd({X: clientX, Y: clientY})
+			}
 		}
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {
 			const INPUT_WIDTH = utils.functions.getStackFrameInputWidth(clientX)
@@ -76,7 +81,7 @@ function App() {
 			className="App"
 			onMouseUp={handleMouseUp}
 			onMouseMove={handleMouseMove}
-			style={isResizable ? {cursor: "col-resize"} : null}
+			style={isResizable ? {cursor: "col-resize"} : arrows.activeDragHandle !== "" ? {cursor: "pointer"} : null}
 		>
 			<Arrows />
 			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>

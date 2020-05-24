@@ -13,9 +13,19 @@ function Arrow(props) {
 	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
 
-	useEffect(() => {}, [getDrawableArrows(arrows.arrows)])
+	const start = {
+		X: props.data.coordinates.start.X,
+		Y: props.data.coordinates.start.Y
+	}
 
-	function getDrawableArrows(arrows) {
+	const end = {
+		X: props.data.coordinates.end.X,
+		Y: props.data.coordinates.end.Y
+	}
+
+	useEffect(() => {}, [getDrawableArrow(arrows.arrows)])
+
+	function getDrawableArrow(arrows) {
 		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
 	}
 
@@ -33,31 +43,24 @@ function Arrow(props) {
 		setIsSelected(prevState => !prevState)
 	}
 
-	function handleMouseDown(event) {
-		console.log("mouse down")
-		arrows.startDraggingArrow(app.diagram, stackWidth, event, props.data.from)
-	}
-
 	function handleClickOnStartHandle() {
 		console.log("Start")
 		setIsSelected(prevState => !prevState)
-
+	}
+	
+	function handleMouseDownOnStartHandle() {
+		console.log("mouse down")
+		arrows.rebaseNewArrow(props.data, "start")
 	}
 
 	function handleClickOnEndHandle() {
 		console.log("End")
 		setIsSelected(prevState => !prevState)
-
 	}
 
-	const start = {
-		X: props.data.coordinates.start.X,
-		Y: props.data.coordinates.start.Y
-	}
-
-	const end = {
-		X: props.data.coordinates.end.X,
-		Y: props.data.coordinates.end.Y
+	function handleMouseDownOnEndHandle() {
+		console.log("mouse down")
+		arrows.rebaseNewArrow(props.data, "end")
 	}
 
 	return (
@@ -65,7 +68,10 @@ function Arrow(props) {
 			<svg 
 				viewBox={`0 0 ${width} ${height}`}
 				className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
-				style={{zIndex: `${props.data.zIndex+1}`}}
+				style={{
+					display: `${arrows.activeDragHandle === "end" ? "none" : "block"}`,
+					zIndex: `${props.data.zIndex+1}`
+				}}
 				width={width} 
 				height={height}
 				xmlns="http://www.w3.org/2000/svg"
@@ -84,13 +90,14 @@ function Arrow(props) {
 					cy={start.Y} 
 					pointerEvents="visible" 
 					onClick={handleClickOnStartHandle}
-					onMouseDown={handleMouseDown}
+					onMouseDown={handleMouseDownOnStartHandle}
 				/>
 				<circle 
 					cx={end.X} 
 					cy={end.Y} 
 					pointerEvents="visible" 
-					onClick={handleClickOnEndHandle} 
+					onClick={handleClickOnEndHandle}
+					onMouseDown={handleMouseDownOnEndHandle}
 				/>
 			</svg>
 		</div>

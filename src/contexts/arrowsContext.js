@@ -34,6 +34,7 @@ function ArrowsContextProvider(props) {
 	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
+	const [activeDragHandle, setActiveDragHandle] = useState("")
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
@@ -395,6 +396,29 @@ function ArrowsContextProvider(props) {
 		}
 	}
 
+	function rebaseNewArrow(arrowData, activeDragHandle) {
+		setIsArrowDragged(true)
+		setNewArrow({
+			from: {
+				region: arrowData.from.region,
+				parentId: arrowData.from.parentId,
+				id: arrowData.from.id
+			},
+			to: arrowData.to,
+			coordinates: {
+				start: {
+					X: arrowData.coordinates.start.X,
+					Y: arrowData.coordinates.start.Y
+				},
+				end: {
+					X: arrowData.coordinates.end.X,
+					Y: arrowData.coordinates.end.Y
+				}
+			}
+		})
+		setActiveDragHandle(`${activeDragHandle}`)
+	}
+
 	// GLOBAL ARROW REBUILD
 	// Usage: This function can be used to recreate the array of arrows
 	//        based on the state of the diagram and the reference variables values
@@ -531,13 +555,14 @@ function ArrowsContextProvider(props) {
 
 	const states = {
 		arrows, setArrows,
-		newArrow,
+		newArrow, setNewArrow,
 		setFrom,
 		setTo,
 		setStart,
 		setEnd,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
+		activeDragHandle, setActiveDragHandle,
 		computeIntersection,
 		storeNewArrow,
 		resetNewArrow,
@@ -554,6 +579,7 @@ function ArrowsContextProvider(props) {
 		recomputeIntersection,
 		startDraggingArrow,
 		stopDraggingArrow,
+		rebaseNewArrow,
 		rebuildArrows
 	}
 
