@@ -1,17 +1,29 @@
 import React, {useState, useEffect, useContext} from "react"
+import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
+import {utils} from "../../utils"
 
 function Arrow(props) {
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
 	const [isSelected, setIsSelected] = useState(false)
 
+	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
 
 	useEffect(() => {}, [getDrawableArrows(arrows.arrows)])
 
 	function getDrawableArrows(arrows) {
 		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+	}
+
+	function handleKeyDown(event) {
+		if (isSelected && event.keyCode === 8) {
+			arrows.setArrows(prevArrows => prevArrows.filter(arrow => {
+				return arrow.from.id !== props.data.from.id || arrow.to !== props.data.to
+			}))
+			app.resetVariablesValueAfterArrowDeletion(props.data.from.id)
+		}
 	}
 
 	function handleClick() {
@@ -21,6 +33,14 @@ function Arrow(props) {
 
 	function handleMouseOver() {
 		// console.log("Mouseover")
+	}
+
+	function handleClickOnStartHandle() {
+		console.log("Start")
+	}
+
+	function handleClickOnEndHandle() {
+		console.log("End")
 	}
 
 	const start = {
@@ -34,28 +54,29 @@ function Arrow(props) {
 	}
 
 	return (
-		<svg 
-			width={width} 
-			height={height}
-			viewBox={`0 0 ${width} ${height}`}
-			fill="none" 
-			xmlns="http://www.w3.org/2000/svg"
-			onClick={handleClick}
-			onMouseOver={handleMouseOver}
-			style={{zIndex: `${props.data.zIndex+1}`}}
-			className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
-		>
-			<path 
-				d={`
-					M ${start.X} ${start.Y}
-					L ${end.X} ${end.Y}
-				`} 
-				className={`${isSelected ? "arrow--selected" : ""}`}
-				pointerEvents="visible"
-			/>
-			<circle cx={start.X} cy={start.Y} r="4" />
-			<circle cx={end.X} cy={end.Y} r="4" />
-		</svg>
+		<div onKeyDown={handleKeyDown} tabIndex="-1" >
+			<svg 
+				viewBox={`0 0 ${width} ${height}`}
+				className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
+				style={{zIndex: `${props.data.zIndex+1}`}}
+				width={width} 
+				height={height}
+				onClick={handleClick}
+				onMouseOver={handleMouseOver}
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path 
+					d={`
+						M ${start.X} ${start.Y}
+						L ${end.X} ${end.Y}
+					`} 
+					className={`${isSelected ? "arrow--selected" : ""}`}
+					pointerEvents="visible"
+				/>
+				<circle cx={start.X} cy={start.Y} onClick={handleClickOnStartHandle} />
+				<circle cx={end.X} cy={end.Y} onClick={handleClickOnEndHandle} />
+			</svg>
+		</div>
 	)
 }
 

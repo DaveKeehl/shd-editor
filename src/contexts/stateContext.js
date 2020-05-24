@@ -255,17 +255,21 @@ function StateContextProvider(props) {
 		clearHeap()
 	}
 
-	const resetVariablesValueAfterArrowDeletion = (blockID) => {
+	const resetVariablesValueAfterArrowDeletion = (targetID) => {
 		stack.forEach(frame => {
 			frame.variables.forEach(variable => {
-				if (variable.nature === "reference" && variable.value === blockID) {
+				if (variable.nature === "reference" && (
+					variable.id === targetID || variable.value === targetID
+				)) {
 					setVariableData("stack", frame.id, variable.id, {name: "value", value: ""})
 				}
 			})
 		})
 		heap.forEach(object => {
 			object.variables.forEach(variable => {
-				if (variable.nature === "reference" && variable.value === blockID) {
+				if (variable.nature === "reference" && (
+					variable.id === targetID || variable.value === targetID
+				)) {
 					setVariableData("heap", object.id, variable.id, {name: "value", value: ""})
 				}
 			})

@@ -178,7 +178,7 @@ function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
 				}
 			}
 
-			console.log(stackFramePosition)
+			// console.log(stackFramePosition)
 
 			return stackFramePosition
 			

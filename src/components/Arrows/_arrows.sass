@@ -1,4 +1,6 @@
 .arrows
+	$green: #27ec7b
+
 	position: absolute
 	top: 0
 	left: 0
@@ -14,13 +16,13 @@
 
 	path
 		stroke-width: 2
-		// &.arrow&.arrow--selected
-		// 	stroke: green
-
 
 	circle
-		fill: #00FF00
+		fill: $green
 		stroke-width: 2px
+		r: 4px
+		&:hover
+			cursor: pointer
 
 	&__new
 		z-index: 1000
@@ -28,7 +30,7 @@
 	.arrow
 		&__stack, &__heap
 			.arrow--selected
-				stroke: green
+				stroke: $green
 
 		&__stack 
 			path, circle
