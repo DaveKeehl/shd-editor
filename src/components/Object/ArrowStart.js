@@ -48,7 +48,7 @@ function ArrowStart(props) {
 		>
 			<circle 
 				className="outer" 
-				style={{opacity: `1`}}
+				style={{opacity: `${arrows.arrows.find(arrow => arrow.from.id === props.variableID) !== undefined ? "0.2" : "1"}`}}
 				cx="9.5" 
 				cy="9" 
 				r="8" 
