@@ -44,8 +44,31 @@ function App() {
 	function handleMouseUp(event) {
 		setIsResizable(false)
 		separator.current.style.background = "#F3F3F3"
+
 		if (arrows.isArrowDragged) {
-			arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
+
+			if (arrows.activeDragHandle === "start") {
+
+				const arrowStart = arrows.getExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
+				console.log(arrowStart)
+				
+				if (arrowStart !== undefined) {
+					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
+					arrows.setStart({
+						X: arrowStart.coordinates.X,
+						Y: arrowStart.coordinates.Y
+					})
+					arrows.setFrom({
+						region: arrowStart.region,
+						parentId: arrowStart.parentId,
+						id: arrowStart.variableId
+					})
+					app.setVariableData(arrowStart.region, arrowStart.parentId, arrowStart.variableId, { name: "value", value: arrows.newArrow.to})
+				}
+			} else {
+				arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
+			}
+			arrows.setIsArrowDragged(false)
 			arrows.setActiveDragHandle("")
 		}
 	}
@@ -81,7 +104,13 @@ function App() {
 			className="App"
 			onMouseUp={handleMouseUp}
 			onMouseMove={handleMouseMove}
-			style={isResizable ? {cursor: "col-resize"} : arrows.activeDragHandle !== "" ? {cursor: "pointer"} : null}
+			style={
+				isResizable ? 
+				{cursor: "col-resize"} : 
+				arrows.activeDragHandle !== "" ? 
+					{cursor: "pointer"} : 
+					null
+			}
 		>
 			<Arrows />
 			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>

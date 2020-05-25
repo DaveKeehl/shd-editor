@@ -189,25 +189,15 @@ function getStackFramePosition(stack, stackFrame, stackScrollAmount) {
 }
 
 function getHoveredHeapObject(heap, mouseX, mouseY, stackWidth) {
-
-	console.log(arguments)
-
 	const {REGION_PADDING, SEPARATOR, HEADER_HEIGHT, BLOCK_WIDTH} = constants
-
-	console.log(`REGION_PADDING: ${REGION_PADDING}, HEADER_HEIGHT: ${HEADER_HEIGHT}, BLOCK_WIDTH: ${BLOCK_WIDTH}`)
 
 	let leftLimit = stackWidth + SEPARATOR + REGION_PADDING
 	let topLimit = HEADER_HEIGHT + REGION_PADDING
-
-	console.log(`leftLimit: ${leftLimit}, topLimit: ${topLimit}`)
 
 	// Returns the object on which the mouse is over
 	const foundObject = heap.find(object => {
 		const {X,Y} = object.position
 		const height = getBlockHeight(object)
-
-		console.log(`object position: {X: ${X}, Y: ${Y}}`)
-		console.log(`height: ${height}`)
 
 		// Check if mouse is inside current analyzed object
 		if (
@@ -220,7 +210,7 @@ function getHoveredHeapObject(heap, mouseX, mouseY, stackWidth) {
 		}
 		return false
 	})
-	console.log(foundObject)
+	// console.log(foundObject)
 	return foundObject
 }
 

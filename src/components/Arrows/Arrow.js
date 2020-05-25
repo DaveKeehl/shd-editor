@@ -69,7 +69,7 @@ function Arrow(props) {
 				viewBox={`0 0 ${width} ${height}`}
 				className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
 				style={{
-					display: `${arrows.activeDragHandle === "end" ? "none" : "block"}`,
+					display: `${props.data.dragged ? "none" : "block"}`,
 					zIndex: `${props.data.zIndex+1}`
 				}}
 				width={width} 

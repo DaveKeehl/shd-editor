@@ -24,7 +24,9 @@ const arrow = {
 			X: "",
 			Y: ""
 		}
-	}
+	},
+	zIndex: "",
+	dragged: false
 }
 
 function ArrowsContextProvider(props) {
@@ -82,6 +84,16 @@ function ArrowsContextProvider(props) {
 				}
 			}
 		}))
+	}
+
+	function setDragged(from, to, state) {
+		const updated = arrows.map(arrow => {
+			if (arrow.from.id === from && arrow.to === to) {
+				arrow.dragged = state
+			}
+			return arrow
+		})
+		setArrows(updated)
 	}
 
 	// Given 2 points (arrow start and center of target object) and the
@@ -150,9 +162,7 @@ function ArrowsContextProvider(props) {
 
 	// NEW ARROW EXACT FUNCTIONS: They set exact coordinates of the new arrow based on screen computations
 
-	// Given the stack object, the stack width and the mouse Y position,
-	// update the coordinates object of the newArrow
-	function setExactStackStartPosition(stack, stackWidth, mouseY) {
+	function getExactStackStartPosition(stack, stackWidth, mouseY) {
 		const {HEADER_HEIGHT, REGION_PADDING, FRAME_MARGIN_BOTTOM} = utils.constants
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
@@ -182,21 +192,16 @@ function ArrowsContextProvider(props) {
 					if (virtualY >= varStartY && virtualY <= varEndY) {
 
 						const arrowStart = {
-							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_WIDTH/2,
-							Y: varStartY + VAR_VERTICAL_PADDING + INPUT_HEIGHT + VAR_ROW_GAP + INPUT_HEIGHT/2 - stackScrollAmount + HEADER_HEIGHT
+							region: "stack",
+							variableId: variable.id,
+							parentId: frame.id,
+							coordinates: {
+								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_WIDTH/2,
+								Y: varStartY + VAR_VERTICAL_PADDING + INPUT_HEIGHT + VAR_ROW_GAP + INPUT_HEIGHT/2 - stackScrollAmount + HEADER_HEIGHT
+							}
 						}
 
-						// 2. Set start arrow position
-						setStart({
-							X: arrowStart.X, 
-							Y: arrowStart.Y
-						})
-						setEnd({
-							X: arrowStart.X, 
-							Y: arrowStart.Y
-						})
-
-						break
+						return arrowStart
 
 					} else {
 						varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
@@ -209,6 +214,20 @@ function ArrowsContextProvider(props) {
 				accumulator = (endY + FRAME_MARGIN_BOTTOM)
 			}
 		}
+	}
+
+	// Given the stack object, the stack width and the mouse Y position,
+	// update the coordinates object of the newArrow
+	function setExactStackStartPosition(stack, stackWidth, mouseY) {
+		const arrowStart = getExactStackStartPosition(stack, stackWidth, mouseY)
+		setStart({
+			X: arrowStart.coordinates.X, 
+			Y: arrowStart.coordinates.Y
+		})
+		setEnd({
+			X: arrowStart.coordinates.X, 
+			Y: arrowStart.coordinates.Y
+		})
 	}
 
 	// Given the heap object where the mouse is over, and the mouse Y position,
@@ -398,6 +417,7 @@ function ArrowsContextProvider(props) {
 
 	function rebaseNewArrow(arrowData, activeDragHandle) {
 		setIsArrowDragged(true)
+		setDragged(arrowData.from.id, arrowData.to, true)
 		setNewArrow({
 			from: {
 				region: arrowData.from.region,
@@ -473,7 +493,8 @@ function ArrowsContextProvider(props) {
 								start,
 								end
 							},
-							zIndex: heap.find(object => object.id === variable.value).depthIndex
+							zIndex: heap.find(object => object.id === variable.value).depthIndex,
+							dragged: false
 						}
 						setArrows(prev => ([...prev, newArrow]))
 					}
@@ -514,7 +535,8 @@ function ArrowsContextProvider(props) {
 									start,
 									end
 								},
-								zIndex: object.depthIndex+1
+								zIndex: object.depthIndex+1,
+								dragged: false
 							}
 							setArrows(prev => ([...prev, newArrow]))
 						}
@@ -543,7 +565,8 @@ function ArrowsContextProvider(props) {
 									start,
 									end
 								},
-								zIndex: object.depthIndex+1
+								zIndex: object.depthIndex+1,
+								dragged: false
 							}
 							setArrows(prev => ([...prev, newArrow]))
 						}
@@ -560,12 +583,14 @@ function ArrowsContextProvider(props) {
 		setTo,
 		setStart,
 		setEnd,
+		setDragged,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
 		activeDragHandle, setActiveDragHandle,
 		computeIntersection,
 		storeNewArrow,
 		resetNewArrow,
+		getExactStackStartPosition,
 		setExactStackStartPosition,
 		setExactHeapStartPosition,
 		setExactHeapEndPositionOnLoop,
