@@ -73,6 +73,7 @@ function App() {
 				console.log(arrowStart())
 
 				if (arrowStart() !== undefined) {
+					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 					arrows.setStart({
 						X: arrowStart().coordinates.X,
 						Y: arrowStart().coordinates.Y
@@ -88,7 +89,6 @@ function App() {
 						arrowStart().variableId, 
 						{name: "value", value: arrows.newArrow.to}
 					)
-					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 				}
 
 			} 
