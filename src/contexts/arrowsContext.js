@@ -26,7 +26,8 @@ const arrow = {
 		}
 	},
 	zIndex: "",
-	dragged: false
+	dragged: false,
+	isSelected: false
 }
 
 function ArrowsContextProvider(props) {
@@ -95,6 +96,26 @@ function ArrowsContextProvider(props) {
 		})
 		setArrows(updated)
 	}
+
+	function setIsSelected(from, to, state) {
+		const updated = arrows.map(arrow => {
+			if (arrow.from.id === from && arrow.to === to) {
+				arrow.isSelected = state
+			}
+			return arrow
+		})
+		setArrows(updated)
+	}	
+
+	function toggleIsSelected(from, to) {
+		const updated = arrows.map(arrow => {
+			if (arrow.from.id === from && arrow.to === to) {
+				arrow.isSelected = !arrow.isSelected
+			}
+			return arrow
+		})
+		setArrows(updated)
+	}	
 
 	// Given 2 points (arrow start and center of target object) and the
 	// size (width and height) of the target object, compute and return 
@@ -487,7 +508,7 @@ function ArrowsContextProvider(props) {
 
 		const {stack, heap} = diagram
 		
-		setArrows([])
+		let rebuiltArrows = []
 
 		stack.forEach(frame => {
 			frame.variables.forEach((variable,idx) => {
@@ -505,7 +526,7 @@ function ArrowsContextProvider(props) {
 							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
 						}
 
-						const newArrow = {
+						let newArrow = {
 							from: {
 								id: variable.id,
 								parentId: frame.id,
@@ -518,9 +539,14 @@ function ArrowsContextProvider(props) {
 							},
 							zIndex: heap.find(object => object.id === variable.value).depthIndex,
 							dragged: false,
-							isSelected: false
+							isSelected: false 
 						}
-						setArrows(prev => ([...prev, newArrow]))
+						const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
+						if (matchingArrow !== undefined && matchingArrow.isSelected) {
+							newArrow.isSelected = true
+						}
+
+						rebuiltArrows = [...rebuiltArrows, newArrow]
 					}
 				}
 			})
@@ -561,7 +587,12 @@ function ArrowsContextProvider(props) {
 								dragged: false,
 								isSelected: false
 							}
-							setArrows(prev => ([...prev, newArrow]))
+							const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
+							if (matchingArrow !== undefined && matchingArrow.isSelected) {
+								newArrow.isSelected = true
+							}
+		
+							rebuiltArrows = [...rebuiltArrows, newArrow]
 						}
 						else {
 							
@@ -592,12 +623,20 @@ function ArrowsContextProvider(props) {
 								dragged: false,
 								isSelected: false
 							}
-							setArrows(prev => ([...prev, newArrow]))
+							const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
+							if (matchingArrow !== undefined && matchingArrow.isSelected) {
+								newArrow.isSelected = true
+							}
+		
+							rebuiltArrows = [...rebuiltArrows, newArrow]
 						}
 					}
 				}
 			})
 		})
+
+		setArrows(rebuiltArrows)
+
 	}
 
 	const states = {
@@ -608,6 +647,8 @@ function ArrowsContextProvider(props) {
 		setStart,
 		setEnd,
 		setDragged,
+		setIsSelected,
+		toggleIsSelected,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
 		activeDragHandle, setActiveDragHandle,

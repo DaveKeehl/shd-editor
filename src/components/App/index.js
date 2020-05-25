@@ -127,11 +127,22 @@ function App() {
 		}
 	}
 
+	function handleKeyDown(event) {
+		if (event.keyCode === 8 || event.keyCode === 46) {
+			console.log("tac")
+			arrows.setArrows(prev => prev.filter(arrow => arrow.isSelected))
+			arrows.arrows.forEach(arrow => {
+				app.resetVariablesValueAfterArrowDeletion(arrow.from.id)
+			})
+		}
+	}
+
 	return (
 		<div
 			className="App"
 			onMouseUp={handleMouseUp}
 			onMouseMove={handleMouseMove}
+			onKeyDown={handleKeyDown}
 			style={
 				isResizable ? 
 				{cursor: "col-resize"} : 
@@ -139,6 +150,7 @@ function App() {
 					{cursor: "pointer"} : 
 					null
 			}
+			tabIndex="-1"
 		>
 			<Arrows />
 			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>

@@ -1,11 +1,11 @@
-import React, {useState, useContext} from "react"
+import React, {useState, useEffect, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function NewArrow() {
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
 
-	const {isArrowDragged, newArrow} = useContext(ArrowsContext)
+	const {isArrowDragged, newArrow, arrows} = useContext(ArrowsContext)
 
 	const start = {
 		X: newArrow.coordinates.start.X === "" ? 0 : newArrow.coordinates.start.X,
@@ -16,6 +16,8 @@ function NewArrow() {
 		X: newArrow.coordinates.end.X === "" ? 0 : newArrow.coordinates.end.X,
 		Y: newArrow.coordinates.end.Y === "" ? 0 : newArrow.coordinates.end.Y
 	}
+
+	const match = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
 
 	return (
 		<svg 
@@ -32,21 +34,17 @@ function NewArrow() {
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
 				`} 
-				// pointerEvents="visible"
+				className={`${
+					match === undefined ?
+					"" :
+					match.isSelected ?
+						"arrow--selected" :
+						""
+				}`}
 				style={isArrowDragged ? {cursor: "pointer"} : null}
 			/>
-			<circle 
-				cx={start.X} 
-				cy={start.Y} 
-				// pointerEvents="visible" 
-				// onClick={handleClickOnStartHandle}
-			/>
-			<circle 
-				cx={end.X} 
-				cy={end.Y} 
-				// pointerEvents="visible" 
-				// onClick={handleClickOnEndHandle} 
-			/>
+			<circle cx={start.X} cy={start.Y} />
+			<circle cx={end.X} cy={end.Y} />
 		</svg>
 	)
 }
