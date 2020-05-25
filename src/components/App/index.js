@@ -51,7 +51,7 @@ function App() {
 
 				const arrowStart = arrows.getExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
 				console.log(arrowStart)
-				
+
 				if (arrowStart !== undefined) {
 					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 					arrows.setStart({
@@ -70,6 +70,7 @@ function App() {
 			}
 			arrows.setIsArrowDragged(false)
 			arrows.setActiveDragHandle("")
+			arrows.setDragged(arrows.newArrow.from.id, arrows.newArrow.to, false)
 		}
 	}
 

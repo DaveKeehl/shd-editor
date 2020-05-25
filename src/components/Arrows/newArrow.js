@@ -32,7 +32,7 @@ function NewArrow() {
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
 				`} 
-				pointerEvents="visible"
+				// pointerEvents="visible"
 				style={isArrowDragged ? {cursor: "pointer"} : null}
 			/>
 			<circle 

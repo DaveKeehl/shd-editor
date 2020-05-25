@@ -44,27 +44,50 @@ function Arrow(props) {
 	}
 
 	function handleClickOnStartHandle() {
-		console.log("Start")
+		console.log("Click @start")
 		setIsSelected(prevState => !prevState)
 	}
 	
 	function handleMouseDownOnStartHandle() {
-		console.log("mouse down")
+		console.log("Mouse down @start")
 		arrows.rebaseNewArrow(props.data, "start")
+		if (props.data.coordinates.start.Y === arrows.newArrow.coordinates.start.Y) {
+			setIsSelected(prevState => !prevState)
+		}
 	}
 
 	function handleClickOnEndHandle() {
-		console.log("End")
+		console.log("Click @end")
 		setIsSelected(prevState => !prevState)
 	}
 
 	function handleMouseDownOnEndHandle() {
-		console.log("mouse down")
+		console.log("Mouse down @end")
 		arrows.rebaseNewArrow(props.data, "end")
+
+		// MUST HANDLE BOTH LOOP AND NOT
+		const {start, end} = props.data.coordinates
+		const intersection = arrows.recomputeIntersection(
+			{ X: start.X, Y: start.Y },
+			props.data.to, 
+			app.diagram.heap, 
+			stackWidth
+		)
+		console.log(intersection)
+		if (intersection.X === end.X && intersection.Y === end.Y) {
+			setIsSelected(prevState => !prevState)
+		}
+
+		// console.log(props.data.coordinates.start)
+		// console.log(arrows.newArrow.coordinates.end)
 	}
 
 	return (
-		<div onKeyDown={handleKeyDown} tabIndex="-1" >
+		<div 
+			className="arrow" 
+			onKeyDown={handleKeyDown} 
+			tabIndex="-1" 
+		>
 			<svg 
 				viewBox={`0 0 ${width} ${height}`}
 				className={props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}
