@@ -163,7 +163,6 @@ function ArrowsContextProvider(props) {
 	// NEW ARROW EXACT FUNCTIONS: They set exact coordinates of the new arrow based on screen computations
 
 	function getExactStackStartPosition(stack, stackWidth, mouseX, mouseY) {
-		console.log(arguments)
 		const {HEADER_HEIGHT, REGION_PADDING, FRAME_MARGIN_BOTTOM} = utils.constants
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
@@ -173,12 +172,8 @@ function ArrowsContextProvider(props) {
 
 		for (const frame of stack) {
 
-			console.log("test")
-
 			let startY = accumulator
 			let endY = startY + getBlockHeight(frame)
-
-			console.log(`startY: ${startY}, virtualY: ${virtualY}, endY: ${endY}`)
 
 			if (virtualY >= startY && virtualY <= endY) {
 
@@ -193,8 +188,6 @@ function ArrowsContextProvider(props) {
 
 					let varStartX = REGION_PADDING + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
 					let varEndX = stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
-
-					console.log(`varStartX: ${varStartX}, varEndX: ${varEndX}, mouseX: ${mouseX}`)
 
 					let varStartY = varAccumulator
 					let varEndY = varStartY + VAR_HEIGHT
@@ -244,9 +237,7 @@ function ArrowsContextProvider(props) {
 		})
 	}
 
-	// Given the heap object where the mouse is over, and the mouse Y position,
-	// update the coordinates object of the newArrow
-	function setExactHeapStartPosition(stackWidth, target, mouseY) {
+	function getExactHeapStartPosition(stackWidth, target, mouseX, mouseY) {
 		const {SEPARATOR, REGION_PADDING, HEADER_HEIGHT, OBJECT_START_FIRST_VAR} = utils.constants
 
 		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
@@ -258,30 +249,48 @@ function ArrowsContextProvider(props) {
 
 			const {VAR_HEIGHT, BLOCK_WIDTH, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, INPUT_MIN_WIDTH, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
 
+			const varStartX = startX + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
+			const varEndX = startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
 
-			if (mouseY >= varStartY && mouseY <= varEndY) {
-				const arrowStart = {
-					X: startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
-					Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
-				}
-				setStart({
-					X: arrowStart.X, 
-					Y: arrowStart.Y
-				})
-				setEnd({
-					X: arrowStart.X, 
-					Y: arrowStart.Y
-				})
+			if (
+				mouseX >= varStartX && mouseX <= varEndX
+				&&
+				mouseY >= varStartY && mouseY <= varEndY
+			) {
 
-				break
+				const arrowStart = {
+					region: "heap",
+					variableId: variable.id,
+					parentId: target.id,
+					coordinates: {
+						X: startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
+						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+					}
+				}
+				
+				return arrowStart
 
 			} else {
 				accumulator = accumulator + VAR_HEIGHT + VAR_VERTICAL_MARGIN
 			}
 
 		}
+	}
+
+	// Given the heap object where the mouse is over, and the mouse Y position,
+	// update the coordinates object of the newArrow
+	function setExactHeapStartPosition(stackWidth, target, mouseX, mouseY) {
+		const arrowStart = getExactHeapStartPosition(stackWidth, target, mouseX, mouseY)
+		setStart({
+			X: arrowStart.X, 
+			Y: arrowStart.Y
+		})
+		setEnd({
+			X: arrowStart.X, 
+			Y: arrowStart.Y
+		})
 	}
 
 	// It sets the coordinates of the end point of the new arrow when a loop occurs
@@ -403,7 +412,7 @@ function ArrowsContextProvider(props) {
 		if (from.region === "heap") {
 			// HEAP
 			const target = utils.functions.getHoveredHeapObject(diagram.heap, clientX, clientY, stackWidth)
-			setExactHeapStartPosition(stackWidth, target, clientY)
+			setExactHeapStartPosition(stackWidth, target, clientX, clientY)
 		} else {
 			// STACK
 			setExactStackStartPosition(diagram.stack, stackWidth, clientX, clientY)
@@ -606,6 +615,7 @@ function ArrowsContextProvider(props) {
 		resetNewArrow,
 		getExactStackStartPosition,
 		setExactStackStartPosition,
+		getExactHeapStartPosition,
 		setExactHeapStartPosition,
 		setExactHeapEndPositionOnLoop,
 		setExactHeapEndPositionOnIntersection,

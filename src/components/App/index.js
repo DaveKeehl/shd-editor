@@ -49,34 +49,50 @@ function App() {
 
 			if (arrows.activeDragHandle === "start") {
 
-				const arrowStart = arrows.getExactStackStartPosition(
-					app.diagram.stack, 
-					stackWidth, 
-					event.clientX, 
-					event.clientY
-				)
-				console.log(arrowStart)
-
-				if (arrowStart !== undefined) {
-					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
-					arrows.setStart({
-						X: arrowStart.coordinates.X,
-						Y: arrowStart.coordinates.Y
-					})
-					arrows.setFrom({
-						region: arrowStart.region,
-						parentId: arrowStart.parentId,
-						id: arrowStart.variableId
-					})
-					app.setVariableData(
-						arrowStart.region, 
-						arrowStart.parentId, 
-						arrowStart.variableId, 
-						{name: "value", value: arrows.newArrow.to}
+				const arrowStart = () => {
+					const stackArrowStart = arrows.getExactStackStartPosition(
+						app.diagram.stack, 
+						stackWidth, 
+						event.clientX, 
+						event.clientY
 					)
+					const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
+					// console.log(target)
+					const heapArrowStart = target === undefined ? undefined : arrows.getExactHeapStartPosition(stackWidth, target, event.clientX, event.clientY)
+					if (stackArrowStart !== undefined && heapArrowStart === undefined) {
+						return stackArrowStart
+					} 
+					else if (stackArrowStart === undefined && heapArrowStart !== undefined) {
+						return heapArrowStart
+					}
+					else {
+						return undefined
+					}
 				}
 
-			} else {
+				console.log(arrowStart())
+
+				if (arrowStart() !== undefined) {
+					arrows.setStart({
+						X: arrowStart().coordinates.X,
+						Y: arrowStart().coordinates.Y
+					})
+					arrows.setFrom({
+						region: arrowStart().region,
+						parentId: arrowStart().parentId,
+						id: arrowStart().variableId
+					})
+					app.setVariableData(
+						arrowStart().region, 
+						arrowStart().parentId, 
+						arrowStart().variableId, 
+						{name: "value", value: arrows.newArrow.to}
+					)
+					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
+				}
+
+			} 
+			else {
 				arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
 			}
 			arrows.setIsArrowDragged(false)
