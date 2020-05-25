@@ -284,12 +284,12 @@ function ArrowsContextProvider(props) {
 	function setExactHeapStartPosition(stackWidth, target, mouseX, mouseY) {
 		const arrowStart = getExactHeapStartPosition(stackWidth, target, mouseX, mouseY)
 		setStart({
-			X: arrowStart.X, 
-			Y: arrowStart.Y
+			X: arrowStart.coordinates.X, 
+			Y: arrowStart.coordinates.Y
 		})
 		setEnd({
-			X: arrowStart.X, 
-			Y: arrowStart.Y
+			X: arrowStart.coordinates.X, 
+			Y: arrowStart.coordinates.Y
 		})
 	}
 
@@ -517,7 +517,8 @@ function ArrowsContextProvider(props) {
 								end
 							},
 							zIndex: heap.find(object => object.id === variable.value).depthIndex,
-							dragged: false
+							dragged: false,
+							isSelected: false
 						}
 						setArrows(prev => ([...prev, newArrow]))
 					}
@@ -534,8 +535,6 @@ function ArrowsContextProvider(props) {
 						if (variable.value === object.id) {
 
 							//LOOP
-
-							console.log(utils.constants)
 
 							const start = {
 								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
@@ -559,7 +558,8 @@ function ArrowsContextProvider(props) {
 									end
 								},
 								zIndex: object.depthIndex+1,
-								dragged: false
+								dragged: false,
+								isSelected: false
 							}
 							setArrows(prev => ([...prev, newArrow]))
 						}
@@ -589,7 +589,8 @@ function ArrowsContextProvider(props) {
 									end
 								},
 								zIndex: object.depthIndex+1,
-								dragged: false
+								dragged: false,
+								isSelected: false
 							}
 							setArrows(prev => ([...prev, newArrow]))
 						}

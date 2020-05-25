@@ -21,6 +21,7 @@ function ArrowStart(props) {
 	}, [arrows.arrows])
 
 	function handleMouseDown(event) {
+		console.log("creating new arrow...")
 		arrows.startDraggingArrow(app.diagram, stackWidth, event, {
 			region: props.region,
 			id: props.variableID,

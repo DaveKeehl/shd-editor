@@ -5,13 +5,17 @@ import {ResizableStackContext} from "../../contexts/resizableStackContext"
 import {utils} from "../../utils"
 
 function Arrow(props) {
-	const [width, setWidth] = useState(window.screen.width)
-	const [height, setHeight] = useState(window.screen.height)
-	const [isSelected, setIsSelected] = useState(false)
-
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
 	const {stackWidth} = useContext(ResizableStackContext)
+
+	const [width, setWidth] = useState(window.screen.width)
+	const [height, setHeight] = useState(window.screen.height)
+	const [isSelected, setIsSelected] = useState(
+		arrows.arrows.find(arrow => (
+			arrow.from.id === props.data.from.id && arrow.to === props.data.to
+		).isSelected)
+	)
 
 	const start = {
 		X: props.data.coordinates.start.X,
@@ -73,13 +77,9 @@ function Arrow(props) {
 			app.diagram.heap, 
 			stackWidth
 		)
-		// console.log(intersection)
 		if (intersection.X === end.X && intersection.Y === end.Y) {
 			setIsSelected(prevState => !prevState)
 		}
-
-		// console.log(props.data.coordinates.start)
-		// console.log(arrows.newArrow.coordinates.end)
 	}
 
 	return (
