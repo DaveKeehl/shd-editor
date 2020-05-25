@@ -49,7 +49,12 @@ function App() {
 
 			if (arrows.activeDragHandle === "start") {
 
-				const arrowStart = arrows.getExactStackStartPosition(app.diagram.stack, stackWidth, event.clientY)
+				const arrowStart = arrows.getExactStackStartPosition(
+					app.diagram.stack, 
+					stackWidth, 
+					event.clientX, 
+					event.clientY
+				)
 				console.log(arrowStart)
 
 				if (arrowStart !== undefined) {
@@ -63,8 +68,14 @@ function App() {
 						parentId: arrowStart.parentId,
 						id: arrowStart.variableId
 					})
-					app.setVariableData(arrowStart.region, arrowStart.parentId, arrowStart.variableId, { name: "value", value: arrows.newArrow.to})
+					app.setVariableData(
+						arrowStart.region, 
+						arrowStart.parentId, 
+						arrowStart.variableId, 
+						{name: "value", value: arrows.newArrow.to}
+					)
 				}
+
 			} else {
 				arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
 			}

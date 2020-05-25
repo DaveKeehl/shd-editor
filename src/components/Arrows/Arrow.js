@@ -73,7 +73,7 @@ function Arrow(props) {
 			app.diagram.heap, 
 			stackWidth
 		)
-		console.log(intersection)
+		// console.log(intersection)
 		if (intersection.X === end.X && intersection.Y === end.Y) {
 			setIsSelected(prevState => !prevState)
 		}

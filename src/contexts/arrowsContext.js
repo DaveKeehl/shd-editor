@@ -162,7 +162,8 @@ function ArrowsContextProvider(props) {
 
 	// NEW ARROW EXACT FUNCTIONS: They set exact coordinates of the new arrow based on screen computations
 
-	function getExactStackStartPosition(stack, stackWidth, mouseY) {
+	function getExactStackStartPosition(stack, stackWidth, mouseX, mouseY) {
+		console.log(arguments)
 		const {HEADER_HEIGHT, REGION_PADDING, FRAME_MARGIN_BOTTOM} = utils.constants
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
@@ -172,8 +173,12 @@ function ArrowsContextProvider(props) {
 
 		for (const frame of stack) {
 
+			console.log("test")
+
 			let startY = accumulator
 			let endY = startY + getBlockHeight(frame)
+
+			console.log(`startY: ${startY}, virtualY: ${virtualY}, endY: ${endY}`)
 
 			if (virtualY >= startY && virtualY <= endY) {
 
@@ -186,10 +191,19 @@ function ArrowsContextProvider(props) {
 
 					const {VAR_HEIGHT, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_ROW_GAP} = utils.constants
 
+					let varStartX = REGION_PADDING + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
+					let varEndX = stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
+
+					console.log(`varStartX: ${varStartX}, varEndX: ${varEndX}, mouseX: ${mouseX}`)
+
 					let varStartY = varAccumulator
 					let varEndY = varStartY + VAR_HEIGHT
 
-					if (virtualY >= varStartY && virtualY <= varEndY) {
+					if (
+						mouseX >= varStartX && mouseX <= varEndX
+						&& 
+						virtualY >= varStartY && virtualY <= varEndY
+					) {
 
 						const arrowStart = {
 							region: "stack",
@@ -218,8 +232,8 @@ function ArrowsContextProvider(props) {
 
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
-	function setExactStackStartPosition(stack, stackWidth, mouseY) {
-		const arrowStart = getExactStackStartPosition(stack, stackWidth, mouseY)
+	function setExactStackStartPosition(stack, stackWidth, mouseX, mouseY) {
+		const arrowStart = getExactStackStartPosition(stack, stackWidth, mouseX, mouseY)
 		setStart({
 			X: arrowStart.coordinates.X, 
 			Y: arrowStart.coordinates.Y
@@ -392,7 +406,7 @@ function ArrowsContextProvider(props) {
 			setExactHeapStartPosition(stackWidth, target, clientY)
 		} else {
 			// STACK
-			setExactStackStartPosition(diagram.stack, stackWidth, clientY)
+			setExactStackStartPosition(diagram.stack, stackWidth, clientX, clientY)
 		}
 	}
 
@@ -598,9 +612,6 @@ function ArrowsContextProvider(props) {
 		updateArrowsOnStackScroll,
 		updateArrowsOnStackResize,
 		updateArrowsOnStackWidthReset,
-		// updateArrowsOnNewStackFrame,
-		// updateArrowsOnNewStackVariable,
-		// updateArrowsOnNewHeapVariable,
 		recomputeIntersection,
 		startDraggingArrow,
 		stopDraggingArrow,
