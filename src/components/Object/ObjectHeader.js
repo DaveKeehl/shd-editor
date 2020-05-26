@@ -10,6 +10,7 @@ function ObjectHeader(props) {
 
 	const headerRef = useRef(null)
 
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// BLOCK_HEADER_HEIGHT
 		const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))

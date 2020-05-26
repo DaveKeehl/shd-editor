@@ -23,7 +23,7 @@ function App() {
 	
 	const separator = useRef(null)
 
-	// LOAD COMPUTED CSS VALUE WHEN APP MOUNTS
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// SEPARATOR
 		const separatorWidth = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
@@ -129,7 +129,6 @@ function App() {
 
 	function handleKeyDown(event) {
 		if (event.keyCode === 8 || event.keyCode === 46) {
-			console.log("tac")
 			arrows.setArrows(prev => prev.filter(arrow => arrow.isSelected))
 			arrows.arrows.forEach(arrow => {
 				app.resetVariablesValueAfterArrowDeletion(arrow.from.id)

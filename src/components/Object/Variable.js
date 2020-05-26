@@ -16,6 +16,7 @@ function Variable(props) {
 	const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
 	const thisVar = parent.variables.find(variable => variable.id === props.id)
 
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// VAR_HEIGHT
 		const height = parseInt(window.getComputedStyle(varRef.current).getPropertyValue("height"))

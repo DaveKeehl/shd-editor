@@ -12,9 +12,10 @@ function StackFrame(props) {
 
 	const frameRef = useRef(null)
 
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// BLOCK_PADDING
-		const padding = parseInt(window.getComputedStyle(frameRef.current).getPropertyValue("padding"))
+		const padding = parseInt(window.getComputedStyle(frameRef.current).getPropertyValue("padding-top"))
 		utils.functions.updateConstantValue("BLOCK_PADDING", padding)
 		// FRAME_MIN_HEIGHT
 		const frameMinHeight = parseInt(window.getComputedStyle(frameRef.current).getPropertyValue("height"))

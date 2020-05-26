@@ -24,12 +24,13 @@ function HeapObject(props) {
 	const obj = useRef(null)
 	const dragHandleRef = useRef(null)
 
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// BLOCK_WIDTH
 		const blockWidth = parseInt(window.getComputedStyle(obj.current).getPropertyValue("width"))
 		utils.functions.updateConstantValue("BLOCK_WIDTH", blockWidth)
 		// BLOCK_PADDING
-		const blockPadding = parseInt(window.getComputedStyle(obj.current).getPropertyValue("padding"))
+		const blockPadding = parseInt(window.getComputedStyle(obj.current).getPropertyValue("padding-top"))
 		utils.functions.updateConstantValue("BLOCK_PADDING", blockPadding)
 		// OBJECT_MIN_HEIGHT
 		const objectMinHeight = parseInt(window.getComputedStyle(obj.current).getPropertyValue("height"))
@@ -135,18 +136,16 @@ function HeapObject(props) {
 		}
 	}
 
-	const styles = {
-		transform: `translate(${position.X}px, ${position.Y}px)`, 
-		zIndex: localDepthIndex,
-		cursor: `${isDragged ? "pointer" : "default"}`
-	}
-
 	return (
 		<div 
 			className={`object ${isDragged ? "object--selected" : ""}`} 
 			draggable={false}
 			ref={obj}
-			style={prefix(styles)}
+			style={{
+				transform: `translate(${position.X}px, ${position.Y}px)`, 
+				zIndex: localDepthIndex,
+				cursor: `${isDragged ? "pointer" : "default"}`
+			}}
 		>
 			<div 
 				className="object__drag-handle"

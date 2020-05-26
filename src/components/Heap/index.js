@@ -18,8 +18,9 @@ function Heap(props) {
 
 	const heapRef = useRef(null)
 
+	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
-		const padding = parseInt(window.getComputedStyle(heapRef.current).getPropertyValue("padding"))
+		const padding = parseInt(window.getComputedStyle(heapRef.current).getPropertyValue("padding-top"))
 		utils.functions.updateConstantValue("REGION_PADDING", padding)
 	}, [])
 
