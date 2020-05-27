@@ -70,7 +70,7 @@ function App() {
 					}
 				}
 
-				console.log(arrowStart())
+				// console.log(arrowStart())
 
 				if (arrowStart() !== undefined) {
 					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)

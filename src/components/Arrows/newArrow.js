@@ -1,11 +1,13 @@
-import React, {useState, useEffect, useContext} from "react"
+import React, {useState, useRef, useEffect, useContext} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 
 function NewArrow() {
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
 
-	const {isArrowDragged, newArrow, arrows} = useContext(ArrowsContext)
+	const lineRef = useRef(null)
+
+	const {activeDragHandle, isArrowDragged, newArrow, arrows} = useContext(ArrowsContext)
 
 	const start = {
 		X: newArrow.coordinates.start.X === "" ? 0 : newArrow.coordinates.start.X,
@@ -29,6 +31,19 @@ function NewArrow() {
 			fill="none" 
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<defs>
+				<marker 
+					id="new_arrow" 
+					viewBox="0 0 10 10" 
+					refX="5" 
+					refY="5" 
+					markerWidth="6" 
+					markerHeight="6" 
+					orient="auto-start-reverse"
+				>
+					<path d="M 0 0 L 10 5 L 0 10 z"/>
+				</marker>
+			</defs>
 			<path 
 				d={`
 					M ${start.X} ${start.Y}
@@ -42,9 +57,11 @@ function NewArrow() {
 						""
 				}`}
 				style={isArrowDragged ? {cursor: "pointer"} : null}
+				ref={lineRef}
+				markerEnd="url(#new_arrow)"
 			/>
-			<circle cx={start.X} cy={start.Y} />
-			<circle cx={end.X} cy={end.Y} />
+			<circle cx={start.X} cy={start.Y} style={{display: `${activeDragHandle === "start"? "block" : "none"}`}} />
+			<circle cx={end.X} cy={end.Y}  style={{display: `${activeDragHandle === "end"? "block" : "none"}`}} />
 		</svg>
 	)
 }

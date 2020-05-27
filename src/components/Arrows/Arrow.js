@@ -79,6 +79,19 @@ function Arrow(props) {
 			height={height}
 			xmlns="http://www.w3.org/2000/svg"
 		>
+			<defs>
+				<marker 
+					id={`arrow${props.data.from.id}${props.data.to}`} 
+					viewBox="0 0 10 10" 
+					refX="5" 
+					refY="5" 
+					markerWidth="6" 
+					markerHeight="6" 
+					orient="auto-start-reverse"
+				>
+					<path d="M 0 0 L 10 5 L 0 10 z"/>
+				</marker>
+			</defs>
 			<path 
 				d={`
 					M ${start.X} ${start.Y}
@@ -87,6 +100,7 @@ function Arrow(props) {
 				className={`${props.data.isSelected ? "arrow--selected" : ""}`}
 				pointerEvents="visible"
 				onClick={handleClick}
+				markerEnd={`url(#arrow${props.data.from.id}${props.data.to})`}
 			/>
 			<circle 
 				cx={start.X} 
