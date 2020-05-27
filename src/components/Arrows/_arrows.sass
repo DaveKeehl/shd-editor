@@ -1,7 +1,5 @@
 .arrows
 	$green: #27ec7b
-	--dark-red: $dark-red
-	--dark-blue: $dark-blue
 
 	position: absolute
 	top: 0
@@ -17,7 +15,7 @@
 		left: 0
 		
 		&:hover circle
-			display: block
+			opacity: 1
 
 	path
 		stroke-width: 2
@@ -25,7 +23,7 @@
 			cursor: pointer
 
 	circle
-		display: none
+		opacity: 0
 		fill: $green
 		stroke-width: 2px
 		r: 4px
@@ -38,8 +36,13 @@
 			&:hover
 				circle
 					cursor: pointer
+
 			.arrow--selected
+				fill: $green
 				stroke: $green
+
+			.arrow--selected ~ circle
+					opacity: 1
 
 		&__stack 
 			path, circle

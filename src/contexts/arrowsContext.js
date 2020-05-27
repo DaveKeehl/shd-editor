@@ -98,6 +98,20 @@ function ArrowsContextProvider(props) {
 		setArrows(updated)
 	}
 
+	function setNewArrowIsSelected(state) {
+		setNewArrow(prev => ({
+			...prev,
+			isSelected: state
+		}))
+	}
+
+	function toggleNewArrowIsSelected() {
+		setNewArrow(prev => ({
+			...prev,
+			isSelected: !prev.isSelected
+		}))
+	}
+
 	function setIsSelected(from, to, state) {
 		const updated = arrows.map(arrow => {
 			if (arrow.from.id === from && arrow.to === to) {
@@ -650,6 +664,8 @@ function ArrowsContextProvider(props) {
 		setDragged,
 		setIsSelected,
 		toggleIsSelected,
+		setNewArrowIsSelected,
+		toggleNewArrowIsSelected,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
 		activeDragHandle, setActiveDragHandle,

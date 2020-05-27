@@ -41,9 +41,10 @@ function Arrow(props) {
 	function handleMouseDownOnStartHandle() {
 		console.log("Mouse down @start")
 		arrows.rebaseNewArrow(props.data, "start")
-		if (props.data.coordinates.start.Y === arrows.newArrow.coordinates.start.Y) {
-			arrows.toggleIsSelected(props.data.from.id, props.data.to)
-		}
+		// arrows.setIsSelected(props.data.from.id, props.data.to, fa)
+		// if (props.data.coordinates.start.Y === arrows.newArrow.coordinates.start.Y) {
+		// 	arrows.toggleIsSelected(props.data.from.id, props.data.to)
+		// }
 	}
 
 	function handleClickOnEndHandle() {
@@ -62,9 +63,9 @@ function Arrow(props) {
 			app.diagram.heap, 
 			stackWidth
 		)
-		if (intersection.X === end.X && intersection.Y === end.Y) {
-			arrows.toggleIsSelected(props.data.from.id, props.data.to)
-		}
+		// if (intersection.X === end.X && intersection.Y === end.Y) {
+		// 	arrows.toggleIsSelected(props.data.from.id, props.data.to)
+		// }
 	}
 
 	return (

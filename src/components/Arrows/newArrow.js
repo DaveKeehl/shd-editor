@@ -43,7 +43,10 @@ function NewArrow() {
 				>
 					<path
 						d="M 0 0 L 10 5 L 0 10 z" 
-						style={{transition: "opacity .3s", opacity: `${isArrowHeadVisible ? "1" : "0"}`}} 
+						style={{
+							transition: `${isArrowHeadVisible ? "opacity .3s" : "none"}`, 
+							opacity: `${isArrowHeadVisible || activeDragHandle !== "" ? "1" : "0"}`
+						}} 
 					/>
 				</marker>
 			</defs>
@@ -63,8 +66,8 @@ function NewArrow() {
 				ref={lineRef}
 				markerEnd="url(#new_arrow)"
 			/>
-			<circle cx={start.X} cy={start.Y} style={{display: `${activeDragHandle === "start"? "block" : "none"}`}} />
-			<circle cx={end.X} cy={end.Y}  style={{display: `${activeDragHandle === "end"? "block" : "none"}`}} />
+			<circle cx={start.X} cy={start.Y} style={{opacity: `${activeDragHandle === "start"? "1" : "0"}`}} />
+			<circle cx={end.X} cy={end.Y}  style={{opacity: `${activeDragHandle === "end"? "1" : "0"}`}} />
 		</svg>
 	)
 }

@@ -10,7 +10,7 @@ import {HeapMousePositionContextProvider} from "../../contexts/heapMousePosition
 import {utils} from "../../utils"
 
 function App() {
-	const [diagram, setDiagram] = useState({})
+	// const [diagram, setDiagram] = useState({})
 	
 	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
@@ -31,7 +31,7 @@ function App() {
 	}, [])
 
 	useEffect(() => {
-		setDiagram(app.diagram)
+		// setDiagram(app.diagram)
 		arrows.rebuildArrows(app.diagram, stackWidth)
 		// console.log(utils.constants)
 	}, [app.diagram, utils.constants])

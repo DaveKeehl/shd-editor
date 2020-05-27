@@ -9,6 +9,8 @@ function Arrows() {
 	const {arrows: arrowsData} = useContext(ArrowsContext)
 	
 	useEffect(() => {
+		console.log("arrows have changed")
+		console.log(arrowsData)
 		const newArrows = arrowsData.map(arrow => {
 			return (
 				<Arrow 
