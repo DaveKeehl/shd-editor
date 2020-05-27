@@ -42,13 +42,16 @@ function App() {
 	}
 
 	function handleMouseUp(event) {
-		setIsResizable(false)
-		separator.current.style.background = "#F3F3F3"
+		if (isResizable) {
+			setIsResizable(false)
+			separator.current.style.background = "#F3F3F3"
+		}
+
+		arrows.setIsArrowHeadVisible(false)
 
 		if (arrows.isArrowDragged) {
-
 			if (arrows.activeDragHandle === "start") {
-
+				// CHECK IF NEW START IS ON A STACK FRAME OR A HEAP OBJECT
 				const arrowStart = () => {
 					const stackArrowStart = arrows.getExactStackStartPosition(
 						app.diagram.stack, 
@@ -56,9 +59,17 @@ function App() {
 						event.clientX, 
 						event.clientY
 					)
-					const target = utils.functions.getHoveredHeapObject(app.diagram.heap, event.clientX, event.clientY, stackWidth)
-					// console.log(target)
-					const heapArrowStart = target === undefined ? undefined : arrows.getExactHeapStartPosition(stackWidth, target, event.clientX, event.clientY)
+					const target = utils.functions.getHoveredHeapObject(
+						app.diagram.heap, 
+						event.clientX, 
+						event.clientY, 
+						stackWidth
+					)
+					const heapArrowStart = (
+						target === undefined ? 
+						undefined : 
+						arrows.getExactHeapStartPosition(stackWidth, target, event.clientX, event.clientY)
+					)
 					if (stackArrowStart !== undefined && heapArrowStart === undefined) {
 						return stackArrowStart
 					} 
@@ -69,9 +80,6 @@ function App() {
 						return undefined
 					}
 				}
-
-				// console.log(arrowStart())
-
 				if (arrowStart() !== undefined) {
 					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 					arrows.setStart({
@@ -90,7 +98,6 @@ function App() {
 						{name: "value", value: arrows.newArrow.to}
 					)
 				}
-
 			} 
 			else {
 				arrows.stopDraggingArrow(app.diagram.heap, stackWidth, event, app.setVariableData)
@@ -117,6 +124,19 @@ function App() {
 				arrows.setStart({X: clientX, Y: clientY})
 			} else {
 				arrows.setEnd({X: clientX, Y: clientY})
+
+				// HIDE ARROWHEAD IF CURSOR DIDN'T MOVE A LOT
+				const start = arrows.newArrow.coordinates.start
+				const tolerance = 5
+				if (clientX >= start.X-tolerance && 
+					clientX <= start.X+tolerance && 
+					clientY >= start.Y-tolerance && 
+					clientY <= start.Y+tolerance)
+				{
+					arrows.setIsArrowHeadVisible(false)
+				} else {
+					arrows.setIsArrowHeadVisible(true)
+				}
 			}
 		}
 		if (isResizable && clientX >= STACK_MIN && clientX <= STACK_MAX) {

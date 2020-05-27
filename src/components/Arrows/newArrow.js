@@ -7,7 +7,7 @@ function NewArrow() {
 
 	const lineRef = useRef(null)
 
-	const {activeDragHandle, isArrowDragged, newArrow, arrows} = useContext(ArrowsContext)
+	const {activeDragHandle, isArrowDragged, isArrowHeadVisible, newArrow, arrows} = useContext(ArrowsContext)
 
 	const start = {
 		X: newArrow.coordinates.start.X === "" ? 0 : newArrow.coordinates.start.X,
@@ -41,7 +41,10 @@ function NewArrow() {
 					markerHeight="6" 
 					orient="auto-start-reverse"
 				>
-					<path d="M 0 0 L 10 5 L 0 10 z"/>
+					<path
+						d="M 0 0 L 10 5 L 0 10 z" 
+						style={{transition: "opacity .3s", opacity: `${isArrowHeadVisible ? "1" : "0"}`}} 
+					/>
 				</marker>
 			</defs>
 			<path 

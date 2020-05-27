@@ -38,6 +38,7 @@ function ArrowsContextProvider(props) {
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
 	const [activeDragHandle, setActiveDragHandle] = useState("")
+	const [isArrowHeadVisible, setIsArrowHeadVisible] = useState(false)
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
@@ -652,6 +653,7 @@ function ArrowsContextProvider(props) {
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
 		activeDragHandle, setActiveDragHandle,
+		isArrowHeadVisible, setIsArrowHeadVisible,
 		computeIntersection,
 		storeNewArrow,
 		resetNewArrow,
