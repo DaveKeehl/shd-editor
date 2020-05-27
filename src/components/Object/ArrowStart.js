@@ -21,12 +21,13 @@ function ArrowStart(props) {
 	}, [arrows.arrows])
 
 	function handleMouseDown(event) {
-		console.log("creating new arrow...")
-		arrows.startDraggingArrow(app.diagram, stackWidth, event, {
-			region: props.region,
-			id: props.variableID,
-			parentId: props.parentID
-		})
+		if (arrows.arrows.find(arrow => arrow.from.id === props.variableID) === undefined) {
+			arrows.startDraggingArrow(app.diagram, stackWidth, event, {
+				region: props.region,
+				id: props.variableID,
+				parentId: props.parentID
+			})
+		}
 	}
 
 	function handleMouseUp() {
@@ -42,7 +43,7 @@ function ArrowStart(props) {
 
 	return (
 		<svg 
-			viewBox="0 0 19 18" 
+			viewBox="0 0 18 18" 
 			fill="none" 
 			xmlns="http://www.w3.org/2000/svg"
 			onMouseDown={handleMouseDown}
@@ -52,12 +53,12 @@ function ArrowStart(props) {
 			<circle 
 				className="outer" 
 				style={{opacity: `${arrow === null ? "1" : "0.1"}`}}
-				cx="9.5" 
+				cx="9" 
 				cy="9" 
 				r="8" 
 				strokeWidth="2"
 			/>
-			<circle className="inner" cx="9.5" cy="9" r="4"/>
+			<circle className="inner" cx="9" cy="9" r="4.8"/>
 		</svg>
 	)
 }

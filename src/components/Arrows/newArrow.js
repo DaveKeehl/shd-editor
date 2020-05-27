@@ -35,7 +35,7 @@ function NewArrow() {
 				<marker 
 					id="new_arrow" 
 					viewBox="0 0 10 10" 
-					refX="5" 
+					refX="8" 
 					refY="5" 
 					markerWidth="6" 
 					markerHeight="6" 
