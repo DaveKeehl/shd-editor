@@ -9,8 +9,10 @@ function Header(props) {
 	const headerRef = useRef(null)
 
 	useEffect(() => {
-		const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
-		utils.functions.updateConstantValue("HEADER_HEIGHT", height)
+		setTimeout(() => {
+			const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
+			utils.functions.updateConstantValue("HEADER_HEIGHT", height)
+		}, 50)
 	}, [])
 
 	return (

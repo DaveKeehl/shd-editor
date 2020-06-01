@@ -42,6 +42,7 @@ function App() {
 	}
 
 	function handleMouseUp(event) {
+
 		if (isResizable) {
 			setIsResizable(false)
 			separator.current.style.background = "#F3F3F3"
@@ -81,6 +82,25 @@ function App() {
 					}
 				}
 				if (arrowStart() !== undefined) {
+					// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
+					const match = arrows.selectedArrows.find(selectedArrow => (
+						selectedArrow.from.id === arrows.newArrow.from.id && selectedArrow.to === arrows.newArrow.to
+					))
+					if (match !== undefined) {
+						const updatedSelectedArrows = arrows.selectedArrows.map(selectedArrow => {
+							if (selectedArrow.from.id === arrows.newArrow.from.id && selectedArrow.to === arrows.newArrow.to) {
+								// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
+								selectedArrow.from.id = arrowStart().variableId
+								selectedArrow.from.parentId = arrowStart().parentId
+								selectedArrow.from.region = arrowStart().region
+								selectedArrow.coordinates.start.X = arrowStart().coordinates.X
+								selectedArrow.coordinates.start.Y = arrowStart().coordinates.Y
+							}
+							return selectedArrow
+						})
+						arrows.setSelectedArrows(updatedSelectedArrows)
+					}
+					// UPDATE NEW ARROW VALUES
 					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 					arrows.setStart({
 						X: arrowStart().coordinates.X,
@@ -149,10 +169,24 @@ function App() {
 
 	function handleKeyDown(event) {
 		if (event.keyCode === 8 || event.keyCode === 46) {
-			arrows.setArrows(prev => prev.filter(arrow => arrow.isSelected))
-			arrows.arrows.forEach(arrow => {
-				app.resetVariablesValueAfterArrowDeletion(arrow.from.id)
+			const filteredArrows = arrows.arrows.filter(arrow => {
+				// check if arrow if present in selected arrows array
+				const match = arrows.selectedArrows.find(selectedArrow => (
+					arrow.from.id === selectedArrow.from.id && arrow.to === selectedArrow.to
+				))
+				if (match !== undefined) {
+					app.resetVariablesValueAfterArrowDeletion(arrow.from.id)
+					arrows.setSelectedArrows(selectedArrows => {
+						return selectedArrows.filter(selectedArrow => (
+							arrow.from.id !== selectedArrow.from.id || arrow.to !== selectedArrow.to
+						))
+					})
+					return true
+				} else {
+					return false
+				}
 			})
+			arrows.setArrows(filteredArrows)
 		}
 	}
 

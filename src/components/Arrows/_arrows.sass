@@ -39,10 +39,11 @@
 
 			.arrow--selected
 				fill: $green
-				stroke: $green
+				&:not(.arrow__head)
+					stroke: $green
 
 			.arrow--selected ~ circle
-					opacity: 1
+				opacity: 1
 
 		&__stack 
 			path, circle

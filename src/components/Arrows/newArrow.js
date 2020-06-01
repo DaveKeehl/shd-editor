@@ -7,7 +7,7 @@ function NewArrow() {
 
 	const lineRef = useRef(null)
 
-	const {activeDragHandle, isArrowDragged, isArrowHeadVisible, newArrow, arrows} = useContext(ArrowsContext)
+	const {activeDragHandle, isArrowDragged, isArrowHeadVisible, newArrow, selectedArrows} = useContext(ArrowsContext)
 
 	const start = {
 		X: newArrow.coordinates.start.X === "" ? 0 : newArrow.coordinates.start.X,
@@ -19,7 +19,9 @@ function NewArrow() {
 		Y: newArrow.coordinates.end.Y === "" ? 0 : newArrow.coordinates.end.Y
 	}
 
-	const match = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
+	const match = selectedArrows.find(selectedArrow => (
+		selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to
+	))
 
 	return (
 		<svg 
@@ -43,6 +45,7 @@ function NewArrow() {
 				>
 					<path
 						d="M 0 0 L 10 5 L 0 10 z" 
+						className={`arrow__head ${match !== undefined ? "arrow--selected" : ""}`}
 						style={{
 							transition: `${isArrowHeadVisible ? "opacity .3s" : "none"}`, 
 							opacity: `${isArrowHeadVisible || activeDragHandle !== "" ? "1" : "0"}`
@@ -55,13 +58,7 @@ function NewArrow() {
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
 				`} 
-				className={`${
-					match === undefined ?
-					"" :
-					match.isSelected ?
-						"arrow--selected" :
-						""
-				}`}
+				className={`${match !== undefined ? "arrow--selected" : ""}`}
 				style={isArrowDragged ? {cursor: "pointer"} : null}
 				ref={lineRef}
 				markerEnd="url(#new_arrow)"

@@ -11,70 +11,80 @@ function Arrow(props) {
 
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
+	const [isSelected, setIsSelected] = useState(() => (
+		checkIsArrowSelected() === undefined ? false : true
+	))
 
 	const start = {
-		X: props.data.coordinates.start.X,
-		Y: props.data.coordinates.start.Y
+		X: props.coordinates.start.X,
+		Y: props.coordinates.start.Y
 	}
 
 	const end = {
-		X: props.data.coordinates.end.X,
-		Y: props.data.coordinates.end.Y
+		X: props.coordinates.end.X,
+		Y: props.coordinates.end.Y
 	}
 
 	useEffect(() => {}, [getDrawableArrow(arrows.arrows)])
 
+	useEffect(() => {
+		setIsSelected(checkIsArrowSelected() === undefined ? false : true)
+	}, [arrows.selectedArrows])
+
+	function checkIsArrowSelected() {
+		const match = arrows.selectedArrows.find(arrow => (
+			arrow.from.id === props.from.id && arrow.to === props.to
+		))
+		return match
+	}
+
 	function getDrawableArrow(arrows) {
-		arrows.find(arrow => arrow.from.id === props.data.from.id && arrow.to === props.data.to)
+		arrows.find(arrow => arrow.from.id === props.from.id && arrow.to === props.to)
 	}
 
 	function handleClick() {
-		console.log("arrow is clicked")
-		arrows.toggleIsSelected(props.data.from.id, props.data.to)
+		// console.log("arrow is clicked")
+		arrows.toggleSelectedArrow(props)
 	}
 
-	function handleClickOnStartHandle() {
-		console.log("Click @start")
-		arrows.toggleIsSelected(props.data.from.id, props.data.to)
-	}
+	// function handleClickOnStartHandle() {
+	// 	console.log("Click @start")
+	// 	arrows.toggleIsSelected(props.from.id, props.to)
+	// }
 	
 	function handleMouseDownOnStartHandle() {
-		console.log("Mouse down @start")
-		arrows.rebaseNewArrow(props.data, "start")
-		// arrows.setIsSelected(props.data.from.id, props.data.to, fa)
-		// if (props.data.coordinates.start.Y === arrows.newArrow.coordinates.start.Y) {
-		// 	arrows.toggleIsSelected(props.data.from.id, props.data.to)
-		// }
+		// console.log("Mouse down @start")
+		arrows.rebaseNewArrow(props, "start")
 	}
 
-	function handleClickOnEndHandle() {
-		console.log("Click @end")
-		arrows.toggleIsSelected(props.data.from.id, props.data.to)
-	}
+	// function handleClickOnEndHandle() {
+	// 	console.log("Click @end")
+	// 	arrows.toggleIsSelected(props.from.id, props.to)
+	// }
 
 	function handleMouseDownOnEndHandle() {
-		console.log("Mouse down @end")
-		arrows.rebaseNewArrow(props.data, "end")
+		// console.log("Mouse down @end")
+		arrows.rebaseNewArrow(props, "end")
 
-		const {start, end} = props.data.coordinates
+		const {start, end} = props.coordinates
 		const intersection = arrows.recomputeIntersection(
 			{ X: start.X, Y: start.Y },
-			props.data.to, 
+			props.to, 
 			app.diagram.heap, 
 			stackWidth
 		)
 		// if (intersection.X === end.X && intersection.Y === end.Y) {
-		// 	arrows.toggleIsSelected(props.data.from.id, props.data.to)
+		// 	arrows.toggleIsSelected(props.from.id, props.to)
 		// }
 	}
 
 	return (
 		<svg 
 			viewBox={`0 0 ${width} ${height}`}
-			className={`arrow ${props.data.from.region === "stack" ? "arrow__stack" : "arrow__heap"}`}
+			className={`arrow ${props.from.region === "stack" ? "arrow__stack" : "arrow__heap"}`}
 			style={{
-				display: `${props.data.dragged ? "none" : "block"}`,
-				zIndex: `${props.data.zIndex+1}`
+				display: `${props.isDragged ? "none" : "block"}`,
+				zIndex: `${props.zIndex+1}`
 			}}
 			width={width} 
 			height={height}
@@ -82,7 +92,7 @@ function Arrow(props) {
 		>
 			<defs>
 				<marker 
-					id={`arrow${props.data.from.id}${props.data.to}`} 
+					id={`arrow${props.from.id}${props.to}`} 
 					viewBox="0 0 10 10" 
 					refX="8" 
 					refY="5" 
@@ -90,7 +100,10 @@ function Arrow(props) {
 					markerHeight="6" 
 					orient="auto-start-reverse"
 				>
-					<path d="M 0 0 L 10 5 L 0 10 z"/>
+					<path 
+						d="M 0 0 L 10 5 L 0 10 z"
+						className={`arrow__head ${isSelected ? "arrow--selected" : ""}`}
+					/>
 				</marker>
 			</defs>
 			<path 
@@ -98,23 +111,23 @@ function Arrow(props) {
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
 				`} 
-				className={`${props.data.isSelected ? "arrow--selected" : ""}`}
+				className={`${isSelected ? "arrow--selected" : ""}`}
 				pointerEvents="visible"
 				onClick={handleClick}
-				markerEnd={`url(#arrow${props.data.from.id}${props.data.to})`}
+				markerEnd={`url(#arrow${props.from.id}${props.to})`}
 			/>
 			<circle 
 				cx={start.X} 
 				cy={start.Y} 
 				pointerEvents="visible" 
-				onClick={handleClickOnStartHandle}
+				// onClick={handleClickOnStartHandle}
 				onMouseDown={handleMouseDownOnStartHandle}
 			/>
 			<circle 
 				cx={end.X} 
 				cy={end.Y} 
 				pointerEvents="visible" 
-				onClick={handleClickOnEndHandle}
+				// onClick={handleClickOnEndHandle}
 				onMouseDown={handleMouseDownOnEndHandle}
 			/>
 		</svg>

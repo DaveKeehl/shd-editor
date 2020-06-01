@@ -9,13 +9,15 @@ function Arrows() {
 	const {arrows: arrowsData} = useContext(ArrowsContext)
 	
 	useEffect(() => {
-		console.log("arrows have changed")
-		console.log(arrowsData)
 		const newArrows = arrowsData.map(arrow => {
 			return (
 				<Arrow 
 					key={[arrow.from.id, arrow.to]}
-					data={arrow}
+					from={arrow.from}
+					to={arrow.to}
+					coordinates={arrow.coordinates}
+					zIndex={arrow.zIndex}
+					isDragged={arrow.isDragged}
 				/>
 			)
 		})

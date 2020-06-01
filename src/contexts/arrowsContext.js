@@ -26,19 +26,18 @@ const arrow = {
 		}
 	},
 	zIndex: "",
-	dragged: false,
-	isSelected: false
+	isDragged: false
 }
 
 function ArrowsContextProvider(props) {
 
 	const [arrows, setArrows] = useState([])
-
 	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
 	const [activeDragHandle, setActiveDragHandle] = useState("")
 	const [isArrowHeadVisible, setIsArrowHeadVisible] = useState(false)
+	const [selectedArrows, setSelectedArrows] = useState([])
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
@@ -91,7 +90,7 @@ function ArrowsContextProvider(props) {
 	function setDragged(from, to, state) {
 		const updated = arrows.map(arrow => {
 			if (arrow.from.id === from && arrow.to === to) {
-				arrow.dragged = state
+				arrow.isDragged = state
 			}
 			return arrow
 		})
@@ -112,25 +111,18 @@ function ArrowsContextProvider(props) {
 		}))
 	}
 
-	function setIsSelected(from, to, state) {
-		const updated = arrows.map(arrow => {
-			if (arrow.from.id === from && arrow.to === to) {
-				arrow.isSelected = state
-			}
-			return arrow
-		})
-		setArrows(updated)
-	}	
-
-	function toggleIsSelected(from, to) {
-		const updated = arrows.map(arrow => {
-			if (arrow.from.id === from && arrow.to === to) {
-				arrow.isSelected = !arrow.isSelected
-			}
-			return arrow
-		})
-		setArrows(updated)
-	}	
+	function toggleSelectedArrow(arrow) {
+		const match = selectedArrows.find(current => (
+			current.from.id === arrow.from.id && current.to === arrow.to
+		))
+		if (match === undefined) {
+			setSelectedArrows(prevArrows => [...prevArrows, arrow])
+		} else {
+			setSelectedArrows(prevArrows => prevArrows.filter(current => (
+				current.from.id !== arrow.from.id || current.to !== arrow.to
+			)))
+		}
+	}
 
 	// Given 2 points (arrow start and center of target object) and the
 	// size (width and height) of the target object, compute and return 
@@ -461,6 +453,28 @@ function ArrowsContextProvider(props) {
 		if (target !== undefined) {
 			// CASE 1: HANDLES BOTH TARGET IS SAME OBJECT (LOOP) AND A DIFFERENT ONE
 			const {region, parentId, id} = newArrow.from
+			
+			console.log("target heap object:")
+			console.log(target)
+
+			console.log("new end arrow data")
+			// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
+			const match = selectedArrows.find(selectedArrow => (
+				selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to
+			))
+			if (match !== undefined) {
+				let updatedSelectedArrows = selectedArrows.map(selectedArrow => {
+					if (selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to) {
+						// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
+						selectedArrow.to = target.id
+					}
+					return selectedArrow
+				})
+				setSelectedArrows(updatedSelectedArrows)
+			}
+
+
+
 			setVariableData(region, parentId, id, { name: "value", value: target.id })
 			setTo(target.id)
 		}
@@ -523,7 +537,7 @@ function ArrowsContextProvider(props) {
 
 		const {stack, heap} = diagram
 		
-		let rebuiltArrows = []
+		setArrows([])
 
 		stack.forEach(frame => {
 			frame.variables.forEach((variable,idx) => {
@@ -553,15 +567,10 @@ function ArrowsContextProvider(props) {
 								end
 							},
 							zIndex: heap.find(object => object.id === variable.value).depthIndex,
-							dragged: false,
-							isSelected: false 
-						}
-						const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
-						if (matchingArrow !== undefined && matchingArrow.isSelected) {
-							newArrow.isSelected = true
+							isDragged: false
 						}
 
-						rebuiltArrows = [...rebuiltArrows, newArrow]
+						setArrows(prev => ([...prev, newArrow]))
 					}
 				}
 			})
@@ -599,15 +608,10 @@ function ArrowsContextProvider(props) {
 									end
 								},
 								zIndex: object.depthIndex+1,
-								dragged: false,
-								isSelected: false
-							}
-							const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
-							if (matchingArrow !== undefined && matchingArrow.isSelected) {
-								newArrow.isSelected = true
+								isDragged: false
 							}
 		
-							rebuiltArrows = [...rebuiltArrows, newArrow]
+							setArrows(prev => ([...prev, newArrow]))
 						}
 						else {
 							
@@ -635,26 +639,19 @@ function ArrowsContextProvider(props) {
 									end
 								},
 								zIndex: object.depthIndex+1,
-								dragged: false,
-								isSelected: false
-							}
-							const matchingArrow = arrows.find(arrow => arrow.from.id === newArrow.from.id && arrow.to === newArrow.to)
-							if (matchingArrow !== undefined && matchingArrow.isSelected) {
-								newArrow.isSelected = true
+								isDragged: false
 							}
 		
-							rebuiltArrows = [...rebuiltArrows, newArrow]
+							setArrows(prev => ([...prev, newArrow]))
 						}
 					}
 				}
 			})
 		})
-
-		setArrows(rebuiltArrows)
-
 	}
 
-	const states = {
+	const data = {
+		// STATE
 		arrows, setArrows,
 		newArrow, setNewArrow,
 		setFrom,
@@ -662,14 +659,14 @@ function ArrowsContextProvider(props) {
 		setStart,
 		setEnd,
 		setDragged,
-		setIsSelected,
-		toggleIsSelected,
+		selectedArrows, setSelectedArrows, toggleSelectedArrow,
 		setNewArrowIsSelected,
 		toggleNewArrowIsSelected,
 		stackScrollAmount, setStackScrollAmount,
 		isArrowDragged, setIsArrowDragged,
 		activeDragHandle, setActiveDragHandle,
 		isArrowHeadVisible, setIsArrowHeadVisible,
+		// FUNCTIONS
 		computeIntersection,
 		storeNewArrow,
 		resetNewArrow,
@@ -690,7 +687,7 @@ function ArrowsContextProvider(props) {
 	}
 
 	return (
-		<ArrowsContext.Provider value={states}>
+		<ArrowsContext.Provider value={data}>
 			{props.children}
 		</ArrowsContext.Provider>
 	)
