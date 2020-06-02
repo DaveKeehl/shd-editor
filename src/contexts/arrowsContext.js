@@ -451,28 +451,29 @@ function ArrowsContextProvider(props) {
 		setIsArrowDragged(false)
 		const target = utils.functions.getHoveredHeapObject(heap, event.clientX, event.clientY, stackWidth)
 		if (target !== undefined) {
+
 			// CASE 1: HANDLES BOTH TARGET IS SAME OBJECT (LOOP) AND A DIFFERENT ONE
 			const {region, parentId, id} = newArrow.from
 			
-			console.log("target heap object:")
+			// console.log("target heap object:")
 			console.log(target)
+			// console.log("new end arrow data")
 
-			console.log("new end arrow data")
+
 			// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
 			const match = selectedArrows.find(selectedArrow => (
 				selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to
 			))
 			if (match !== undefined) {
-				let updatedSelectedArrows = selectedArrows.map(selectedArrow => {
-					if (selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to) {
-						// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
-						selectedArrow.to = target.id
+				const updatedSelectedArrows = selectedArrows.map(selectedArrow => {
+					const copy = JSON.parse(JSON.stringify(selectedArrow))
+					if (copy.from.id === newArrow.from.id && copy.to === newArrow.to) {
+					copy.to = target.id
 					}
-					return selectedArrow
+					return copy
 				})
 				setSelectedArrows(updatedSelectedArrows)
-			}
-
+			  }
 
 
 			setVariableData(region, parentId, id, { name: "value", value: target.id })
