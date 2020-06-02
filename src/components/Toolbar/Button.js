@@ -33,8 +33,13 @@ function Button(props) {
 	function handleChange(event) {
 		console.log("change")
 		const file = event.target.files[0]
+		console.log(file)
 		app.uploadJSON(file)
 		event.target.value = ''
+		// if (file.type === "JSON") {
+		// } else {
+		// 	alert(`You uploaded a ${file.type} file. Only JSON files are supported.`)
+		// }
 	}
 
 	return (

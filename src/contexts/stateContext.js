@@ -282,34 +282,27 @@ function StateContextProvider(props) {
 	// UPLOAD, DOWNLOAD
 
 	const uploadJSON = (file) => {
-		
-		console.log("uploading")
-
 		clearAll()
-
 		const reader = new FileReader()
-
 		reader.onload = (e) => {
 			try {
 				const json = JSON.parse(e.target.result)
-				console.log(json)
+				// should check if json object is valid
+				// valid == correct data structure
 				setStack(json.stack)
 				setHeap(json.heap)
 			}
 			catch(ex) {
-				console.log(`Something went wrong: ${ex}`)
+				alert("Only JSON files are supported.")
 			}
 		}
-
-		reader.onprogress = (event) => {
-			if (event.loaded && event.total) {
-			  const percent = (event.loaded / event.total) * 100;
-			  console.log(`Progress: ${Math.round(percent)}`);
-			}
-		  }
-
+		// reader.onprogress = (event) => {
+		// 	if (event.loaded && event.total) {
+		// 		const percent = (event.loaded / event.total) * 100
+		// 		console.log(`Progress: ${Math.round(percent)}`)
+		// 	}
+		// }
 		reader.readAsText(file)
-
 	}
 
 	const downloadJSON = (filename = "diagram") => {
