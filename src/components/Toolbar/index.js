@@ -12,6 +12,7 @@ function Toolbar() {
 			<Button action="upload-json" />
 			<Button action="scale-up" />
 			<Button action="scale-down" />
+			<Button action="toggle-fullscreen" />
 		</div>
 	)
 }

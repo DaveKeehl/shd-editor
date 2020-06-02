@@ -283,14 +283,32 @@ function StateContextProvider(props) {
 
 	const uploadJSON = (file) => {
 		
-		// clearAll()
-		// updateStack(file.stack)
-		// updateHeap(file.heap)
-		// convertStackToJSX()
-		// convertHeapToJSX()
-		
-		
-		// const JSON = file.parse()
+		console.log("uploading")
+
+		clearAll()
+
+		const reader = new FileReader()
+
+		reader.onload = (e) => {
+			try {
+				const json = JSON.parse(e.target.result)
+				console.log(json)
+				setStack(json.stack)
+				setHeap(json.heap)
+			}
+			catch(ex) {
+				console.log(`Something went wrong: ${ex}`)
+			}
+		}
+
+		reader.onprogress = (event) => {
+			if (event.loaded && event.total) {
+			  const percent = (event.loaded / event.total) * 100;
+			  console.log(`Progress: ${Math.round(percent)}`);
+			}
+		  }
+
+		reader.readAsText(file)
 
 	}
 
