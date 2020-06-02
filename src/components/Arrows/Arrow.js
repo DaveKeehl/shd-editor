@@ -1,13 +1,8 @@
 import React, {useState, useEffect, useContext} from "react"
-import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
-import {ResizableStackContext} from "../../contexts/resizableStackContext"
-import {utils} from "../../utils"
 
 function Arrow(props) {
-	const app = useContext(StateContext)
 	const arrows = useContext(ArrowsContext)
-	const {stackWidth} = useContext(ResizableStackContext)
 
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
@@ -43,39 +38,15 @@ function Arrow(props) {
 	}
 
 	function handleClick() {
-		// console.log("arrow is clicked")
 		arrows.toggleSelectedArrow(props)
 	}
-
-	// function handleClickOnStartHandle() {
-	// 	console.log("Click @start")
-	// 	arrows.toggleIsSelected(props.from.id, props.to)
-	// }
 	
 	function handleMouseDownOnStartHandle() {
-		// console.log("Mouse down @start")
 		arrows.rebaseNewArrow(props, "start")
 	}
 
-	// function handleClickOnEndHandle() {
-	// 	console.log("Click @end")
-	// 	arrows.toggleIsSelected(props.from.id, props.to)
-	// }
-
 	function handleMouseDownOnEndHandle() {
-		// console.log("Mouse down @end")
 		arrows.rebaseNewArrow(props, "end")
-
-		const {start, end} = props.coordinates
-		const intersection = arrows.recomputeIntersection(
-			{ X: start.X, Y: start.Y },
-			props.to, 
-			app.diagram.heap, 
-			stackWidth
-		)
-		// if (intersection.X === end.X && intersection.Y === end.Y) {
-		// 	arrows.toggleIsSelected(props.from.id, props.to)
-		// }
 	}
 
 	return (
@@ -120,14 +91,12 @@ function Arrow(props) {
 				cx={start.X} 
 				cy={start.Y} 
 				pointerEvents="visible" 
-				// onClick={handleClickOnStartHandle}
 				onMouseDown={handleMouseDownOnStartHandle}
 			/>
 			<circle 
 				cx={end.X} 
 				cy={end.Y} 
 				pointerEvents="visible" 
-				// onClick={handleClickOnEndHandle}
 				onMouseDown={handleMouseDownOnEndHandle}
 			/>
 		</svg>

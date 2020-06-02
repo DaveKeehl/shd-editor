@@ -12,7 +12,7 @@ function Header(props) {
 		setTimeout(() => {
 			const height = parseInt(window.getComputedStyle(headerRef.current).getPropertyValue("height"))
 			utils.functions.updateConstantValue("HEADER_HEIGHT", height)
-		}, 50)
+		}, 100)
 	}, [])
 
 	return (

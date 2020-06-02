@@ -82,24 +82,8 @@ function App() {
 					}
 				}
 				if (arrowStart() !== undefined) {
-					// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
-					const match = arrows.selectedArrows.find(selectedArrow => (
-						selectedArrow.from.id === arrows.newArrow.from.id && selectedArrow.to === arrows.newArrow.to
-					))
-					if (match !== undefined) {
-						const updatedSelectedArrows = arrows.selectedArrows.map(selectedArrow => {
-							if (selectedArrow.from.id === arrows.newArrow.from.id && selectedArrow.to === arrows.newArrow.to) {
-								// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
-								selectedArrow.from.id = arrowStart().variableId
-								selectedArrow.from.parentId = arrowStart().parentId
-								selectedArrow.from.region = arrowStart().region
-								selectedArrow.coordinates.start.X = arrowStart().coordinates.X
-								selectedArrow.coordinates.start.Y = arrowStart().coordinates.Y
-							}
-							return selectedArrow
-						})
-						arrows.setSelectedArrows(updatedSelectedArrows)
-					}
+					// KEEP SELECTED ARROWS UPDATED WHEN REBASING ARROW
+					arrows.updateSelectedArrowOnDragStart(arrowStart)
 					// UPDATE NEW ARROW VALUES
 					app.resetVariablesValueAfterArrowDeletion(arrows.newArrow.from.id)
 					arrows.setStart({
