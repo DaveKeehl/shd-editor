@@ -241,12 +241,12 @@ function StateContextProvider(props) {
 	}
 
 	const clearStack = () => {
-		// console.log("Removed all Stack Frames")
+		console.log("Removed all Stack Frames")
 		setStack([])
 	}
 
 	const clearHeap = () => {
-		// console.log("Removed all Heap Objects")
+		console.log("Removed all Heap Objects")
 		setHeap([])
 	}
 

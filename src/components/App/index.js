@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
+import Toolbar from "../Toolbar"
 import Arrows from "../Arrows"
 import {StateContext} from "../../contexts/stateContext"
 import {ArrowsContext} from "../../contexts/arrowsContext"
@@ -190,7 +191,7 @@ function App() {
 			tabIndex="-1"
 		>
 			<Arrows />
-			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto`}}>
+			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto min-content`}}>
 				<Stack />
 				<div
 					className="separator"
@@ -205,6 +206,7 @@ function App() {
 						<Heap stackWidth={stackWidth} />
 					</HeapMousePositionContextProvider>
 				</HeapAddModeContextProvider>
+				<Toolbar />
 			</main>
 		</div>
 	)
