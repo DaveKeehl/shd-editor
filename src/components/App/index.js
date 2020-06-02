@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useContext} from "react"
+import React, {useState, useRef, useEffect, useLayoutEffect, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
 import Toolbar from "../Toolbar"
@@ -35,7 +35,7 @@ function App() {
 		// setDiagram(app.diagram)
 		arrows.rebuildArrows(app.diagram, stackWidth)
 		// console.log(utils.constants)
-	}, [app.diagram, utils.constants])
+	}, [app.diagram, app.stack, app.heap, utils.constants])
 
 	function handleMouseDown() {
 		setIsResizable(true)

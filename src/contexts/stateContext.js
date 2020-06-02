@@ -219,7 +219,7 @@ function StateContextProvider(props) {
 
 	// CLEANUP
 
-	const clearConnections = () => {
+	const clearConnections = (setSelectedArrows) => {
 		setStack(prevState => prevState.map(frame => {
 			frame.variables = frame.variables.map(variable => {
 				if (variable.nature === "reference") {
@@ -238,6 +238,9 @@ function StateContextProvider(props) {
 			})
 			return object
 		}))
+		if (setSelectedArrows !== undefined) {
+			setSelectedArrows([])
+		}
 	}
 
 	const clearStack = () => {
@@ -305,6 +308,12 @@ function StateContextProvider(props) {
 	// APPLICATION STATE OBJECT
 	
 	const data = {
+		stack, 
+		setStack, 
+		
+		heap,
+		setHeap,
+
 		diagram,
 
 		count,
