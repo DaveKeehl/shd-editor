@@ -9,27 +9,23 @@
 		filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.2))
 		margin-bottom: 45px
 
-	button, label
-		background-color: $header-bg
-		height: 35px
-		width: 35px
-		border-radius: 6px
-		color: $white
+	&__button
 		position: relative
+
+		&:hover span
+			opacity: 1
+			visibility: visible
 
 		&:not(:last-child)
 			margin-bottom: 10px
 
-		&::before, &::after
-			visibility: hidden
+		span
 			opacity: 0
+			visibility: hidden
 			position: absolute
 			top: 50%
 			transform: translateY(-50%)
-			transition: opacity .2s
-
-		&::before
-			content: attr(data-tooltip)
+			color: $white
 			font-size: 14px
 			background: black
 			right: calc(100% + 18px)
@@ -38,30 +34,39 @@
 			padding: 8px
 			font-weight: bold
 			filter: drop-shadow(0 2px 4px transparentize($black, .7))
+			transition: opacity .1s
 
-		&::after
-			content: ''
-			right: calc(100% + 13px)
-			width: 0
-			height: 0
-			border-style: solid
-			border-width: 5px 0 5px 5px
-			border-color: transparent transparent transparent $black
+			&::after
+				content: ''
+				position: absolute
+				left: 100%
+				top: 50%
+				transform: translateY(-50%)
+				width: 0
+				height: 0
+				border-style: solid
+				border-width: 5px 0 5px 5px
+				border-color: transparent transparent transparent $black
 
-		&:hover::before, &:hover::after
-			opacity: 1
-			visibility: visible
+		button, label
+			display: grid
+			place-items: center
+			background-color: $header-bg
+			height: 35px
+			width: 35px
+			border-radius: 6px
+			color: $white
+			position: relative
 
-	label 
-		display: flex
-		border: none
+		label 
+			border: none
 
-		&:hover
-			cursor: pointer
-		&:active
-			opacity: .8
-		&:focus
-			outline: none
+			&:hover
+				cursor: pointer
+			&:active
+				opacity: .8
+			&:focus
+				outline: none
 
-		input
-			display: none
+			input
+				display: none

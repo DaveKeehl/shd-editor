@@ -6,15 +6,11 @@ function Button(props) {
 	const app = useContext(StateContext)
 	const {setSelectedArrows} = useContext(ArrowsContext)
 
-	const test = useRef(null)
 	const inputRef = useRef(null)
 
 	function handleClick() {
 		if (props.action === "new-diagram") {
-			app.clearAll()
-			// app.setStack([])
-			// app.setHeap([])
-			// test.current.requestFullscreen()
+			// app.clearAll()
 		}
 		else if (props.action === "delete-arrows") {
 			app.clearConnections(setSelectedArrows)
@@ -28,32 +24,44 @@ function Button(props) {
 		else if (props.action === "scale-down") {
 			//
 		}
+		else if (props.action === "toggle-fullscreen") {
+			const getFullscreenElement = () => {
+				return document.fullscreenElement
+					|| document.webkitFullscreenElement
+					|| document.mozFullscreenElement
+					|| document.msFullscreenElement
+			}
+			if (getFullscreenElement()) {
+				document.exitFullscreen()
+			} else {
+				document.documentElement.requestFullscreen().catch((e) => { console.log(e) })
+			}
+		}
 	}
 
 	function handleChange(event) {
-		console.log("change")
 		const file = event.target.files[0]
-		console.log(file)
 		app.uploadJSON(file)
 		event.target.value = ''
-		// if (file.type === "JSON") {
-		// } else {
-		// 	alert(`You uploaded a ${file.type} file. Only JSON files are supported.`)
-		// }
 	}
 
 	return (
-		props.action === "upload-json" ?
-		<label onClick={handleClick} data-tooltip={props.action.toUpperCase().replace("-", " ")}>
-			{/* <img src={`../../images/${props.action}.svg`} alt={props.action} /> */}
-			{/* <p>{props.action}</p> */}
-			<input type="file" accept=".json" onChange={handleChange} ref={inputRef} />
-		</label>
-		:
-		<button ref={test} onClick={handleClick} data-tooltip={props.action.toUpperCase().replace("-", " ")}>
-			{/* <img src={`../../images/${props.action}.svg`} alt={props.action} /> */}
-			{/* <p>{props.action}</p> */}
-		</button>
+		<div className="toolbar__button">
+			<span>
+				{props.action.toUpperCase().replace("-", " ")}
+			</span>
+			{
+				props.action === "upload-json" ?
+				<label onClick={handleClick}>
+					<img src={require(`../../images/${props.action}.svg`)} alt={props.action} />
+					<input type="file" accept=".json" onChange={handleChange} ref={inputRef} />
+				</label>
+				:
+				<button onClick={handleClick}>
+					<img src={require(`../../images/${props.action}.svg`)} alt={props.action} />
+				</button>
+			}
+		</div>
 	)
 }
 

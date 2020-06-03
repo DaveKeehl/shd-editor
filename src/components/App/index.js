@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useLayoutEffect, useContext} from "react"
+import React, {useState, useRef, useEffect, useContext} from "react"
 import Stack from "../Stack"
 import Heap from "../Heap"
 import Toolbar from "../Toolbar"
@@ -22,6 +22,7 @@ function App() {
 			isResizable, 
 			setIsResizable } = useContext(ResizableStackContext)
 	
+	const appRef = useRef(null)
 	const separator = useRef(null)
 
 	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
@@ -189,6 +190,7 @@ function App() {
 					null
 			}
 			tabIndex="-1"
+			ref={appRef}
 		>
 			<Arrows />
 			<main style={{gridTemplateColumns: `${stackWidth}px min-content auto min-content`}}>
