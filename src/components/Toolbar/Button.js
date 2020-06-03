@@ -1,12 +1,25 @@
-import React, {useContext, useRef} from "react"
+import React, {useState, useContext, useRef, useEffect} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 import {StateContext} from "../../contexts/stateContext"
 
 function Button(props) {
+	const [isFullscreen, setIsFullscreen] = useState(false)
+
 	const app = useContext(StateContext)
 	const {setSelectedArrows} = useContext(ArrowsContext)
 
 	const inputRef = useRef(null)
+
+	document.onfullscreenchange = () => {
+		setIsFullscreen(prev => !prev)
+	}
+
+	function getFullscreenElement() {
+		return document.fullscreenElement
+			|| document.webkitFullscreenElement
+			|| document.mozFullscreenElement
+			|| document.msFullscreenElement
+	}
 
 	function handleClick() {
 		if (props.action === "new-diagram") {
@@ -25,16 +38,10 @@ function Button(props) {
 			//
 		}
 		else if (props.action === "toggle-fullscreen") {
-			const getFullscreenElement = () => {
-				return document.fullscreenElement
-					|| document.webkitFullscreenElement
-					|| document.mozFullscreenElement
-					|| document.msFullscreenElement
-			}
-			if (getFullscreenElement()) {
+			if (isFullscreen) {
 				document.exitFullscreen()
 			} else {
-				document.documentElement.requestFullscreen().catch((e) => { console.log(e) })
+				document.documentElement.requestFullscreen().catch(console.log)
 			}
 		}
 	}
@@ -57,8 +64,10 @@ function Button(props) {
 					<input type="file" accept=".json" onChange={handleChange} ref={inputRef} />
 				</label>
 				:
-				<button onClick={handleClick}>
-					<img src={require(`../../images/${props.action}.svg`)} alt={props.action} />
+				<button 
+					onClick={handleClick} 
+				>
+					<img src={require(`../../images/${props.action}${isFullscreen ? '-selected' : ''}.svg`)} alt={props.action} />
 				</button>
 			}
 		</div>
