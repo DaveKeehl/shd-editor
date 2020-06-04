@@ -154,7 +154,7 @@ function App() {
 	}
 
 	function handleKeyDown(event) {
-		if (event.keyCode === 8 || event.keyCode === 46) {
+		if ((event.keyCode === 8 || event.keyCode === 46) && arrows.selectedArrows.length > 0) {
 			const filteredArrows = arrows.arrows.filter(arrow => {
 				// check if arrow if present in selected arrows array
 				const match = arrows.selectedArrows.find(selectedArrow => (
