@@ -21,7 +21,7 @@ function Header(props) {
 					<img src={addBlock} alt="Add a Stack Frame"/>
 				</button>
 				:
-				<button>
+				<button aria-label="Create new object">
 					<SmartAddIcon />
 				</button>
 			}
