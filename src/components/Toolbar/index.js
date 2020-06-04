@@ -6,13 +6,13 @@ function Toolbar() {
 	return (
 		<div className="toolbar">
 			<img className="toolbar__logo" src={logo} alt="Logo" />
-			<Button action="new-diagram" />
+			{/* <Button action="new-diagram" /> */}
 			<Button action="delete-arrows" />
 			<Button action="download-json" />
-			<Button action="upload-json" />
-			<Button action="scale-up" />
-			<Button action="scale-down" />
-			<Button action="toggle-fullscreen" />
+			{/* <Button action="upload-json" /> */}
+			{/* <Button action="scale-up" /> */}
+			{/* <Button action="scale-down" /> */}
+			{/* <Button action="toggle-fullscreen" /> */}
 		</div>
 	)
 }

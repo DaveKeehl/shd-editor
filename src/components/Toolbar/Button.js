@@ -14,16 +14,9 @@ function Button(props) {
 		setIsFullscreen(prev => !prev)
 	}
 
-	function getFullscreenElement() {
-		return document.fullscreenElement
-			|| document.webkitFullscreenElement
-			|| document.mozFullscreenElement
-			|| document.msFullscreenElement
-	}
-
 	function handleClick() {
 		if (props.action === "new-diagram") {
-			// app.clearAll()
+			app.clearAll()
 		}
 		else if (props.action === "delete-arrows") {
 			app.clearConnections(setSelectedArrows)
