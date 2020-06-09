@@ -7,14 +7,20 @@ import {ResizableStackContextProvider} from "./contexts/resizableStackContext"
 import {ArrowsContextProvider} from "./contexts/arrowsContext"
 import * as serviceWorker from './serviceWorker';
 
+export default function Editor() {
+	return (
+		<StateContextProvider>
+			<ResizableStackContextProvider>
+				<ArrowsContextProvider>
+					<App />
+				</ArrowsContextProvider>
+			</ResizableStackContextProvider>
+		</StateContextProvider>
+	)
+}
+
 ReactDOM.render(
-	<StateContextProvider>
-		<ResizableStackContextProvider>
-			<ArrowsContextProvider>
-				<App />
-			</ArrowsContextProvider>
-		</ResizableStackContextProvider>
-	</StateContextProvider>, 
+	<Editor />, 
 	document.getElementById('root')
 );
 

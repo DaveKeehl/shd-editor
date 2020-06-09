@@ -20,17 +20,18 @@ function Stack() {
 		utils.functions.updateConstantValue("REGION_PADDING", padding)
 	}, [])
 
-	function addBlock() {
-		const newBlock = (
-			<StackFrame 
-				key={app.count} 
-				id={app.count} 
-				removeBlock={removeBlock}
-			/>	
-		)
-		setObjects(prevObjects => [newBlock, ...prevObjects])
-		app.addStackFrame()
-	}
+	useEffect(() => {
+		const updatedStack = app.diagram.stack.map(frame => {
+			return (
+				<StackFrame
+					key={frame.id} 
+					id={frame.id} 
+					removeBlock={removeBlock}
+				/>
+			)
+		})
+		setObjects(updatedStack)
+	}, [app.diagram.stack.length])
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -38,7 +39,11 @@ function Stack() {
 	}
 
 	function handleScroll() {
-		arrows.updateArrowsOnStackScroll(stackFramesRef.current.scrollTop, app.diagram.heap, stackWidth)
+		arrows.updateArrowsOnStackScroll(
+			stackFramesRef.current.scrollTop, 
+			app.diagram.heap, 
+			stackWidth
+		)
 	}
 
 	return (
@@ -46,7 +51,6 @@ function Stack() {
 			<Header 
 				region="stack" 
 				objectsCount={objects.length} 
-				addBlock={addBlock}
 			/>
 			<div 
 				className="stack__objects objects" 

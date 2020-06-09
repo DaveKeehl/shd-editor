@@ -13,9 +13,6 @@ function Variable(props) {
 	const formRef = useRef(null)
 	const inputRef = useRef(null)
 
-	const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
-	const thisVar = parent.variables.find(variable => variable.id === props.id)
-
 	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
 		// VAR_HEIGHT
@@ -49,13 +46,12 @@ function Variable(props) {
 		}
 	},[])
 
-	useEffect(() => {
-		setData(prevData => ({...prevData, value: thisVar.value}))
-	}, [thisVar.value])
+	// const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
+	// const thisVar = parent.variables.find(variable => variable.id === props.id)
 
-	function removeVariable() {
-		props.removeVariable(props.id)
-	}
+	// useEffect(() => {
+	// 	setData(prevData => ({...prevData, value: thisVar.value}))
+	// }, [thisVar.value])
 
 	function handleChange(event) {
 		const {name, value} = event.target
@@ -63,34 +59,15 @@ function Variable(props) {
 		app.setVariableData(props.region, props.parentID, props.id, {name,value})
 	}
 
+	function removeVariable() {
+		props.removeVariable(props.id)
+	}
+
 	function handleKeyUp(event) {
 		if (event.keyCode === 13) {
 			event.target.blur()
 		}
 	}
-
-	const valueField = (
-		<input 
-			className="object__variable__value"
-			name="value"
-			value={value}
-			autoComplete="off"
-			placeholder="value"
-			spellCheck={false}
-			onChange={handleChange}
-			onKeyUp={handleKeyUp}
-		/>
-	)
-
-	const referenceField = (
-		<div className="object__variable__value">
-			<ArrowStart 
-				region={props.region} 
-				parentID={props.parentID} 
-				variableID={props.id} 
-			/>
-		</div>
-	)
 
 	return (
 		<div 
@@ -122,7 +99,27 @@ function Variable(props) {
 					onKeyUp={handleKeyUp}
 					spellCheck={false}
 				/>
-				{props.nature === "reference" ? referenceField : valueField}
+				{
+					props.nature === "reference" ? 
+						<div className="object__variable__value">
+							<ArrowStart 
+								region={props.region} 
+								parentID={props.parentID} 
+								variableID={props.id} 
+							/>
+						</div> 
+					: 
+						<input 
+							className="object__variable__value"
+							name="value"
+							value={value}
+							autoComplete="off"
+							placeholder="value"
+							spellCheck={false}
+							onChange={handleChange}
+							onKeyUp={handleKeyUp}
+						/>
+				}
 			</form>
 		</div>
 	)

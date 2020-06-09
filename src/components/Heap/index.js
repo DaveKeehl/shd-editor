@@ -24,6 +24,20 @@ function Heap(props) {
 		utils.functions.updateConstantValue("REGION_PADDING", padding)
 	}, [])
 
+	useEffect(() => {
+		const updatedHeap = app.diagram.heap.map(object => {
+			return (
+				<HeapObject 
+					key={object.id} 
+					id={object.id} 
+					initialPosition={object.position}
+					removeBlock={removeBlock}
+				/>
+			)
+		})
+		setObjects(updatedHeap)
+	}, [app.diagram.heap.length])
+
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
 		app.removeHeapObject(id)
@@ -38,15 +52,15 @@ function Heap(props) {
 				X: clientX - props.stackWidth - REGION_PADDING - SEPARATOR - BLOCK_WIDTH/2,
 				Y: clientY - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
 			}
-			const newBlock = (
-				<HeapObject 
-					key={app.count} 
-					id={app.count} 
-					initialPosition={initialPosition}
-					removeBlock={removeBlock}
-				/>	
-			)
-			setObjects(prevObjects => [newBlock, ...prevObjects])
+			// const newBlock = (
+			// 	<HeapObject 
+			// 		key={app.count} 
+			// 		id={app.count} 
+			// 		initialPosition={initialPosition}
+			// 		removeBlock={removeBlock}
+			// 	/>	
+			// )
+			// setObjects(prevObjects => [newBlock, ...prevObjects])
 			app.addHeapObject(initialPosition)
 			toggleAddMode()
 		}
@@ -71,7 +85,12 @@ function Heap(props) {
 					onMouseMove={handleMouseMove}
 					ref={heapRef}
 				>
-					{objects.length === 0 ? <p>Click on the "+" button to freely position an Object on the Heap.</p> : objects}
+					{
+						objects.length === 0 ? 
+						<p>Click on the "+" button to freely position an Object on the Heap.</p> 
+						: 
+						objects
+					}
 				</div>
 			</HeapDepthIndexContextProvider>
 		</div>

@@ -33,10 +33,8 @@ function App() {
 	}, [])
 
 	useEffect(() => {
-		// setDiagram(app.diagram)
 		arrows.rebuildArrows(app.diagram, stackWidth)
-		// console.log(utils.constants)
-	}, [app.diagram, app.stack, app.heap, utils.constants])
+	}, [app.diagram, utils.constants])
 
 	function handleMouseDown() {
 		setIsResizable(true)

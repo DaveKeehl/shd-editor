@@ -7,12 +7,13 @@ import {HeapDepthIndexContext} from "../../contexts/heapDepthIndexContext"
 import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
 
-import {prefix} from "inline-style-prefixer"
-
 function HeapObject(props) {
 	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
-	const [position, setPosition] = useState({X: props.initialPosition.X, Y: props.initialPosition.Y})
+	const [position, setPosition] = useState({
+		X: props.initialPosition.X, 
+		Y: props.initialPosition.Y
+	})
 	const [isDragged, setIsDragged] = useState(false)
 	const [localDepthIndex, setLocalDepthIndex] = useState("")
 
