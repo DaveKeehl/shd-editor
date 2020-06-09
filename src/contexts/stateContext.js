@@ -370,7 +370,13 @@ function StateContextProvider(props) {
 								) {
 									// 3. CHECK IF VARIABLE VALUES TYPES ARE LEGAL
 									if (
-										(nature === "reference" && typeof value === "number" && heap.find(object => object.id === id) !== undefined) || 
+										(
+											nature === "reference" && 
+											(
+												(typeof value === "number" && (heap.find(object => object.id === value) !== undefined)) || 
+												(typeof value === "string" && value === "")
+											) 
+										) || 
 										(nature === "primitive" && typeof value === "string")
 									) {
 										// 4. CHECK IF ELEMENT ID IS UNIQUE
@@ -439,6 +445,7 @@ function StateContextProvider(props) {
 
 						// CHECK EVERY VARIBLE!
 						for (let j = 0; j < object.variables.length; j++) {
+
 							const variable = object.variables[j]
 							const {id, nature, name, type, value} = variable
 							// 1. CHECK IF VARIABLE HAS ALL THE EXPECTED FIELDS
@@ -458,7 +465,13 @@ function StateContextProvider(props) {
 								) {
 									// 3. CHECK IF VARIABLE VALUES TYPES ARE LEGAL
 									if (
-										(nature === "reference" && typeof value === "number" && heap.find(object => object.id === id) !== undefined) || 
+										(
+											nature === "reference" && 
+											(
+												(typeof value === "number" && (heap.find(object => object.id === value) !== undefined)) || 
+												(typeof value === "string" && value === "")
+											) 
+										) || 
 										(nature === "primitive" && typeof value === "string")
 									) {
 										// 4. CHECK IF ELEMENT ID IS UNIQUE
