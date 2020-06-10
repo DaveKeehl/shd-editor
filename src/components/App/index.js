@@ -27,6 +27,10 @@ function App() {
 
 	// LOAD COMPUTED CSS VALUE WHEN COMPONENT MOUNTS
 	useEffect(() => {
+
+		const bb = appRef.current.getBoundingClientRect()
+		console.log(bb)
+
 		// SEPARATOR
 		const separatorWidth = parseInt(window.getComputedStyle(separator.current).getPropertyValue("width"))
 		utils.functions.updateConstantValue("SEPARATOR", separatorWidth)

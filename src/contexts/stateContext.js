@@ -524,7 +524,7 @@ function StateContextProvider(props) {
 							"2. Does every stack frame and heap object have the right data in it?\n" +
 							"3. Are the data types correct?\n" +
 							"4. Does every stack frame, heap object and variable have a unique id?\n"+
-							"5. Does every reference variable contains as value the id of an existing heap object?"
+							"5. Does every reference variable contain as value the id of an existing heap object?"
 					)
 				}
 			} catch (ex) {

@@ -4,8 +4,6 @@ import removeBlock from "../../images/delete-icon.svg"
 import {utils} from "../../utils"
 
 function ObjectHeader(props) {
-	const [className, setClassName] = useState("")
-
 	const app = useContext(StateContext)
 
 	const headerRef = useRef(null)
@@ -26,7 +24,6 @@ function ObjectHeader(props) {
 
 	function handleChange(event) {
 		const {value} = event.target
-		setClassName(value)
 		props.updateName(value)
 	}
 
@@ -44,7 +41,7 @@ function ObjectHeader(props) {
 			<input 
 				type="text"
 				name="className"
-				value={className}
+				value={props.name}
 				placeholder={props.region === "stack" ? "Class.method()" : "Class"}
 				onChange={handleChange}
 				onKeyUp={handleKeyUp}

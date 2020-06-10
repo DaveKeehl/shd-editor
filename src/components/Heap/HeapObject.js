@@ -8,12 +8,7 @@ import {HeapMousePositionContext} from "../../contexts/heapMousePositionContext"
 import {utils} from "../../utils"
 
 function HeapObject(props) {
-	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
-	const [position, setPosition] = useState({
-		X: props.initialPosition.X, 
-		Y: props.initialPosition.Y
-	})
 	const [isDragged, setIsDragged] = useState(false)
 	const [localDepthIndex, setLocalDepthIndex] = useState("")
 
@@ -48,35 +43,45 @@ function HeapObject(props) {
 	}, [])
 
 	useEffect(() => {
+		const updatedVariables = props.variables.map(variable => {
+			return (
+				<Variable 
+					key={variable.id} 
+					id={variable.id} 
+					nature={variable.nature}
+					region="heap"
+					name={variable.name}
+					type={variable.type}
+					value={variable.value}
+					parentID={props.id}
+					removeVariable={removeVariable}
+				/>
+			)
+		})
+		setVariables(updatedVariables)
+	}, [props.variables])
+
+	useEffect(() => {
 		if (isDragged) {
 			const newPosition = utils.functions.convertFromAbsoluteToRelative(
 				stackWidth, 
 				{X: mousePosition.X, Y: mousePosition.Y}
 			)
-			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
 	}, [mousePosition])
 
 	useEffect(() => {
-		if (props.initialPosition.X < 0 && props.initialPosition.Y < 0) {
+		if (props.position.X < 0 && props.position.Y < 0) {
 			const newPosition = {X: 0, Y: 0}
-			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
-		// else if (props.initialPosition.X > window.innerWidth && props.initialPosition.Y > window.innerHeight) {
-		// 	const newPosition = {X: "to be defined", Y: "to be defined"}
-		// 	setPosition(newPosition)
-		// 	app.setHeapObjectPosition(props.id, newPosition)
-		// }
-		else if (props.initialPosition.X < 0) {
-			const newPosition = {X: 0, Y: props.initialPosition.Y}
-			setPosition(newPosition)
+		else if (props.position.X < 0) {
+			const newPosition = {X: 0, Y: props.position.Y}
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
-		else if (props.initialPosition.Y < 0) {
-			const newPosition = {X: props.initialPosition.X, Y: 0}
-			setPosition(newPosition)
+		else if (props.position.Y < 0) {
+			const newPosition = {X: props.position.X, Y: 0}
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
 		setDepthIndex(prevState => prevState+1)
@@ -84,30 +89,9 @@ function HeapObject(props) {
 		app.setHeapObjectDepthIndex(props.id, depthIndex+1)
 	}, [])
 
-	function updateName(newName) {
-		setName(newName)
-		app.setHeapObjectName(props.id, newName)
-	}
-
-	function addVariable(nature) {
-		const newVariable = (
-			<Variable 
-				key={app.count} 
-				id={app.count} 
-				nature={nature}
-				region="heap"
-				parentID={props.id}
-				removeVariable={removeVariable}
-			/>
-		)
-		setVariables(prevVariables => [...prevVariables, newVariable])
-		app.addHeapObjectVariable(props.id, nature)
-	}
-
-	function removeVariable(id) {
-		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
-		app.removeHeapObjectVariable(props.id, id)
-	}
+	const updateName = (newName) => { app.setHeapObjectName(props.id, newName) }
+	const addVariable = (nature) => { app.addHeapObjectVariable(props.id, nature) }
+	const removeVariable = (id) => { app.removeHeapObjectVariable(props.id, id) }
 
 	function handleMouseDown() {
 		setIsDragged(true)
@@ -120,19 +104,16 @@ function HeapObject(props) {
 
 	function handleMouseUp() {
 		setIsDragged(false)
-		if (position.X < 0 && position.Y < 0) {
+		if (props.position.X < 0 && props.position.Y < 0) {
 			const newPosition = {X: 0, Y: 0}
-			setPosition(newPosition)
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
-		else if (position.X < 0) {
-			const newPosition = {X: 0, Y: position.Y}
-			setPosition(newPosition)
+		else if (props.position.X < 0) {
+			const newPosition = {X: 0, Y: props.position.Y}
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
-		else if (position.Y < 0) {
-			const newPosition = {X: position.X, Y: 0}
-			setPosition(newPosition)
+		else if (props.position.Y < 0) {
+			const newPosition = {X: props.position.X, Y: 0}
 			app.setHeapObjectPosition(props.id, newPosition)
 		}
 	}
@@ -143,7 +124,7 @@ function HeapObject(props) {
 			draggable={false}
 			ref={obj}
 			style={{
-				transform: `translate(${position.X}px, ${position.Y}px)`, 
+				transform: `translate(${props.position.X}px, ${props.position.Y}px)`, 
 				zIndex: localDepthIndex,
 				cursor: `${isDragged ? "pointer" : "default"}`
 			}}
@@ -158,6 +139,7 @@ function HeapObject(props) {
 			<ObjectHeader 
 				id={props.id} 
 				region="heap"
+				name={props.name}
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>

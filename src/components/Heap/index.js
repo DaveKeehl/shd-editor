@@ -30,13 +30,16 @@ function Heap(props) {
 				<HeapObject 
 					key={object.id} 
 					id={object.id} 
-					initialPosition={object.position}
+					name={object.name}
+					variables={object.variables}
+					position={object.position}
+					depthIndex={object.depthIndex}
 					removeBlock={removeBlock}
 				/>
 			)
 		})
 		setObjects(updatedHeap)
-	}, [app.diagram.heap.length])
+	}, [app.diagram.heap])
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
@@ -52,15 +55,6 @@ function Heap(props) {
 				X: clientX - props.stackWidth - REGION_PADDING - SEPARATOR - BLOCK_WIDTH/2,
 				Y: clientY - REGION_PADDING - HEADER_HEIGHT - BLOCK_PADDING - OBJECT_HANDLE_HEIGHT/2
 			}
-			// const newBlock = (
-			// 	<HeapObject 
-			// 		key={app.count} 
-			// 		id={app.count} 
-			// 		initialPosition={initialPosition}
-			// 		removeBlock={removeBlock}
-			// 	/>	
-			// )
-			// setObjects(prevObjects => [newBlock, ...prevObjects])
 			app.addHeapObject(initialPosition)
 			toggleAddMode()
 		}
@@ -87,8 +81,7 @@ function Heap(props) {
 				>
 					{
 						objects.length === 0 ? 
-						<p>Click on the "+" button to freely position an Object on the Heap.</p> 
-						: 
+						<p>Click on the "+" button to freely position an Object on the Heap.</p> : 
 						objects
 					}
 				</div>

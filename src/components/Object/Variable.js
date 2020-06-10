@@ -5,7 +5,7 @@ import {StateContext} from "../../contexts/stateContext"
 import {utils} from "../../utils"
 
 function Variable(props) {
-	const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
+	// const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
 
 	const app = useContext(StateContext)
 
@@ -55,7 +55,7 @@ function Variable(props) {
 
 	function handleChange(event) {
 		const {name, value} = event.target
-		setData(prevData => ({...prevData, [name]: value}))
+		// setData(prevData => ({...prevData, [name]: value}))
 		app.setVariableData(props.region, props.parentID, props.id, {name,value})
 	}
 
@@ -81,7 +81,7 @@ function Variable(props) {
 				<input 
 					className="object__variable__name"
 					name="name"
-					value={name}
+					value={props.name}
 					autoComplete="off"
 					placeholder="Name"
 					onChange={handleChange}
@@ -92,7 +92,7 @@ function Variable(props) {
 				<input 
 					className="object__variable__type"
 					name="type"
-					value={type}
+					value={props.type}
 					autoComplete="off"
 					placeholder="Type"
 					onChange={handleChange}
@@ -112,7 +112,7 @@ function Variable(props) {
 						<input 
 							className="object__variable__value"
 							name="value"
-							value={value}
+							value={props.value}
 							autoComplete="off"
 							placeholder="value"
 							spellCheck={false}

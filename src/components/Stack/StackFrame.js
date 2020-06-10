@@ -5,7 +5,6 @@ import {StateContext} from "../../contexts/stateContext"
 import {utils} from "../../utils"
 
 function StackFrame(props) {
-	const [name, setName] = useState("")
 	const [variables, setVariables] = useState([])
 
 	const app = useContext(StateContext)
@@ -25,30 +24,28 @@ function StackFrame(props) {
 		utils.functions.updateConstantValue("FRAME_MARGIN_BOTTOM", frameMarginBottom)
 	},[])
 
-	function updateName(newName) {
-		setName(newName)
-		app.setStackFrameName(props.id, newName)
-	}
+	useEffect(() => {
+		const updatedVariables = props.variables.map(variable => {
+			return (
+				<Variable 
+					key={variable.id} 
+					id={variable.id} 
+					nature={variable.nature}
+					region="stack"
+					name={variable.name}
+					type={variable.type}
+					value={variable.value}
+					parentID={props.id}
+					removeVariable={removeVariable}
+				/>
+			)
+		})
+		setVariables(updatedVariables)
+	}, [props.variables])
 
-	function addVariable(nature) {
-		const newVariable = (
-			<Variable 
-				key={app.count} 
-				id={app.count} 
-				nature={nature}
-				region="stack"
-				parentID={props.id}
-				removeVariable={removeVariable}
-			/>
-		)
-		setVariables(prevVariables => [...prevVariables, newVariable])
-		app.addStackFrameVariable(props.id, nature)
-	}
-
-	function removeVariable(id) {
-		setVariables(prevVariables => prevVariables.filter(variable => id !== variable.props.id))
-		app.removeStackFrameVariable(props.id, id)
-	}
+	const updateName = (newName) => { app.setStackFrameName(props.id, newName) }
+	const addVariable = (nature) => { app.addStackFrameVariable(props.id, nature) }
+	const removeVariable = (id) => { app.removeStackFrameVariable(props.id, id) }
 
 	return (
 		<div 
@@ -59,6 +56,7 @@ function StackFrame(props) {
 			<ObjectHeader 
 				id={props.id} 
 				region="stack"
+				name={props.name}
 				updateName={updateName}
 				removeBlock={props.removeBlock}
 			/>

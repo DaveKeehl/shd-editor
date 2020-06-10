@@ -27,11 +27,13 @@ function Stack() {
 					key={frame.id} 
 					id={frame.id} 
 					removeBlock={removeBlock}
+					name={frame.name}
+					variables={frame.variables}
 				/>
 			)
 		})
 		setObjects(updatedStack)
-	}, [app.diagram.stack.length])
+	}, [app.diagram.stack])
 
 	function removeBlock(id) {
 		setObjects(prevObjects => prevObjects.filter(object => id !== object.props.id))
