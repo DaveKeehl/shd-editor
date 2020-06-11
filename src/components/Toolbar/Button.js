@@ -2,6 +2,9 @@ import React, {useState, useContext, useRef, useEffect} from "react"
 import {ArrowsContext} from "../../contexts/arrowsContext"
 import {StateContext} from "../../contexts/stateContext"
 
+import {EnterFullscreen} from "../../images/enter-fullscreen.svg"
+import {ExitFullscreen} from "../../images/exit-fullscreen.svg"
+
 function Button(props) {
 	const [isFullscreen, setIsFullscreen] = useState(false)
 
@@ -48,7 +51,15 @@ function Button(props) {
 	return (
 		<div className="toolbar__button">
 			<span>
-				{props.action.toUpperCase().replace("-", " ")}
+				{
+					(
+						props.action === "toggle-fullscreen" ? 
+						(isFullscreen ? "exit fullscreen" : "enter fullscreen") : 
+						props.action
+					)
+					.toUpperCase()
+					.replace("-", " ")
+				}
 			</span>
 			{
 				props.action === "upload-json" ?
@@ -60,7 +71,7 @@ function Button(props) {
 				<button 
 					onClick={handleClick} 
 				>
-					<img src={require(`../../images/${props.action}${isFullscreen ? '-selected' : ''}.svg`)} alt={props.action} />
+					<img src={require(`../../images/${props.action === "toggle-fullscreen" ? (isFullscreen ? "exit-fullscreen": "enter-fullscreen") : props.action}.svg`)} alt={props.action} />
 				</button>
 			}
 		</div>

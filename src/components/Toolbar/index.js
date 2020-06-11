@@ -10,8 +10,8 @@ function Toolbar() {
 			<Button action="delete-arrows" />
 			<Button action="download-json" />
 			<Button action="upload-json" />
-			<Button action="scale-up" />
-			<Button action="scale-down" />
+			{/* <Button action="scale-up" />
+			<Button action="scale-down" /> */}
 			<Button action="toggle-fullscreen" />
 		</div>
 	)

@@ -5,8 +5,6 @@ import {StateContext} from "../../contexts/stateContext"
 import {utils} from "../../utils"
 
 function Variable(props) {
-	// const [{name, type, value}, setData] = useState({name: "", type: "", value: ""})
-
 	const app = useContext(StateContext)
 
 	const varRef = useRef(null)
@@ -46,16 +44,8 @@ function Variable(props) {
 		}
 	},[])
 
-	// const parent = app.diagram[props.region].find(obj => obj.id === props.parentID)
-	// const thisVar = parent.variables.find(variable => variable.id === props.id)
-
-	// useEffect(() => {
-	// 	setData(prevData => ({...prevData, value: thisVar.value}))
-	// }, [thisVar.value])
-
 	function handleChange(event) {
 		const {name, value} = event.target
-		// setData(prevData => ({...prevData, [name]: value}))
 		app.setVariableData(props.region, props.parentID, props.id, {name,value})
 	}
 
