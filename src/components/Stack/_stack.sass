@@ -4,7 +4,10 @@
 	$stack-object-dark: $dark-blue
 
 	.objects
-		overflow: auto
+		overflow: overlay
+
+		&::-webkit-scrollbar 
+			display: none
 
 	.object
 		background: linear-gradient(180deg, $stack-object-start 0%, $stack-object-end 100%)
