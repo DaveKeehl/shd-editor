@@ -1,14 +1,14 @@
-import React, {useState, useEffect, useContext} from "react"
-import {ArrowsContext} from "../../contexts/arrowsContext"
+import React, { useState, useEffect, useContext } from 'react'
+import { ArrowsContext } from '../../contexts/arrowsContext'
 
 function Arrow(props) {
 	const arrows = useContext(ArrowsContext)
 
 	const [width, setWidth] = useState(window.screen.width)
 	const [height, setHeight] = useState(window.screen.height)
-	const [isSelected, setIsSelected] = useState(() => (
+	const [isSelected, setIsSelected] = useState(() =>
 		checkIsArrowSelected() === undefined ? false : true
-	))
+	)
 
 	const start = {
 		X: props.coordinates.start.X,
@@ -20,83 +20,91 @@ function Arrow(props) {
 		Y: props.coordinates.end.Y
 	}
 
-	useEffect(() => {}, [getDrawableArrow(arrows.arrows)])
+	const drawableArrow = getDrawableArrow(arrows.arrows)
+
+	useEffect(() => {}, [drawableArrow])
 
 	useEffect(() => {
 		setIsSelected(checkIsArrowSelected() === undefined ? false : true)
 	}, [arrows.selectedArrows])
 
 	function checkIsArrowSelected() {
-		const match = arrows.selectedArrows.find(arrow => (
-			arrow.from.id === props.from.id && arrow.to === props.to
-		))
+		const match = arrows.selectedArrows.find(
+			(arrow) => arrow.from.id === props.from.id && arrow.to === props.to
+		)
 		return match
 	}
 
 	function getDrawableArrow(arrows) {
-		arrows.find(arrow => arrow.from.id === props.from.id && arrow.to === props.to)
+		arrows.find(
+			(arrow) => arrow.from.id === props.from.id && arrow.to === props.to
+		)
 	}
 
 	function handleClick() {
 		arrows.toggleSelectedArrow(props)
 	}
-	
+
 	function handleMouseDownOnStartHandle() {
-		arrows.rebaseNewArrow(props, "start")
+		arrows.rebaseNewArrow(props, 'start')
 	}
 
 	function handleMouseDownOnEndHandle() {
-		arrows.rebaseNewArrow(props, "end")
+		arrows.rebaseNewArrow(props, 'end')
 	}
 
 	return (
-		<svg 
+		<svg
 			viewBox={`0 0 ${width} ${height}`}
-			className={`arrow ${props.from.region === "stack" ? "arrow__stack" : "arrow__heap"}`}
+			className={`arrow ${
+				props.from.region === 'stack' ? 'arrow__stack' : 'arrow__heap'
+			}`}
 			style={{
-				display: `${props.isDragged ? "none" : "block"}`,
-				zIndex: `${props.zIndex+1}`
+				display: `${props.isDragged ? 'none' : 'block'}`,
+				zIndex: `${props.zIndex + 1}`
 			}}
-			width={width} 
+			width={width}
 			height={height}
 			xmlns="http://www.w3.org/2000/svg"
 		>
 			<defs>
-				<marker 
-					id={`arrow${props.from.id}${props.to}`} 
-					viewBox="0 0 10 10" 
-					refX="8" 
-					refY="5" 
-					markerWidth="6" 
-					markerHeight="6" 
+				<marker
+					id={`arrow${props.from.id}${props.to}`}
+					viewBox="0 0 10 10"
+					refX="8"
+					refY="5"
+					markerWidth="6"
+					markerHeight="6"
 					orient="auto-start-reverse"
 				>
-					<path 
+					<path
 						d="M 0 0 L 10 5 L 0 10 z"
-						className={`arrow__head ${isSelected ? "arrow--selected" : ""}`}
+						className={`arrow__head ${
+							isSelected ? 'arrow--selected' : ''
+						}`}
 					/>
 				</marker>
 			</defs>
-			<path 
+			<path
 				d={`
 					M ${start.X} ${start.Y}
 					L ${end.X} ${end.Y}
-				`} 
-				className={`${isSelected ? "arrow--selected" : ""}`}
+				`}
+				className={`${isSelected ? 'arrow--selected' : ''}`}
 				pointerEvents="visible"
 				onClick={handleClick}
 				markerEnd={`url(#arrow${props.from.id}${props.to})`}
 			/>
-			<circle 
-				cx={start.X} 
-				cy={start.Y} 
-				pointerEvents="visible" 
+			<circle
+				cx={start.X}
+				cy={start.Y}
+				pointerEvents="visible"
 				onMouseDown={handleMouseDownOnStartHandle}
 			/>
-			<circle 
-				cx={end.X} 
-				cy={end.Y} 
-				pointerEvents="visible" 
+			<circle
+				cx={end.X}
+				cy={end.Y}
+				pointerEvents="visible"
 				onMouseDown={handleMouseDownOnEndHandle}
 			/>
 		</svg>

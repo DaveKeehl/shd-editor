@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 
 const StateContext = React.createContext()
 
@@ -15,7 +15,7 @@ function StateContextProvider(props) {
 		// console.log("Added new Stack Frame")
 		const newStackFrame = {
 			id: count,
-			name: "",
+			name: '',
 			variables: []
 		}
 		setCount((prevState) => prevState + 1)
@@ -26,7 +26,7 @@ function StateContextProvider(props) {
 		// console.log("Added new Heap Object")
 		const newHeapObject = {
 			id: count,
-			name: "",
+			name: '',
 			variables: [],
 			position: {
 				X: initialPosition.X,
@@ -57,9 +57,9 @@ function StateContextProvider(props) {
 		const newVariable = {
 			id: count,
 			nature: variableNature,
-			name: "",
-			type: "",
-			value: ""
+			name: '',
+			type: '',
+			value: ''
 		}
 		setCount((prevState) => prevState + 1)
 		setStack((prevState) =>
@@ -76,9 +76,9 @@ function StateContextProvider(props) {
 		const newVariable = {
 			id: count,
 			nature: variableNature,
-			name: "",
-			type: "",
-			value: ""
+			name: '',
+			type: '',
+			value: ''
 		}
 		setCount((prevState) => prevState + 1)
 		setHeap((prevState) =>
@@ -128,7 +128,7 @@ function StateContextProvider(props) {
 	}
 
 	const getParent = (variableID) => {
-		let parent = ""
+		let parent = ''
 		stack.forEach((frame) => {
 			frame.variables.forEach((variable) => {
 				if (variable.id === variableID) {
@@ -189,7 +189,7 @@ function StateContextProvider(props) {
 	}
 
 	const setVariableData = (region, parentID, variableID, newData) => {
-		if (region === "stack") {
+		if (region === 'stack') {
 			setStack((prevState) =>
 				prevState.map((frame) => {
 					if (frame.id === parentID) {
@@ -204,7 +204,7 @@ function StateContextProvider(props) {
 					return frame
 				})
 			)
-		} else if (region === "heap") {
+		} else if (region === 'heap') {
 			setHeap((prevState) =>
 				prevState.map((object) => {
 					if (object.id === parentID) {
@@ -250,8 +250,8 @@ function StateContextProvider(props) {
 		setStack((prevState) =>
 			prevState.map((frame) => {
 				frame.variables = frame.variables.map((variable) => {
-					if (variable.nature === "reference") {
-						variable.value = ""
+					if (variable.nature === 'reference') {
+						variable.value = ''
 					}
 					return variable
 				})
@@ -261,8 +261,8 @@ function StateContextProvider(props) {
 		setHeap((prevState) =>
 			prevState.map((object) => {
 				object.variables = object.variables.map((variable) => {
-					if (variable.nature === "reference") {
-						variable.value = ""
+					if (variable.nature === 'reference') {
+						variable.value = ''
 					}
 					return variable
 				})
@@ -275,12 +275,12 @@ function StateContextProvider(props) {
 	}
 
 	const clearStack = () => {
-		console.log("Removed all Stack Frames")
+		console.log('Removed all Stack Frames')
 		setStack([])
 	}
 
 	const clearHeap = () => {
-		console.log("Removed all Heap Objects")
+		console.log('Removed all Heap Objects')
 		setHeap([])
 	}
 
@@ -293,12 +293,12 @@ function StateContextProvider(props) {
 		stack.forEach((frame) => {
 			frame.variables.forEach((variable) => {
 				if (
-					variable.nature === "reference" &&
+					variable.nature === 'reference' &&
 					(variable.id === targetID || variable.value === targetID)
 				) {
-					setVariableData("stack", frame.id, variable.id, {
-						name: "value",
-						value: ""
+					setVariableData('stack', frame.id, variable.id, {
+						name: 'value',
+						value: ''
 					})
 				}
 			})
@@ -306,12 +306,12 @@ function StateContextProvider(props) {
 		heap.forEach((object) => {
 			object.variables.forEach((variable) => {
 				if (
-					variable.nature === "reference" &&
+					variable.nature === 'reference' &&
 					(variable.id === targetID || variable.value === targetID)
 				) {
-					setVariableData("heap", object.id, variable.id, {
-						name: "value",
-						value: ""
+					setVariableData('heap', object.id, variable.id, {
+						name: 'value',
+						value: ''
 					})
 				}
 			})
@@ -340,8 +340,8 @@ function StateContextProvider(props) {
 			) {
 				// 2. CHECK IF FIELDS HAVE EXPECTED TYPES
 				if (
-					typeof frame.id === "number" &&
-					typeof frame.name === "string" &&
+					typeof frame.id === 'number' &&
+					typeof frame.name === 'string' &&
 					Array.isArray(frame.variables)
 				) {
 					// 3. CHECK IF ELEMENT ID IS UNIQUE
@@ -352,7 +352,7 @@ function StateContextProvider(props) {
 						// CHECK EVERY VARIBLE!
 						for (let j = 0; j < frame.variables.length; j++) {
 							const variable = frame.variables[j]
-							const {id, nature, name, type, value} = variable
+							const { id, nature, name, type, value } = variable
 							// 1. CHECK IF VARIABLE HAS ALL THE EXPECTED FIELDS
 							if (
 								id !== undefined &&
@@ -363,21 +363,23 @@ function StateContextProvider(props) {
 							) {
 								// 2. CHECK IF FIELDS HAVE EXPECTED TYPES
 								if (
-									typeof id === "number" && 
-									typeof nature === "string" && 
-									typeof name === "string" && 
-									typeof type === "string"
+									typeof id === 'number' &&
+									typeof nature === 'string' &&
+									typeof name === 'string' &&
+									typeof type === 'string'
 								) {
 									// 3. CHECK IF VARIABLE VALUES TYPES ARE LEGAL
 									if (
-										(
-											nature === "reference" && 
-											(
-												(typeof value === "number" && (heap.find(object => object.id === value) !== undefined)) || 
-												(typeof value === "string" && value === "")
-											) 
-										) || 
-										(nature === "primitive" && typeof value === "string")
+										(nature === 'reference' &&
+											((typeof value === 'number' &&
+												heap.find(
+													(object) =>
+														object.id === value
+												) !== undefined) ||
+												(typeof value === 'string' &&
+													value === ''))) ||
+										(nature === 'primitive' &&
+											typeof value === 'string')
 									) {
 										// 4. CHECK IF ELEMENT ID IS UNIQUE
 										if (isElementUnique(variable.id)) {
@@ -426,17 +428,17 @@ function StateContextProvider(props) {
 			) {
 				// 2. CHECK IF FIELDS HAVE EXPECTED TYPES
 				if (
-					typeof object.id === "number" &&
-					typeof object.name === "string" &&
+					typeof object.id === 'number' &&
+					typeof object.name === 'string' &&
 					Array.isArray(object.variables) &&
 					object.position.X !== undefined &&
 					object.position.Y !== undefined &&
-					typeof object.position === "object" &&
-					typeof object.position.X === "number" &&
-					typeof object.position.Y === "number" &&
+					typeof object.position === 'object' &&
+					typeof object.position.X === 'number' &&
+					typeof object.position.Y === 'number' &&
 					object.position.X >= 0 &&
 					object.position.Y >= 0 &&
-					typeof object.depthIndex === "number"
+					typeof object.depthIndex === 'number'
 				) {
 					// 3. CHECK IF ELEMENT ID IS UNIQUE
 					if (isElementUnique(object.id)) {
@@ -445,9 +447,8 @@ function StateContextProvider(props) {
 
 						// CHECK EVERY VARIBLE!
 						for (let j = 0; j < object.variables.length; j++) {
-
 							const variable = object.variables[j]
-							const {id, nature, name, type, value} = variable
+							const { id, nature, name, type, value } = variable
 							// 1. CHECK IF VARIABLE HAS ALL THE EXPECTED FIELDS
 							if (
 								id !== undefined &&
@@ -458,21 +459,23 @@ function StateContextProvider(props) {
 							) {
 								// 2. CHECK IF FIELDS HAVE EXPECTED TYPES
 								if (
-									typeof id === "number" && 
-									typeof nature === "string" && 
-									typeof name === "string" && 
-									typeof type === "string"
+									typeof id === 'number' &&
+									typeof nature === 'string' &&
+									typeof name === 'string' &&
+									typeof type === 'string'
 								) {
 									// 3. CHECK IF VARIABLE VALUES TYPES ARE LEGAL
 									if (
-										(
-											nature === "reference" && 
-											(
-												(typeof value === "number" && (heap.find(object => object.id === value) !== undefined)) || 
-												(typeof value === "string" && value === "")
-											) 
-										) || 
-										(nature === "primitive" && typeof value === "string")
+										(nature === 'reference' &&
+											((typeof value === 'number' &&
+												heap.find(
+													(object) =>
+														object.id === value
+												) !== undefined) ||
+												(typeof value === 'string' &&
+													value === ''))) ||
+										(nature === 'primitive' &&
+											typeof value === 'string')
 									) {
 										// 4. CHECK IF ELEMENT ID IS UNIQUE
 										if (isElementUnique(variable.id)) {
@@ -508,6 +511,24 @@ function StateContextProvider(props) {
 		return isValid
 	}
 
+	const getElementsCount = (diagram) => {
+		const { stack, heap } = diagram
+		let highestId = 0
+		for (const frame of stack) {
+			highestId = Math.max(highestId, frame.id)
+			for (const variable of frame.variables) {
+				highestId = Math.max(highestId, variable.id)
+			}
+		}
+		for (const object of heap) {
+			highestId = Math.max(highestId, object.id)
+			for (const variable of object.variables) {
+				highestId = Math.max(highestId, variable.id)
+			}
+		}
+		return highestId
+	}
+
 	const uploadJSON = (file) => {
 		clearAll()
 		const reader = new FileReader()
@@ -517,18 +538,20 @@ function StateContextProvider(props) {
 				if (isDiagramValid(json)) {
 					setStack(json.stack)
 					setHeap(json.heap)
+					setCount(getElementsCount(json))
 				} else {
-					alert(
-						"The diagram contained in the JSON file you have uploaded presents some errors. Check for the following things:\n\n" +
-							'1. Does the diagram has an array called "stack" and an array called "heap"?\n' +
-							"2. Does every stack frame and heap object have the right data in it?\n" +
-							"3. Are the data types correct?\n" +
-							"4. Does every stack frame, heap object and variable have a unique id?\n"+
-							"5. Does every reference variable contain as value the id of an existing heap object?"
-					)
+					alert(`
+						The diagram contained in the JSON file you have uploaded presents some errors. Check for the following things:
+
+						1. Does the diagram has an array called "stack" and an array called "heap"?
+						2. Does every stack frame and heap object have the right data in it?
+						3. Are the data types correct?
+						4. Does every stack frame, heap object and variable have a unique id?
+						5. Does every reference variable contain as value the id of an existing heap object?
+					`)
 				}
 			} catch (ex) {
-				alert("Only JSON files are supported.")
+				alert('Only JSON files are supported.')
 			}
 		}
 		// reader.onprogress = (event) => {
@@ -540,12 +563,12 @@ function StateContextProvider(props) {
 		reader.readAsText(file)
 	}
 
-	const downloadJSON = (filename = "diagram") => {
+	const downloadJSON = (filename = 'diagram') => {
 		const json = JSON.stringify(diagram, null, 4)
-		const data = "data:text/json;charset=utf-8," + encodeURIComponent(json)
-		var downloadable = document.createElement("a")
-		downloadable.setAttribute("href", data)
-		downloadable.setAttribute("download", filename + ".json")
+		const data = 'data:text/json;charset=utf-8,' + encodeURIComponent(json)
+		var downloadable = document.createElement('a')
+		downloadable.setAttribute('href', data)
+		downloadable.setAttribute('download', filename + '.json')
 		document.body.appendChild(downloadable) // required for firefox
 		downloadable.click()
 		downloadable.remove()
@@ -563,6 +586,7 @@ function StateContextProvider(props) {
 		diagram,
 
 		count,
+		setCount,
 
 		addStackFrame,
 		addHeapObject,

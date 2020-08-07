@@ -1,39 +1,35 @@
-import React, {useState, useContext, useRef, useEffect} from "react"
-import {ArrowsContext} from "../../contexts/arrowsContext"
-import {StateContext} from "../../contexts/stateContext"
+import React, { useState, useContext, useRef, useEffect } from 'react'
+import { ArrowsContext } from '../../contexts/arrowsContext'
+import { StateContext } from '../../contexts/stateContext'
 
-import {EnterFullscreen} from "../../images/enter-fullscreen.svg"
-import {ExitFullscreen} from "../../images/exit-fullscreen.svg"
+import { EnterFullscreen } from '../../images/enter-fullscreen.svg'
+import { ExitFullscreen } from '../../images/exit-fullscreen.svg'
 
 function Button(props) {
 	const [isFullscreen, setIsFullscreen] = useState(false)
 
 	const app = useContext(StateContext)
-	const {setSelectedArrows} = useContext(ArrowsContext)
+	const { setSelectedArrows } = useContext(ArrowsContext)
 
 	const inputRef = useRef(null)
 
 	document.onfullscreenchange = () => {
-		setIsFullscreen(prev => !prev)
+		setIsFullscreen((prev) => !prev)
 	}
 
 	function handleClick() {
-		if (props.action === "new-diagram") {
+		if (props.action === 'new-diagram') {
 			app.clearAll()
-		}
-		else if (props.action === "delete-arrows") {
+			app.setCount(0)
+		} else if (props.action === 'delete-arrows') {
 			app.clearConnections(setSelectedArrows)
-		}
-		else if (props.action === "download-json") {
+		} else if (props.action === 'download-json') {
 			app.downloadJSON()
-		}
-		else if (props.action === "scale-up") {
+		} else if (props.action === 'scale-up') {
 			//
-		}
-		else if (props.action === "scale-down") {
+		} else if (props.action === 'scale-down') {
 			//
-		}
-		else if (props.action === "toggle-fullscreen") {
+		} else if (props.action === 'toggle-fullscreen') {
 			if (isFullscreen) {
 				document.exitFullscreen()
 			} else {
@@ -51,29 +47,42 @@ function Button(props) {
 	return (
 		<div className="toolbar__button">
 			<span>
-				{
-					(
-						props.action === "toggle-fullscreen" ? 
-						(isFullscreen ? "exit fullscreen" : "enter fullscreen") : 
-						props.action
-					)
+				{(props.action === 'toggle-fullscreen'
+					? isFullscreen
+						? 'exit fullscreen'
+						: 'enter fullscreen'
+					: props.action
+				)
 					.toUpperCase()
-					.replace("-", " ")
-				}
+					.replace('-', ' ')}
 			</span>
-			{
-				props.action === "upload-json" ?
+			{props.action === 'upload-json' ? (
 				<label onClick={handleClick}>
-					<img src={require(`../../images/${props.action}.svg`)} alt={props.action} />
-					<input type="file" accept=".json" onChange={handleChange} ref={inputRef} />
+					<img
+						src={require(`../../images/${props.action}.svg`)}
+						alt={props.action}
+					/>
+					<input
+						type="file"
+						accept=".json"
+						onChange={handleChange}
+						ref={inputRef}
+					/>
 				</label>
-				:
-				<button 
-					onClick={handleClick} 
-				>
-					<img src={require(`../../images/${props.action === "toggle-fullscreen" ? (isFullscreen ? "exit-fullscreen": "enter-fullscreen") : props.action}.svg`)} alt={props.action} />
+			) : (
+				<button onClick={handleClick}>
+					<img
+						src={require(`../../images/${
+							props.action === 'toggle-fullscreen'
+								? isFullscreen
+									? 'exit-fullscreen'
+									: 'enter-fullscreen'
+								: props.action
+						}.svg`)}
+						alt={props.action}
+					/>
 				</button>
-			}
+			)}
 		</div>
 	)
 }

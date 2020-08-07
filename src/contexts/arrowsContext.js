@@ -1,49 +1,50 @@
-import React, {useState} from "react"
-import {utils} from "../utils"
+import React, { useState } from 'react'
+import { utils } from '../utils'
 
 const ArrowsContext = React.createContext()
 
-const { getStackFrameInputWidth, 
-		getBlockHeight, 
-		getHeapObjectCenter,
-		getStackFramePosition } = utils.functions
+const {
+	getStackFrameInputWidth,
+	getBlockHeight,
+	getHeapObjectCenter,
+	getStackFramePosition
+} = utils.functions
 
 const arrow = {
 	from: {
-		region: "",
-		parentId: "",
-		id: ""
+		region: '',
+		parentId: '',
+		id: ''
 	},
-	to: "",
+	to: '',
 	coordinates: {
 		start: {
-			X: "",
-			Y: ""
+			X: '',
+			Y: ''
 		},
 		end: {
-			X: "",
-			Y: ""
+			X: '',
+			Y: ''
 		}
 	},
-	zIndex: "",
+	zIndex: '',
 	isDragged: false
 }
 
 function ArrowsContextProvider(props) {
-
 	const [arrows, setArrows] = useState([])
 	const [newArrow, setNewArrow] = useState(arrow)
 	const [stackScrollAmount, setStackScrollAmount] = useState(0)
 	const [isArrowDragged, setIsArrowDragged] = useState(false)
-	const [activeDragHandle, setActiveDragHandle] = useState("")
+	const [activeDragHandle, setActiveDragHandle] = useState('')
 	const [isArrowHeadVisible, setIsArrowHeadVisible] = useState(false)
 	const [selectedArrows, setSelectedArrows] = useState([])
 
 	// FROM: the refence variable that started the new arrow
 	function setFrom(from) {
-		const {region, parentId, id} = from
-		setNewArrow(prev => ({
-			...prev, 
+		const { region, parentId, id } = from
+		setNewArrow((prev) => ({
+			...prev,
 			from: {
 				region: region,
 				parentId: parentId,
@@ -54,14 +55,14 @@ function ArrowsContextProvider(props) {
 
 	// TO: the heap object on which the new arrow is released
 	function setTo(to) {
-		setNewArrow(prev => ({...prev, to: to}))
+		setNewArrow((prev) => ({ ...prev, to: to }))
 	}
 
 	// START: set of absolute coordinates where the new arrow starts
 	function setStart(start) {
-		const {X,Y} = start
-		setNewArrow(prev => ({
-			...prev, 
+		const { X, Y } = start
+		setNewArrow((prev) => ({
+			...prev,
 			coordinates: {
 				start: {
 					X: X,
@@ -74,9 +75,9 @@ function ArrowsContextProvider(props) {
 
 	// END: set of absolute coordinates where the new arrow ends
 	function setEnd(end) {
-		const {X,Y} = end
-		setNewArrow(prev => ({
-			...prev, 
+		const { X, Y } = end
+		setNewArrow((prev) => ({
+			...prev,
 			coordinates: {
 				...prev.coordinates,
 				end: {
@@ -88,7 +89,7 @@ function ArrowsContextProvider(props) {
 	}
 
 	function setDragged(from, to, state) {
-		const updated = arrows.map(arrow => {
+		const updated = arrows.map((arrow) => {
 			if (arrow.from.id === from && arrow.to === to) {
 				arrow.isDragged = state
 			}
@@ -98,80 +99,81 @@ function ArrowsContextProvider(props) {
 	}
 
 	function setNewArrowIsSelected(state) {
-		setNewArrow(prev => ({
+		setNewArrow((prev) => ({
 			...prev,
 			isSelected: state
 		}))
 	}
 
 	function toggleNewArrowIsSelected() {
-		setNewArrow(prev => ({
+		setNewArrow((prev) => ({
 			...prev,
 			isSelected: !prev.isSelected
 		}))
 	}
 
 	function toggleSelectedArrow(arrow) {
-		const match = selectedArrows.find(current => (
-			current.from.id === arrow.from.id && current.to === arrow.to
-		))
+		const match = selectedArrows.find(
+			(current) =>
+				current.from.id === arrow.from.id && current.to === arrow.to
+		)
 		if (match === undefined) {
-			setSelectedArrows(prevArrows => [...prevArrows, arrow])
+			setSelectedArrows((prevArrows) => [...prevArrows, arrow])
 		} else {
-			setSelectedArrows(prevArrows => prevArrows.filter(current => (
-				current.from.id !== arrow.from.id || current.to !== arrow.to
-			)))
+			setSelectedArrows((prevArrows) =>
+				prevArrows.filter(
+					(current) =>
+						current.from.id !== arrow.from.id ||
+						current.to !== arrow.to
+				)
+			)
 		}
 	}
 
 	// Given 2 points (arrow start and center of target object) and the
-	// size (width and height) of the target object, compute and return 
-	// the intersection of the line created by those 2 points and the 
+	// size (width and height) of the target object, compute and return
+	// the intersection of the line created by those 2 points and the
 	// border of the object
 	function computeIntersection(A, B, width, height) {
-		const {X: x1, Y: y1} = A
-		const {X: x2, Y: y2} = B
-		const intersection = {X: "", Y: ""}
+		const { X: x1, Y: y1 } = A
+		const { X: x2, Y: y2 } = B
+		const intersection = { X: '', Y: '' }
 		const slope = (y2 - y1) / (x2 - x1)
-		const horizontalTest = slope * (width/2)
-		const verticalTest = (height/2) / slope
+		const horizontalTest = slope * (width / 2)
+		const verticalTest = height / 2 / slope
 		const horLimit = height / 2
 		const verLimit = width / 2
-		let edge = ""
+		let edge = ''
 
 		if (horizontalTest >= -horLimit && horizontalTest <= horLimit) {
 			if (x1 < x2) {
-				edge = "left"
-			} 
-			else if (x1 > x2) {
-				edge = "right"
+				edge = 'left'
+			} else if (x1 > x2) {
+				edge = 'right'
 			}
-		}
-		else if (verticalTest >= -verLimit && verticalTest <= verLimit) {
+		} else if (verticalTest >= -verLimit && verticalTest <= verLimit) {
 			if (y1 < y2) {
-				edge = "top"
-			} 
-			else if (y1 > y2) {
-				edge = "bottom"
+				edge = 'top'
+			} else if (y1 > y2) {
+				edge = 'bottom'
 			}
 		}
 
-		if (edge === "left" || edge === "right") {
-			if (edge === "left") {
-				intersection.X = x2 - (width/2)
-				intersection.Y = y2 - slope * (width/2)
+		if (edge === 'left' || edge === 'right') {
+			if (edge === 'left') {
+				intersection.X = x2 - width / 2
+				intersection.Y = y2 - slope * (width / 2)
 			} else {
-				intersection.X = x2 + (width/2)
-				intersection.Y = y2 + slope * (width/2)
+				intersection.X = x2 + width / 2
+				intersection.Y = y2 + slope * (width / 2)
 			}
-		}
-		else if (edge === "top" || edge === "bottom") {
-			if (edge === "top") {
-				intersection.X = x2 - (height/2) / slope
-				intersection.Y = y2 - (height/2)
+		} else if (edge === 'top' || edge === 'bottom') {
+			if (edge === 'top') {
+				intersection.X = x2 - height / 2 / slope
+				intersection.Y = y2 - height / 2
 			} else {
-				intersection.X = x2 + (height/2) / slope
-				intersection.Y = y2 + (height/2)
+				intersection.X = x2 + height / 2 / slope
+				intersection.Y = y2 + height / 2
 			}
 		}
 
@@ -185,13 +187,17 @@ function ArrowsContextProvider(props) {
 
 	// Add newArrow in the arrows array
 	function storeNewArrow() {
-		setArrows(prev => [...prev, newArrow])
+		setArrows((prev) => [...prev, newArrow])
 	}
 
 	// NEW ARROW EXACT FUNCTIONS: They set exact coordinates of the new arrow based on screen computations
 
 	function getExactStackStartPosition(stack, stackWidth, mouseX, mouseY) {
-		const {HEADER_HEIGHT, REGION_PADDING, FRAME_MARGIN_BOTTOM} = utils.constants
+		const {
+			HEADER_HEIGHT,
+			REGION_PADDING,
+			FRAME_MARGIN_BOTTOM
+		} = utils.constants
 
 		const INPUT_WIDTH = getStackFrameInputWidth(stackWidth)
 
@@ -199,54 +205,82 @@ function ArrowsContextProvider(props) {
 		let accumulator = REGION_PADDING
 
 		for (const frame of stack) {
-
 			let startY = accumulator
 			let endY = startY + getBlockHeight(frame)
 
 			if (virtualY >= startY && virtualY <= endY) {
+				const {
+					BLOCK_PADDING,
+					BLOCK_HEADER_HEIGHT,
+					VAR_VERTICAL_MARGIN
+				} = utils.constants
 
-				const {BLOCK_PADDING, BLOCK_HEADER_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
-
-				let varAccumulator = startY + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + VAR_VERTICAL_MARGIN
+				let varAccumulator =
+					startY +
+					BLOCK_PADDING +
+					BLOCK_HEADER_HEIGHT +
+					VAR_VERTICAL_MARGIN
 
 				// 1. Find closest variable
 				for (const variable of frame.variables) {
+					const {
+						VAR_HEIGHT,
+						VAR_HORIZONTAL_MARGIN,
+						VAR_HORIZONTAL_PADDING,
+						VAR_VERTICAL_PADDING,
+						INPUT_HEIGHT,
+						VAR_ROW_GAP
+					} = utils.constants
 
-					const {VAR_HEIGHT, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_ROW_GAP} = utils.constants
-
-					let varStartX = REGION_PADDING + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
-					let varEndX = stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
+					let varStartX =
+						REGION_PADDING + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
+					let varEndX =
+						stackWidth -
+						REGION_PADDING -
+						BLOCK_PADDING -
+						VAR_HORIZONTAL_MARGIN
 
 					let varStartY = varAccumulator
 					let varEndY = varStartY + VAR_HEIGHT
 
 					if (
-						mouseX >= varStartX && mouseX <= varEndX
-						&& 
-						virtualY >= varStartY && virtualY <= varEndY
+						mouseX >= varStartX &&
+						mouseX <= varEndX &&
+						virtualY >= varStartY &&
+						virtualY <= varEndY
 					) {
-
 						const arrowStart = {
-							region: "stack",
+							region: 'stack',
 							variableId: variable.id,
 							parentId: frame.id,
 							coordinates: {
-								X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_WIDTH/2,
-								Y: varStartY + VAR_VERTICAL_PADDING + INPUT_HEIGHT + VAR_ROW_GAP + INPUT_HEIGHT/2 - stackScrollAmount + HEADER_HEIGHT
+								X:
+									stackWidth -
+									REGION_PADDING -
+									BLOCK_PADDING -
+									VAR_HORIZONTAL_MARGIN -
+									VAR_HORIZONTAL_PADDING -
+									INPUT_WIDTH / 2,
+								Y:
+									varStartY +
+									VAR_VERTICAL_PADDING +
+									INPUT_HEIGHT +
+									VAR_ROW_GAP +
+									INPUT_HEIGHT / 2 -
+									stackScrollAmount +
+									HEADER_HEIGHT
 							}
 						}
 
 						return arrowStart
-
 					} else {
-						varAccumulator = (varEndY + VAR_VERTICAL_MARGIN)
+						varAccumulator = varEndY + VAR_VERTICAL_MARGIN
 					}
 				}
 
 				break
-				
 			} else {
-				accumulator = (endY + FRAME_MARGIN_BOTTOM)
+				accumulator = endY + FRAME_MARGIN_BOTTOM
 			}
 		}
 	}
@@ -254,69 +288,99 @@ function ArrowsContextProvider(props) {
 	// Given the stack object, the stack width and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactStackStartPosition(stack, stackWidth, mouseX, mouseY) {
-		const arrowStart = getExactStackStartPosition(stack, stackWidth, mouseX, mouseY)
+		const arrowStart = getExactStackStartPosition(
+			stack,
+			stackWidth,
+			mouseX,
+			mouseY
+		)
 		setStart({
-			X: arrowStart.coordinates.X, 
+			X: arrowStart.coordinates.X,
 			Y: arrowStart.coordinates.Y
 		})
 		setEnd({
-			X: arrowStart.coordinates.X, 
+			X: arrowStart.coordinates.X,
 			Y: arrowStart.coordinates.Y
 		})
 	}
 
 	function getExactHeapStartPosition(stackWidth, target, mouseX, mouseY) {
-		const {SEPARATOR, REGION_PADDING, HEADER_HEIGHT, OBJECT_START_FIRST_VAR} = utils.constants
+		const {
+			SEPARATOR,
+			REGION_PADDING,
+			HEADER_HEIGHT,
+			OBJECT_START_FIRST_VAR
+		} = utils.constants
 
-		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
+		const startX =
+			stackWidth + SEPARATOR + REGION_PADDING + target.position.X
 		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
 
 		let accumulator = OBJECT_START_FIRST_VAR
 
 		for (const variable of target.variables) {
-
-			const {VAR_HEIGHT, BLOCK_WIDTH, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, INPUT_MIN_WIDTH, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
+			const {
+				VAR_HEIGHT,
+				BLOCK_WIDTH,
+				BLOCK_PADDING,
+				VAR_HORIZONTAL_MARGIN,
+				VAR_HORIZONTAL_PADDING,
+				INPUT_MIN_WIDTH,
+				VAR_VERTICAL_PADDING,
+				INPUT_HEIGHT,
+				VAR_VERTICAL_MARGIN
+			} = utils.constants
 
 			const varStartX = startX + BLOCK_PADDING + VAR_HORIZONTAL_MARGIN
-			const varEndX = startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
+			const varEndX =
+				startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
 
 			if (
-				mouseX >= varStartX && mouseX <= varEndX
-				&&
-				mouseY >= varStartY && mouseY <= varEndY
+				mouseX >= varStartX &&
+				mouseX <= varEndX &&
+				mouseY >= varStartY &&
+				mouseY <= varEndY
 			) {
-
 				const arrowStart = {
-					region: "heap",
+					region: 'heap',
 					variableId: variable.id,
 					parentId: target.id,
 					coordinates: {
-						X: startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
-						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+						X:
+							startX +
+							BLOCK_WIDTH -
+							BLOCK_PADDING -
+							VAR_HORIZONTAL_MARGIN -
+							VAR_HORIZONTAL_PADDING -
+							INPUT_MIN_WIDTH / 2,
+						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT / 2
 					}
 				}
-				
-				return arrowStart
 
+				return arrowStart
 			} else {
 				accumulator = accumulator + VAR_HEIGHT + VAR_VERTICAL_MARGIN
 			}
-
 		}
 	}
 
 	// Given the heap object where the mouse is over, and the mouse Y position,
 	// update the coordinates object of the newArrow
 	function setExactHeapStartPosition(stackWidth, target, mouseX, mouseY) {
-		const arrowStart = getExactHeapStartPosition(stackWidth, target, mouseX, mouseY)
+		const arrowStart = getExactHeapStartPosition(
+			stackWidth,
+			target,
+			mouseX,
+			mouseY
+		)
 		setStart({
-			X: arrowStart.coordinates.X, 
+			X: arrowStart.coordinates.X,
 			Y: arrowStart.coordinates.Y
 		})
 		setEnd({
-			X: arrowStart.coordinates.X, 
+			X: arrowStart.coordinates.X,
 			Y: arrowStart.coordinates.Y
 		})
 	}
@@ -324,14 +388,29 @@ function ArrowsContextProvider(props) {
 	// It sets the coordinates of the end point of the new arrow when a loop occurs
 	// (an object on the heap points to itself)
 	function setExactHeapEndPositionOnLoop(stackWidth, target, mouseX, mouseY) {
-		const {SEPARATOR, REGION_PADDING, HEADER_HEIGHT, OBJECT_START_FIRST_VAR} = utils.constants
+		const {
+			SEPARATOR,
+			REGION_PADDING,
+			HEADER_HEIGHT,
+			OBJECT_START_FIRST_VAR
+		} = utils.constants
 
-		const startX = stackWidth + SEPARATOR + REGION_PADDING + target.position.X
+		const startX =
+			stackWidth + SEPARATOR + REGION_PADDING + target.position.X
 		const startY = HEADER_HEIGHT + REGION_PADDING + target.position.Y
 		let accumulator = OBJECT_START_FIRST_VAR
 
 		for (const variable of target.variables) {
-			const {VAR_HEIGHT, BLOCK_WIDTH, BLOCK_PADDING, VAR_HORIZONTAL_MARGIN, VAR_HORIZONTAL_PADDING, VAR_VERTICAL_PADDING, INPUT_HEIGHT, VAR_VERTICAL_MARGIN} = utils.constants
+			const {
+				VAR_HEIGHT,
+				BLOCK_WIDTH,
+				BLOCK_PADDING,
+				VAR_HORIZONTAL_MARGIN,
+				VAR_HORIZONTAL_PADDING,
+				VAR_VERTICAL_PADDING,
+				INPUT_HEIGHT,
+				VAR_VERTICAL_MARGIN
+			} = utils.constants
 
 			const varStartY = startY + accumulator
 			const varEndY = varStartY + VAR_HEIGHT
@@ -339,10 +418,17 @@ function ArrowsContextProvider(props) {
 			// Find correct variable
 			if (mouseY >= varStartY && mouseY <= varEndY) {
 				// Check if mouse is outside input field
-				if (mouseX >= startX + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING) {
+				if (
+					mouseX >=
+					startX +
+						BLOCK_WIDTH -
+						BLOCK_PADDING -
+						VAR_HORIZONTAL_MARGIN -
+						VAR_HORIZONTAL_PADDING
+				) {
 					setEnd({
-						X: startX + BLOCK_WIDTH, 
-						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+						X: startX + BLOCK_WIDTH,
+						Y: varEndY - VAR_VERTICAL_PADDING - INPUT_HEIGHT / 2
 					})
 					setTo(target.id)
 					break
@@ -353,14 +439,19 @@ function ArrowsContextProvider(props) {
 		}
 	}
 
-	// It sets the coordinates of the intersection between the line 
-	// created by connecting the start and end point of the arrow, 
+	// It sets the coordinates of the intersection between the line
+	// created by connecting the start and end point of the arrow,
 	// and the target heap object
 	function setExactHeapEndPositionOnIntersection(stackWidth, target) {
 		const start = newArrow.coordinates.start
 		const center = getHeapObjectCenter(stackWidth, target)
 		const height = getBlockHeight(target)
-		const intersection = computeIntersection(start, center, utils.constants.BLOCK_WIDTH, height)
+		const intersection = computeIntersection(
+			start,
+			center,
+			utils.constants.BLOCK_WIDTH,
+			height
+		)
 		setEnd({
 			X: intersection.X,
 			Y: intersection.Y
@@ -369,10 +460,15 @@ function ArrowsContextProvider(props) {
 	}
 
 	function recomputeIntersection(start, to, heap, stackWidth) {
-		const heapObject = heap.find(object => object.id === to)
+		const heapObject = heap.find((object) => object.id === to)
 		const center = getHeapObjectCenter(stackWidth, heapObject)
 		const height = getBlockHeight(heapObject)
-		return computeIntersection(start, center, utils.constants.BLOCK_WIDTH, height)
+		return computeIntersection(
+			start,
+			center,
+			utils.constants.BLOCK_WIDTH,
+			height
+		)
 	}
 
 	function updateArrowsOnStackScroll(newScrollAmount, heap, stackWidth) {
@@ -380,13 +476,18 @@ function ArrowsContextProvider(props) {
 		const scrollOffset = oldScrollAmount - newScrollAmount
 		setStackScrollAmount(newScrollAmount)
 
-		const updatedArrows = arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
+		const updatedArrows = arrows.map((arrow) => {
+			if (arrow.from.region === 'stack') {
 				let start = arrow.coordinates.start
 				let end = arrow.coordinates.end
-				
+
 				start.Y = start.Y + scrollOffset
-				const intersection = recomputeIntersection(start, arrow.to, heap, stackWidth)
+				const intersection = recomputeIntersection(
+					start,
+					arrow.to,
+					heap,
+					stackWidth
+				)
 				end.X = intersection.X
 				end.Y = intersection.Y
 			}
@@ -395,15 +496,22 @@ function ArrowsContextProvider(props) {
 		setArrows(updatedArrows)
 	}
 
-	function updateArrowsOnStackResize(clientX, stackWidth, stackInputWidth, INPUT_WIDTH) {
+	function updateArrowsOnStackResize(
+		clientX,
+		stackWidth,
+		stackInputWidth,
+		INPUT_WIDTH
+	) {
 		const resizeOffset = clientX - stackWidth
 		const inputOffset = INPUT_WIDTH - stackInputWidth
 
-		const updatedArrows = arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset - (inputOffset/2)
+		const updatedArrows = arrows.map((arrow) => {
+			if (arrow.from.region === 'stack') {
+				arrow.coordinates.start.X =
+					arrow.coordinates.start.X + resizeOffset - inputOffset / 2
 			} else {
-				arrow.coordinates.start.X = arrow.coordinates.start.X + resizeOffset
+				arrow.coordinates.start.X =
+					arrow.coordinates.start.X + resizeOffset
 			}
 			arrow.coordinates.end.X = arrow.coordinates.end.X + resizeOffset
 			return arrow
@@ -414,12 +522,14 @@ function ArrowsContextProvider(props) {
 	function updateArrowsOnStackWidthReset(stackWidth, INPUT_WIDTH) {
 		const resizeOffset = stackWidth - utils.constants.STACK_MIN
 		const inputOffset = INPUT_WIDTH - utils.constants.INPUT_MIN_WIDTH
-		
-		const updatedArrows = arrows.map(arrow => {
-			if (arrow.from.region === "stack") {
-				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset + inputOffset/2
+
+		const updatedArrows = arrows.map((arrow) => {
+			if (arrow.from.region === 'stack') {
+				arrow.coordinates.start.X =
+					arrow.coordinates.start.X - resizeOffset + inputOffset / 2
 			} else {
-				arrow.coordinates.start.X = arrow.coordinates.start.X - resizeOffset
+				arrow.coordinates.start.X =
+					arrow.coordinates.start.X - resizeOffset
 			}
 			arrow.coordinates.end.X = arrow.coordinates.end.X - resizeOffset
 			return arrow
@@ -431,38 +541,56 @@ function ArrowsContextProvider(props) {
 		resetNewArrow()
 		setIsArrowDragged(true)
 		setFrom({
-			region: from.region, 
-			parentId: from.parentId, 
+			region: from.region,
+			parentId: from.parentId,
 			id: from.id
 		})
 		// SET START COORDINATES OF NEW ARROW
-		const {clientX, clientY} = event
-		if (from.region === "heap") {
+		const { clientX, clientY } = event
+		if (from.region === 'heap') {
 			// HEAP
-			const target = utils.functions.getHoveredHeapObject(diagram.heap, clientX, clientY, stackWidth)
+			const target = utils.functions.getHoveredHeapObject(
+				diagram.heap,
+				clientX,
+				clientY,
+				stackWidth
+			)
 			setExactHeapStartPosition(stackWidth, target, clientX, clientY)
 		} else {
 			// STACK
-			setExactStackStartPosition(diagram.stack, stackWidth, clientX, clientY)
+			setExactStackStartPosition(
+				diagram.stack,
+				stackWidth,
+				clientX,
+				clientY
+			)
 		}
 	}
 
 	function stopDraggingArrow(heap, stackWidth, event, setVariableData) {
 		setIsArrowDragged(false)
-		const target = utils.functions.getHoveredHeapObject(heap, event.clientX, event.clientY, stackWidth)
+		const target = utils.functions.getHoveredHeapObject(
+			heap,
+			event.clientX,
+			event.clientY,
+			stackWidth
+		)
 		if (target !== undefined) {
 			// CASE 1: HANDLES BOTH TARGET IS SAME OBJECT (LOOP) AND A DIFFERENT ONE
-			const {region, parentId, id} = newArrow.from
+			const { region, parentId, id } = newArrow.from
 			// KEEP SELECTED ARROWS UPDATED WHEN REBASING ARROW
 			updateSelectedArrowOnDragEnd(target)
-			setVariableData(region, parentId, id, { name: "value", value: target.id })
+			setVariableData(region, parentId, id, {
+				name: 'value',
+				value: target.id
+			})
 			setTo(target.id)
 		}
 		// CASE 2: ARROW-END POSITION IS NOT VALID (IT SNAPS BACK TO ARROW-START POSITION)
 		else {
-			const {X,Y} = newArrow.coordinates.start
+			const { X, Y } = newArrow.coordinates.start
 			setEnd({
-				X: X, 
+				X: X,
 				Y: Y
 			})
 		}
@@ -470,38 +598,52 @@ function ArrowsContextProvider(props) {
 
 	function updateSelectedArrowOnDragStart(arrowStart) {
 		// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
-		const match = selectedArrows.find(selectedArrow => (
-			selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to
-		))
+		const match = selectedArrows.find(
+			(selectedArrow) =>
+				selectedArrow.from.id === newArrow.from.id &&
+				selectedArrow.to === newArrow.to
+		)
 		if (match !== undefined) {
-			const updatedSelectedArrows = selectedArrows.map(selectedArrow => {
-				if (selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to) {
-					// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
-					selectedArrow.from.id = arrowStart().variableId
-					selectedArrow.from.parentId = arrowStart().parentId
-					selectedArrow.from.region = arrowStart().region
-					selectedArrow.coordinates.start.X = arrowStart().coordinates.X
-					selectedArrow.coordinates.start.Y = arrowStart().coordinates.Y
+			const updatedSelectedArrows = selectedArrows.map(
+				(selectedArrow) => {
+					if (
+						selectedArrow.from.id === newArrow.from.id &&
+						selectedArrow.to === newArrow.to
+					) {
+						// UPDATE DRAGGED ARROW IN SELECTED ARROWS ARRAY
+						selectedArrow.from.id = arrowStart().variableId
+						selectedArrow.from.parentId = arrowStart().parentId
+						selectedArrow.from.region = arrowStart().region
+						selectedArrow.coordinates.start.X = arrowStart().coordinates.X
+						selectedArrow.coordinates.start.Y = arrowStart().coordinates.Y
+					}
+					return selectedArrow
 				}
-				return selectedArrow
-			})
+			)
 			setSelectedArrows(updatedSelectedArrows)
 		}
 	}
 
 	function updateSelectedArrowOnDragEnd(target) {
 		// IF THE DRAGGED ARROW IS SELECTED, KEEP IT SELECTED AFTER IT'S RELEASED
-		const match = selectedArrows.find(selectedArrow => (
-			selectedArrow.from.id === newArrow.from.id && selectedArrow.to === newArrow.to
-		))
+		const match = selectedArrows.find(
+			(selectedArrow) =>
+				selectedArrow.from.id === newArrow.from.id &&
+				selectedArrow.to === newArrow.to
+		)
 		if (match !== undefined) {
-			const updatedSelectedArrows = selectedArrows.map(selectedArrow => {
-				const copy = JSON.parse(JSON.stringify(selectedArrow))
-				if (copy.from.id === newArrow.from.id && copy.to === newArrow.to) {
-					copy.to = target.id
+			const updatedSelectedArrows = selectedArrows.map(
+				(selectedArrow) => {
+					const copy = JSON.parse(JSON.stringify(selectedArrow))
+					if (
+						copy.from.id === newArrow.from.id &&
+						copy.to === newArrow.to
+					) {
+						copy.to = target.id
+					}
+					return copy
 				}
-				return copy
-			})
+			)
 			setSelectedArrows(updatedSelectedArrows)
 		}
 	}
@@ -535,16 +677,15 @@ function ArrowsContextProvider(props) {
 	//        based on the state of the diagram and the reference variables values
 	// Target: Any event that modifies the arrows positions
 	function rebuildArrows(diagram, stackWidth) {
-
 		const {
-			REGION_PADDING, 
-			BLOCK_PADDING, 
-			VAR_HORIZONTAL_MARGIN, 
-			VAR_HORIZONTAL_PADDING, 
-			BLOCK_HEADER_HEIGHT, 
-			VAR_VERTICAL_MARGIN, 
-			VAR_HEIGHT, 
-			VAR_VERTICAL_PADDING, 
+			REGION_PADDING,
+			BLOCK_PADDING,
+			VAR_HORIZONTAL_MARGIN,
+			VAR_HORIZONTAL_PADDING,
+			BLOCK_HEADER_HEIGHT,
+			VAR_VERTICAL_MARGIN,
+			VAR_HEIGHT,
+			VAR_VERTICAL_PADDING,
 			INPUT_HEIGHT,
 			SEPARATOR,
 			BLOCK_WIDTH,
@@ -553,114 +694,212 @@ function ArrowsContextProvider(props) {
 			INPUT_MIN_WIDTH
 		} = utils.constants
 
-		const {stack, heap} = diagram
-		
+		const { stack, heap } = diagram
+
 		setArrows([])
 
-		stack.forEach(frame => {
-			frame.variables.forEach((variable,idx) => {
-
-				if (variable.nature === "reference" && variable.value !== "") {
-					if (heap.find(obj => obj.id === variable.value) !== undefined) {
-
+		stack.forEach((frame) => {
+			frame.variables.forEach((variable, idx) => {
+				if (variable.nature === 'reference' && variable.value !== '') {
+					if (
+						heap.find((obj) => obj.id === variable.value) !==
+						undefined
+					) {
 						const start = {
-							X: stackWidth - REGION_PADDING - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - getStackFrameInputWidth(stackWidth)/2,
-							Y: getStackFramePosition(stack, frame, stackScrollAmount).Y.virtual + BLOCK_PADDING + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+							X:
+								stackWidth -
+								REGION_PADDING -
+								BLOCK_PADDING -
+								VAR_HORIZONTAL_MARGIN -
+								VAR_HORIZONTAL_PADDING -
+								getStackFrameInputWidth(stackWidth) / 2,
+							Y:
+								getStackFramePosition(
+									stack,
+									frame,
+									stackScrollAmount
+								).Y.virtual +
+								BLOCK_PADDING +
+								BLOCK_HEADER_HEIGHT +
+								(VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx + 1) -
+								VAR_VERTICAL_PADDING -
+								INPUT_HEIGHT / 2
 						}
 
+						console.log(`
+						start.Y: ${start.Y}
+						...
+						getStackFramePosition: ${
+							getStackFramePosition(
+								stack,
+								frame,
+								stackScrollAmount
+							).Y.virtual
+						},
+						BLOCK_PADDING: ${BLOCK_PADDING},
+						BLOCK_HEADER_HEIGHT: ${BLOCK_HEADER_HEIGHT},
+						VAR_VERTICAL_MARGIN: ${VAR_VERTICAL_MARGIN},
+						VAR_HEIGHT: ${VAR_HEIGHT},
+						VAR_VERTICAL_PADDING: ${VAR_VERTICAL_PADDING},
+						INPUT_HEIGHT: ${INPUT_HEIGHT}
+						`)
+
 						const end = {
-							X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
-							Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
+							X: recomputeIntersection(
+								start,
+								variable.value,
+								heap,
+								stackWidth
+							).X,
+							Y: recomputeIntersection(
+								start,
+								variable.value,
+								heap,
+								stackWidth
+							).Y
 						}
 
 						let newArrow = {
 							from: {
 								id: variable.id,
 								parentId: frame.id,
-								region: "stack"
+								region: 'stack'
 							},
 							to: variable.value,
 							coordinates: {
 								start,
 								end
 							},
-							zIndex: heap.find(object => object.id === variable.value).depthIndex,
+							zIndex: heap.find(
+								(object) => object.id === variable.value
+							).depthIndex,
 							isDragged: false
 						}
 
-						setArrows(prev => ([...prev, newArrow]))
+						setArrows((prev) => [...prev, newArrow])
 					}
 				}
 			})
 		})
 
-		heap.forEach(object => {
-			object.variables.forEach((variable,idx) => {
-				
-				if (variable.nature === "reference" && variable.value !== "") {
-					if (heap.find(obj => obj.id === variable.value) !== undefined) {
-
+		heap.forEach((object) => {
+			object.variables.forEach((variable, idx) => {
+				if (variable.nature === 'reference' && variable.value !== '') {
+					if (
+						heap.find((obj) => obj.id === variable.value) !==
+						undefined
+					) {
 						if (variable.value === object.id) {
-
 							//LOOP
 
 							const start = {
-								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
-								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+								X:
+									stackWidth +
+									SEPARATOR +
+									REGION_PADDING +
+									object.position.X +
+									BLOCK_WIDTH -
+									BLOCK_PADDING -
+									VAR_HORIZONTAL_MARGIN -
+									VAR_HORIZONTAL_PADDING -
+									INPUT_MIN_WIDTH / 2,
+								Y:
+									HEADER_HEIGHT +
+									REGION_PADDING +
+									object.position.Y +
+									BLOCK_PADDING +
+									OBJECT_HANDLE_FULL_HEIGHT +
+									BLOCK_HEADER_HEIGHT +
+									(VAR_VERTICAL_MARGIN + VAR_HEIGHT) *
+										(idx + 1) -
+									VAR_VERTICAL_PADDING -
+									INPUT_HEIGHT / 2
 							}
-	
+
 							const end = {
-								X: start.X + INPUT_MIN_WIDTH/2 + VAR_HORIZONTAL_PADDING + VAR_HORIZONTAL_MARGIN + BLOCK_PADDING,
+								X:
+									start.X +
+									INPUT_MIN_WIDTH / 2 +
+									VAR_HORIZONTAL_PADDING +
+									VAR_HORIZONTAL_MARGIN +
+									BLOCK_PADDING,
 								Y: start.Y
 							}
-	
+
 							const newArrow = {
 								from: {
 									id: variable.id,
 									parentId: object.id,
-									region: "heap"
+									region: 'heap'
 								},
 								to: variable.value,
 								coordinates: {
 									start,
 									end
 								},
-								zIndex: object.depthIndex+1,
+								zIndex: object.depthIndex + 1,
 								isDragged: false
 							}
-		
-							setArrows(prev => ([...prev, newArrow]))
-						}
-						else {
-							
+
+							setArrows((prev) => [...prev, newArrow])
+						} else {
 							// INTERSECTION
-	
+
 							const start = {
-								X: stackWidth + SEPARATOR + REGION_PADDING + object.position.X + BLOCK_WIDTH - BLOCK_PADDING - VAR_HORIZONTAL_MARGIN - VAR_HORIZONTAL_PADDING - INPUT_MIN_WIDTH/2,
-								Y: HEADER_HEIGHT + REGION_PADDING + object.position.Y + BLOCK_PADDING + OBJECT_HANDLE_FULL_HEIGHT + BLOCK_HEADER_HEIGHT + (VAR_VERTICAL_MARGIN + VAR_HEIGHT) * (idx+1) - VAR_VERTICAL_PADDING - INPUT_HEIGHT/2
+								X:
+									stackWidth +
+									SEPARATOR +
+									REGION_PADDING +
+									object.position.X +
+									BLOCK_WIDTH -
+									BLOCK_PADDING -
+									VAR_HORIZONTAL_MARGIN -
+									VAR_HORIZONTAL_PADDING -
+									INPUT_MIN_WIDTH / 2,
+								Y:
+									HEADER_HEIGHT +
+									REGION_PADDING +
+									object.position.Y +
+									BLOCK_PADDING +
+									OBJECT_HANDLE_FULL_HEIGHT +
+									BLOCK_HEADER_HEIGHT +
+									(VAR_VERTICAL_MARGIN + VAR_HEIGHT) *
+										(idx + 1) -
+									VAR_VERTICAL_PADDING -
+									INPUT_HEIGHT / 2
 							}
-	
+
 							const end = {
-								X: recomputeIntersection(start, variable.value, heap, stackWidth).X,
-								Y: recomputeIntersection(start, variable.value, heap, stackWidth).Y
+								X: recomputeIntersection(
+									start,
+									variable.value,
+									heap,
+									stackWidth
+								).X,
+								Y: recomputeIntersection(
+									start,
+									variable.value,
+									heap,
+									stackWidth
+								).Y
 							}
-	
+
 							const newArrow = {
 								from: {
 									id: variable.id,
 									parentId: object.id,
-									region: "heap"
+									region: 'heap'
 								},
 								to: variable.value,
 								coordinates: {
 									start,
 									end
 								},
-								zIndex: object.depthIndex+1,
+								zIndex: object.depthIndex + 1,
 								isDragged: false
 							}
-		
-							setArrows(prev => ([...prev, newArrow]))
+
+							setArrows((prev) => [...prev, newArrow])
 						}
 					}
 				}
@@ -670,20 +909,28 @@ function ArrowsContextProvider(props) {
 
 	const data = {
 		// STATE
-		arrows, setArrows,
-		newArrow, setNewArrow,
+		arrows,
+		setArrows,
+		newArrow,
+		setNewArrow,
 		setFrom,
 		setTo,
 		setStart,
 		setEnd,
 		setDragged,
-		selectedArrows, setSelectedArrows, toggleSelectedArrow,
+		selectedArrows,
+		setSelectedArrows,
+		toggleSelectedArrow,
 		setNewArrowIsSelected,
 		toggleNewArrowIsSelected,
-		stackScrollAmount, setStackScrollAmount,
-		isArrowDragged, setIsArrowDragged,
-		activeDragHandle, setActiveDragHandle,
-		isArrowHeadVisible, setIsArrowHeadVisible,
+		stackScrollAmount,
+		setStackScrollAmount,
+		isArrowDragged,
+		setIsArrowDragged,
+		activeDragHandle,
+		setActiveDragHandle,
+		isArrowHeadVisible,
+		setIsArrowHeadVisible,
 		// FUNCTIONS
 		computeIntersection,
 		storeNewArrow,
@@ -713,4 +960,4 @@ function ArrowsContextProvider(props) {
 	)
 }
 
-export {ArrowsContextProvider, ArrowsContext}
+export { ArrowsContextProvider, ArrowsContext }
