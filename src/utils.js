@@ -1,3 +1,22 @@
+const colors = {
+	black: '#000000',
+	white: '#FFFFFF',
+
+	headerBg: '#020712',
+
+	redStart: '#ee4848',
+	redEnd: '#d93333',
+	darkRed: '#571c1c',
+
+	blueStart: '#606eed',
+	blueEnd: '#3747db',
+	darkBlue: '#1e2458',
+
+	greyStart: '#9f9f9f',
+	greyEnd: '#777777',
+	darkGrey: '#353535'
+}
+
 let constants = {
 	HEADER_HEIGHT: 55,
 
@@ -289,6 +308,7 @@ function convertFromRelativeToAbsolute(stackWidth, relativeCoordinates) {
 }
 
 const utils = {
+	colors,
 	constants,
 	functions: {
 		getStackFrameVariableWidth,

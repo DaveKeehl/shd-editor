@@ -1,19 +1,21 @@
-import React from "react"
-import Button from "./Button"
-import logo from "../../images/logo.svg"
+import React from 'react'
+
+import { StyledLogo, StyledToolbar } from './Toolbar.style'
+import ToolbarButton from './ToolbarButton'
+import logo from '../../images/logo.svg'
 
 function Toolbar() {
 	return (
-		<div className="toolbar">
-			<img className="toolbar__logo" src={logo} alt="Logo" />
-			<Button action="new-diagram" />
-			<Button action="delete-arrows" />
-			<Button action="download-json" />
-			<Button action="upload-json" />
-			{/* <Button action="scale-up" />
-			<Button action="scale-down" /> */}
-			<Button action="toggle-fullscreen" />
-		</div>
+		<StyledToolbar>
+			<StyledLogo src={logo} alt="Logo" />
+			<ToolbarButton action="new-diagram" />
+			<ToolbarButton action="delete-arrows" />
+			<ToolbarButton action="download-json" />
+			<ToolbarButton action="upload-json" />
+			{/* <ToolbarButton action="scale-up" />
+			<ToolbarButton action="scale-down" /> */}
+			<ToolbarButton action="toggle-fullscreen" />
+		</StyledToolbar>
 	)
 }
 

@@ -8,9 +8,10 @@
     "@testing-library/user-event": "^7.1.2",
     "inline-style-prefixer": "^6.0.0",
     "node-sass": "^4.14.1",
+    "polished": "^3.6.5",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.2",
     "styled-components": "^5.1.1"
   },
   "scripts": {

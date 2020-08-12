@@ -1,11 +1,13 @@
-import React, { useState, useContext, useRef, useEffect } from 'react'
+import React, { useState, useContext, useRef } from 'react'
+
 import { ArrowsContext } from '../../contexts/arrowsContext'
 import { StateContext } from '../../contexts/stateContext'
-
 import { EnterFullscreen } from '../../images/enter-fullscreen.svg'
 import { ExitFullscreen } from '../../images/exit-fullscreen.svg'
 
-function Button(props) {
+import { Button } from './ToolbarButton.style'
+
+function ToolbarButton(props) {
 	const [isFullscreen, setIsFullscreen] = useState(false)
 
 	const app = useContext(StateContext)
@@ -45,7 +47,7 @@ function Button(props) {
 	}
 
 	return (
-		<div className="toolbar__button">
+		<Button>
 			<span>
 				{(props.action === 'toggle-fullscreen'
 					? isFullscreen
@@ -83,8 +85,8 @@ function Button(props) {
 					/>
 				</button>
 			)}
-		</div>
+		</Button>
 	)
 }
 
-export default Button
+export default ToolbarButton

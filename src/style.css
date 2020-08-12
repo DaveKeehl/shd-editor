@@ -1,0 +1,18 @@
+:root {
+	--black: #000000;
+	--white: #ffffff;
+
+	--header-bg: #020712;
+
+	--red-start: #ee4848;
+	--red-end: #d93333;
+	--dark-red: #571c1c;
+
+	--blue-start: #606eed;
+	--blue-end: #3747db;
+	--dark-blue: #1e2458;
+
+	--grey-start: #9f9f9f;
+	--grey-end: #777777;
+	--dark-grey: #353535;
+}
