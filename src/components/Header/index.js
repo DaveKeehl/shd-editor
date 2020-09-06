@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useContext } from 'react'
 import { StateContext } from '../../contexts/stateContext'
 import { utils } from '../../utils'
+import { StyledHeader, StyledH1, StyledButton } from './Header.style'
 
-import addBlock from '../../images/add-block.svg'
 import SmartAddIcon from './SmartAddIcon'
+import addBlock from '../../images/add-block.svg'
 
 function Header(props) {
 	const app = useContext(StateContext)
@@ -22,23 +23,23 @@ function Header(props) {
 	}, [])
 
 	return (
-		<header ref={headerRef}>
-			<h1>
+		<StyledHeader ref={headerRef}>
+			<StyledH1>
 				{props.region.toUpperCase()} ({props.objectsCount})
-			</h1>
+			</StyledH1>
 			{props.region === 'stack' ? (
-				<button
+				<StyledButton
 					onClick={() => app.addStackFrame()}
 					aria-label="Create new stack frame"
 				>
 					<img src={addBlock} alt="Add a Stack Frame" />
-				</button>
+				</StyledButton>
 			) : (
-				<button aria-label="Create new heap object">
+				<StyledButton aria-label="Create new heap object">
 					<SmartAddIcon />
-				</button>
+				</StyledButton>
 			)}
-		</header>
+		</StyledHeader>
 	)
 }
 
