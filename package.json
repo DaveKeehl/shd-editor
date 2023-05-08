@@ -10,7 +10,7 @@
 		"node-sass": "^4.14.1",
 		"react": "^16.13.0",
 		"react-dom": "^16.13.0",
-		"react-scripts": "3.4.1"
+		"react-scripts": "5.0.1"
 	},
 	"scripts": {
 		"start": "react-scripts start",
@@ -40,7 +40,7 @@
 		"@storybook/addon-links": "^5.3.14",
 		"@storybook/addons": "^5.3.14",
 		"@storybook/preset-create-react-app": "^2.0.0",
-		"@storybook/react": "^5.3.14",
+		"@storybook/react": "^7.0.9",
 		"eslint-plugin-react-hooks": "^3.0.0"
 	}
 }
